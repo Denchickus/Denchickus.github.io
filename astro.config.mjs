@@ -5,7 +5,7 @@ import { defineConfig } from 'astro/config';
 // Слой данных читается из локального JSON на этапе сборки (src/data/*).
 export default defineConfig({
   output: 'static',
-  site: 'https://example.invalid', // PLACEHOLDER: домен прототипа не определён
+  site: 'https://denchickus.github.io', // GitHub Pages, корень домена (User Pages repo)
   trailingSlash: 'ignore',
   build: {
     format: 'directory',
