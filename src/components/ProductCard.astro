@@ -1,0 +1,183 @@
+---
+/**
+ * Карточка товара в выдаче (DESIGN_PLAN.md §6, SITE_STRUCTURE.md §6.5).
+ * Вся карточка — одна ссылка. Кнопки «Купить» нет.
+ *
+ * MEDIA-БОКС: у ВСЕХ карточек одинаковая зона 4:3. Изображение позиционируется
+ * абсолютно и полностью заполняет бокс — натуральные пропорции исходного файла
+ * НИКОГДА не влияют на высоту карточки. object-fit / object-position задаются
+ * для каждого изображения в data/catalog/product-images.json.
+ *
+ * BODY: название (до 2 строк), цена отдельным уровнем, до 2 типов техники
+ * (+ «ещё N») прижаты к низу. Служебных бейджей нет.
+ */
+import type { Product } from '../types/catalog';
+import { getProductMachineTypes } from '../data/catalog';
+import { getCardImage } from '../data/productImages';
+import Placeholder from './Placeholder.astro';
+
+interface Props {
+  product: Product;
+  /** Первый экран? Тогда без lazy. По умолчанию карточки ниже сгиба — lazy. */
+  eager?: boolean;
+  /**
+   * Journey B (/machines/:type → товар): добавляет `?mt=<slug>` к ссылке на
+   * товар, чтобы страница товара предвыбрала вариант под эту технику
+   * (SITE_STRUCTURE.md §4, решение №6). На главной и в /catalog не передаётся.
+   */
+  mtSlug?: string;
+}
+const { product, eager = false, mtSlug } = Astro.props;
+const href = mtSlug ? `/catalog/${product.slug}?mt=${mtSlug}` : `/catalog/${product.slug}`;
+
+const mts = getProductMachineTypes(product);
+const shownMts = mts.slice(0, 2);
+const restMts = mts.length - shownMts.length;
+
+const priceLabel =
+  typeof product.priceFrom === 'number'
+    ? `от ${product.priceFrom.toLocaleString('ru-RU')} ₽`
+    : 'Цена по запросу';
+
+// Реальное изображение продукции с st-technics.ru (только VERIFIED); иначе заглушка.
+const cardImage = getCardImage(product.id);
+const objectFit = cardImage?.fit ?? 'contain';
+const objectPosition = cardImage?.objectPosition ?? 'center';
+---
+
+<a class="card card--link product-card" href={href}>
+  <div class:list={['product-card__media', cardImage && objectFit === 'contain' && 'product-card__media--contain']}>
+    {cardImage && cardImage.localPath ? (
+      <img
+        class="product-card__photo"
+        src={cardImage.localPath}
+        alt={product.name}
+        width={cardImage.width ?? undefined}
+        height={cardImage.height ?? undefined}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+        style={`object-fit: ${objectFit}; object-position: ${objectPosition};`}
+      />
+    ) : (
+      <div class="product-card__ph"><Placeholder ratio="4 / 3" /></div>
+    )}
+  </div>
+
+  <div class="product-card__body">
+    <h3 class="product-card__name">{product.name}</h3>
+
+    <p class="product-card__price tnum">{priceLabel}</p>
+
+    {shownMts.length > 0 && (
+      <ul role="list" class="product-card__mts">
+        {shownMts.map((mt) => <li class="chip">{mt.name}</li>)}
+        {restMts > 0 && <li class="chip chip--muted">ещё {restMts}</li>}
+      </ul>
+    )}
+  </div>
+</a>
+
+<style>
+  .product-card {
+    height: 100%;
+  }
+
+  /* Единый media-бокс: высота задаётся ТОЛЬКО соотношением сторон, не картинкой */
+  .product-card__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-muted);
+  }
+  /* object-fit: contain оставляет свободную полосу по краям (пропорции файла не
+     4:3) — на var(--bg-muted) она читалась как серые боковые полосы. Бокс
+     (aspect-ratio, размер карточки) не меняется — только фон и небольшой inset
+     у самого изображения, чтобы белый фон визуально слился с белым фоном фото. */
+  .product-card__media--contain {
+    background: var(--bg);
+  }
+  .product-card__media--contain .product-card__photo {
+    inset: 16px; /* 12–20px */
+  }
+  /* Изображение вынуто из потока -> не может растянуть бокс по высоте */
+  .product-card__photo,
+  .product-card__ph {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .product-card__ph {
+    display: flex;
+  }
+  .product-card__ph > :global(.img-placeholder) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .product-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    flex: 1;
+  }
+  .product-card__name {
+    font-size: 18px;
+    line-height: 1.3;
+    /* до 2 строк, без обрезки в середине слова */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .product-card:hover .product-card__name {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .product-card__price {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .product-card__mts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: auto;
+  }
+  .chip {
+    font-size: 12px;
+    line-height: 1.4;
+    padding: 2px 8px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .chip--muted {
+    color: var(--text-muted);
+  }
+
+  /* Typography polish на mobile. Структура/порядок/картинка/цена-как-факт —
+     не менялись, только размеры/начертание/воздух. */
+  @media (max-width: 768px) {
+    .product-card__body {
+      padding: 13px; /* было var(--space-4)=16px */
+    }
+    .product-card__name {
+      font-size: 15px; /* было 18px */
+      font-weight: 700; /* было унаследованное 600 от h3 */
+      line-height: 1.3;
+    }
+    .product-card__price {
+      font-size: 15px; /* было 20px */
+      font-weight: 700; /* было 600 */
+      margin-top: 2px; /* немного больше воздуха сверху, поверх общего gap body */
+    }
+    .chip {
+      color: var(--text-muted); /* явно вторичный — не спорит с названием/ценой */
+    }
+  }
+</style>

@@ -1,0 +1,167 @@
+---
+/**
+ * Переключатель варианта товара (SITE_STRUCTURE.md §7 блок 4, DATA_MODEL.md §4).
+ *
+ * Рендерится только когда у товара ≥ 2 ВИДИМЫХ вариантов (getProductVariants уже
+ * отфильтровал варианты неподтверждённого типа техники — решение №12). Нативные
+ * radio: клавиатура и скринридер работают без единой строчки кода.
+ *
+ * Цена и таблица переключаются вместе — это одна и та же карточка данных на
+ * variant, смешивать значения разных вариантов нельзя (SITE_STRUCTURE §7).
+ * `label` у каждого варианта обязателен и уникален именно потому, что
+ * machineTypeId внутри товара не гарантированно уникален (см. типы каталога).
+ */
+import type { ProductVariant } from '../types/catalog';
+import SpecTable from './SpecTable.astro';
+import { getSpecTables } from '../data/productContent';
+
+interface Props {
+  variants: ProductVariant[];
+  selectedId: string;
+}
+const { variants, selectedId } = Astro.props;
+---
+
+<div class="variants" data-variants>
+  <fieldset class="variants__fieldset">
+    <legend class="variants__legend">Вариант</legend>
+    <div class="variants__options">
+      {variants.map((v) => (
+        <label class="variants__option">
+          <input
+            type="radio"
+            name="variant"
+            value={v.id}
+            checked={v.id === selectedId}
+            data-variant-radio
+            data-mt={v.machineTypeId}
+          />
+          <span class="variants__option-label">{v.label}</span>
+        </label>
+      ))}
+    </div>
+  </fieldset>
+
+  {variants.map((v) => {
+    const tables = getSpecTables(v.id);
+    return (
+      <div class="variants__panel" data-variant-panel={v.id} hidden={v.id !== selectedId}>
+        <p class="variants__price tnum">
+          {typeof v.priceFrom === 'number'
+            ? `от ${v.priceFrom.toLocaleString('ru-RU')} ₽`
+            : 'Цена по запросу'}
+        </p>
+        {v.priceRawSamples.length > 0 && (
+          <ul class="variants__price-samples" role="list">
+            {v.priceRawSamples.map((sample) => <li>{sample}</li>)}
+          </ul>
+        )}
+        {tables.map((t) => <SpecTable table={t} />)}
+      </div>
+    );
+  })}
+</div>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-variants]')) {
+    const radios = root.querySelectorAll<HTMLInputElement>('[data-variant-radio]');
+    const panels = root.querySelectorAll<HTMLElement>('[data-variant-panel]');
+
+    radios.forEach((radio) => {
+      radio.addEventListener('change', () => {
+        if (!radio.checked) return;
+        panels.forEach((panel) => {
+          panel.hidden = panel.dataset.variantPanel !== radio.value;
+        });
+        // Слушает страница товара: обновляет цену в липкой панели/нижней
+        // полосе и поле «Тип техники» в форме заявки (SITE_STRUCTURE §7).
+        document.dispatchEvent(new CustomEvent('variant-change', { detail: { id: radio.value } }));
+      });
+    });
+  }
+</script>
+
+<style>
+  .variants {
+    margin-bottom: var(--space-6);
+  }
+  .variants__fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0 0 var(--space-4);
+  }
+  .variants__legend {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    padding: 0 0 var(--space-3);
+  }
+  .variants__options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .variants__option {
+    position: relative;
+  }
+  .variants__option input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+  .variants__option-label {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 var(--space-4);
+    font-size: 14px;
+    line-height: 1.3;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    cursor: pointer;
+    user-select: none;
+  }
+  .variants__option input:checked + .variants__option-label {
+    border-color: var(--text);
+    background: var(--text);
+    color: var(--bg);
+    font-weight: 600;
+  }
+  .variants__option input:focus-visible + .variants__option-label {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .variants__price {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: var(--space-3);
+  }
+  .variants__price-samples {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin-bottom: var(--space-4);
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  @media (max-width: 768px) {
+    /* Список вместо горизонтального скролл-ряда: у ряда не было своей
+       подсказки о прокрутке (в отличие от галереи/таблиц), и вторая кнопка
+       просто обрезалась краем экрана, выглядя как поломка. */
+    .variants__options {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .variants__option-label {
+      width: 100%;
+      white-space: normal;
+    }
+  }
+</style>

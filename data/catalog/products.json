@@ -1,0 +1,1671 @@
+{
+  "_generatedBy": "scripts/build-catalog-data.mjs",
+  "_generatedAt": "2026-09-02",
+  "_source": "data/content-inventory.json",
+  "_note": "Провизорная группировка категорий и связи товар<->тип техники — см. docs/DATA_MODEL.md. confirmed:false типы техники в пользовательском UI не показываются (getVisibleMachineTypes).",
+  "products": [
+    {
+      "id": "p-navesnaya-dorognaya-freza",
+      "slug": "navesnaya-dorognaya-freza",
+      "name": "Фреза дорожная навесная",
+      "h1Source": "ФРЕЗА ДОРОЖНАЯ НАВЕСНАЯ",
+      "categoryId": "cat-gidravlicheskoe",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-ehkskavator-pogruzchik"
+      ],
+      "priceFrom": 260000,
+      "priceRawSamples": [
+        "ширина 400 мм - 480 000₽",
+        "ширина 600 мм - 630 000₽",
+        "барабан для демаркировки - 260 000₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": true,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/navesnaya-dorognaya-freza",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [
+        "DR-08",
+        "DR-15"
+      ],
+      "notes": "Тело страницы содержит явную ошибку копирайтинга ('Данный гидромотор обладает большим мощностью...') - не относится к фрезе.",
+      "catalogOrder": 0
+    },
+    {
+      "id": "p-povorotnaya-shetka-dorozhnaya",
+      "slug": "povorotnaya-shetka-dorozhnaya",
+      "name": "Коммунальная дорожная щётка (щётка поворотная)",
+      "h1Source": "КОММУНАЛЬНАЯ ДОРОЖНАЯ ЩЕТКА",
+      "categoryId": "cat-shchetki",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-vilochnyj-pogruzchik",
+        "mt-ehkskavator-pogruzchik",
+        "mt-frontalnyj-pogruzchik",
+        "mt-teleskopicheskij-pogruzchik",
+        "mt-traktor"
+      ],
+      "priceFrom": 105000,
+      "priceRawSamples": [
+        "от 105 000 ₽",
+        "МТЗ 82: 120 000 ₽",
+        "Вилочный погрузчик: 105 000 ₽",
+        "Минипогрузчик: 105 000 ₽",
+        "Экскаватор-погрузчик: от 140 000 ₽",
+        "Фронтальный погрузчик: от 140 000 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": true,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/povorotnaya-shetka-dorozhnaya",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 1
+    },
+    {
+      "id": "p-bynkernaya-schetka",
+      "slug": "bynkernaya-schetka",
+      "name": "Щётка с бункером",
+      "h1Source": "ЩЕТКА С БУНКЕРОМ",
+      "categoryId": "cat-shchetki",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-ehkskavator-pogruzchik",
+        "mt-frontalnyj-pogruzchik",
+        "mt-teleskopicheskij-pogruzchik",
+        "mt-traktor"
+      ],
+      "priceFrom": 145000,
+      "priceRawSamples": [
+        "на Минипогрузчик (1800 мм) - от 145 000 ₽",
+        "на МТЗ (2100 мм) - от 165 000 ₽",
+        "на Экскаватор-погрузчик (2400 мм) - от 190 000 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": true,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/bynkernaya-schetka",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 2
+    },
+    {
+      "id": "p-otvalu",
+      "slug": "otvalu",
+      "name": "Отвалы",
+      "h1Source": "ОТВАЛЫ",
+      "categoryId": "cat-otvaly",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-vilochnyj-pogruzchik",
+        "mt-ehkskavator-pogruzchik",
+        "mt-frontalnyj-pogruzchik",
+        "mt-traktor"
+      ],
+      "priceFrom": 60000,
+      "priceRawSamples": [
+        "от 60 000 ₽",
+        "отвал на МТЗ 82 - от 100 000 ₽",
+        "на Вилочный погрузчик - от 60 000 ₽",
+        "на Минипогрузчик - от 68 000 ₽",
+        "на Экскаватор-погрузчик - от 125 000 ₽",
+        "V-образный 1,8 м - от 220 000 ₽",
+        "V-образный 2,8 м - от 375 000 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": true,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/otvalu",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [
+        "DR-15"
+      ],
+      "notes": null,
+      "catalogOrder": 3
+    },
+    {
+      "id": "p-palletnye-vily",
+      "slug": "palletnye-vily",
+      "name": "Паллетные вилы и удлинители вил",
+      "h1Source": "ПАЛЛЕТНЫЕ ВИЛЫ И УДЛИНИТЕЛИ ВИЛ",
+      "categoryId": "cat-zahvaty-i-vily",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-vilochnyj-pogruzchik",
+        "mt-ehkskavator-pogruzchik",
+        "mt-frontalnyj-pogruzchik",
+        "mt-teleskopicheskij-pogruzchik"
+      ],
+      "priceFrom": 65000,
+      "priceRawSamples": [
+        "ЦЕНА: от 65 000 ₽",
+        "на мини-погрузчик - 65 000 ₽",
+        "на экскаватор-погрузчик (откидные) - 65 000 р",
+        "на фронтальный погрузчик г/п 2 т - 85 000 ₽",
+        "г/п 3 т - 130 000 ₽",
+        "г/п 5 т - 200 000 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/palletnye-vily",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 4
+    },
+    {
+      "id": "p-kovsh-obshchestroitelnyj",
+      "slug": "kovsh-obshchestroitelnyj",
+      "name": "Ковш общестроительный",
+      "h1Source": "КОВШ ОБЩЕСТРОИТЕЛЬНЫЙ",
+      "categoryId": "cat-kovshi",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-ehkskavator-pogruzchik",
+        "mt-frontalnyj-pogruzchik",
+        "mt-teleskopicheskij-pogruzchik"
+      ],
+      "priceFrom": 50000,
+      "priceRawSamples": [
+        "Минипогрузчик 1300мм: 50 000 ₽",
+        "1600мм: 60 000 ₽",
+        "1800мм: 65 000 ₽",
+        "1900мм: 70 000 ₽",
+        "Экскаватор-погрузчик 2400мм/1м3: 160 000 ₽",
+        "Фронтальный: 90 000-365 000 ₽",
+        "Телескопический: 175 000-205 000 ₽",
+        "комплект зубьев +14 000/+23 000 ₽",
+        "сменная кромка +11 000/+25 000 ₽"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "Модель",
+        "Ширина ковша, мм",
+        "Объем по SAE",
+        "Масса ковша, кг",
+        "Стоимость, руб."
+      ],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/kovsh-obshchestroitelnyj",
+      "duplicateOf": "page-63841391",
+      "visible": true,
+      "dataReview": [
+        "DR-02"
+      ],
+      "notes": null,
+      "catalogOrder": 5
+    },
+    {
+      "id": "p-kovsh-chelustnoy",
+      "slug": "kovsh-chelustnoy",
+      "name": "Ковш челюстной",
+      "h1Source": "КОВШ ЧЕЛЮСТНОЙ",
+      "categoryId": "cat-kovshi",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-ehkskavator-pogruzchik",
+        "mt-frontalnyj-pogruzchik",
+        "mt-teleskopicheskij-pogruzchik"
+      ],
+      "priceFrom": 195000,
+      "priceRawSamples": [
+        "от 195 000 ₽",
+        "Минипогрузчик 1300-2000мм: 195 000-210 000 ₽",
+        "Экскаватор-погрузчик: 290 000-300 000 ₽",
+        "Фронтальный: 195 000-355 000 ₽",
+        "Телескопический: 305 000-310 000 ₽"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "Модель",
+        "Ширина ковша, мм",
+        "Объем по SAE",
+        "Масса ковша, кг",
+        "Стоимость, руб.",
+        "Угол открытия"
+      ],
+      "specRowsCaptured": true,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/kovsh-chelustnoy",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 6
+    },
+    {
+      "id": "p-kovsh-vysokoobjemniy",
+      "slug": "kovsh-vysokoobjemniy",
+      "name": "Ковш высокообъёмный",
+      "h1Source": "КОВШ ВЫСОКООБЪЕМНЫЙ",
+      "categoryId": "cat-kovshi",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-ehkskavator-pogruzchik",
+        "mt-frontalnyj-pogruzchik",
+        "mt-teleskopicheskij-pogruzchik"
+      ],
+      "priceFrom": 75000,
+      "priceRawSamples": [
+        "от 75 000 ₽",
+        "Минипогрузчик: 75 000-85 000 ₽",
+        "Экскаватор-погрузчик 2400мм/1.8м3: 170 000 ₽",
+        "Фронтальный: 95 000-400 000 ₽",
+        "Телескопический: 195 000-305 000 ₽"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "Модель",
+        "Ширина, мм",
+        "Объем по SAE, литров",
+        "Зубья",
+        "Угол наклона",
+        "Масса ковша, кг",
+        "Стоимость, руб."
+      ],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/kovsh-vysokoobjemniy",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 7
+    },
+    {
+      "id": "p-kovsh-visokoy-vygruzki",
+      "slug": "kovsh-visokoy-vygruzki",
+      "name": "Ковш высокой выгрузки",
+      "h1Source": "КОВШ ВЫСОКОЙ ВЫГРУЗКИ",
+      "categoryId": "cat-kovshi",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-frontalnyj-pogruzchik"
+      ],
+      "priceFrom": 175000,
+      "priceRawSamples": [
+        "от 175 000 ₽",
+        "1500мм: 175 000 руб",
+        "1900мм: 180 000 руб",
+        "2000мм: 200 000 руб",
+        "Фронтальный 2000-3000мм: 190 000-580 000 руб",
+        "общего назначения 2450-3000мм: 530 000-675 000 руб",
+        "сменная кромка +10 500 руб/шт"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "Модель",
+        "Ширина, мм",
+        "Объем по SAE, литров",
+        "Объем по воде, литров",
+        "Угол опрокидывания",
+        "Масса, кг",
+        "Стоимость руб."
+      ],
+      "specRowsCaptured": true,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/kovsh-visokoy-vygruzki",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 8
+    },
+    {
+      "id": "p-kovsh-planirovochnyj",
+      "slug": "kovsh-planirovochnyj",
+      "name": "Ковш планировочный",
+      "h1Source": "КОВШ ПЛАНИРОВОЧНЫЙ",
+      "categoryId": "cat-kovshi",
+      "machineTypeIds": [
+        "mt-ehkskavator-pogruzchik",
+        "mt-ehkskavator",
+        "mt-mini-ehkskavator"
+      ],
+      "priceFrom": 21000,
+      "priceRawSamples": [
+        "от 21 000 ₽",
+        "миниэкскаватор: 21 000-50 000 ₽",
+        "экскаватор-погрузчик: 45 000-60 000 ₽",
+        "поворотный на задн. рукоять: 140 000-155 000 ₽",
+        "экскаватор: 100 000-215 000 ₽",
+        "поворотный на экскаватор 18-27т: 270 000-315 000 ₽"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "ширина, мм",
+        "объем",
+        "масса",
+        "зубья",
+        "угол наклона",
+        "стоимость"
+      ],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/kovsh-planirovochnyj",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 9
+    },
+    {
+      "id": "p-kovsh-universalnyj",
+      "slug": "kovsh-universalnyj",
+      "name": "Ковш универсальный",
+      "h1Source": "КОВШ УНИВЕРСАЛЬНЫЙ",
+      "categoryId": "cat-kovshi",
+      "machineTypeIds": [
+        "mt-ehkskavator",
+        "mt-ehkskavator-pogruzchik",
+        "mt-mini-ehkskavator"
+      ],
+      "priceFrom": 30000,
+      "priceRawSamples": [
+        "от 30 000 ₽",
+        "миниэкскаватор 0-2т: 30 000-42 000 ₽",
+        "2-4т: 34 000-46 000 ₽",
+        "4-7т: 42 000-55 000 ₽",
+        "задняя рукоять экс-погр: 38 000-61 000 ₽",
+        "экскаватор: 200 000-590 000 ₽",
+        "траншейный: 120 000-230 000 ₽"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "ширина, мм",
+        "объем",
+        "масса, кг",
+        "зубья, шт",
+        "стоимость"
+      ],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/kovsh-universalnyj",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 10
+    },
+    {
+      "id": "p-kovsh-serpovidnyj",
+      "slug": "kovsh-serpovidnyj",
+      "name": "Ковш серповидный",
+      "h1Source": "КОВШ СЕРПОВИДНЫЙ",
+      "categoryId": "cat-kovshi",
+      "machineTypeIds": [
+        "mt-ehkskavator-pogruzchik",
+        "mt-mini-ehkskavator"
+      ],
+      "priceFrom": 32000,
+      "priceRawSamples": [
+        "от 32 000 ₽",
+        "Экскаватор-погрузчик 300мм: 41 000 ₽",
+        "400мм: 42 000 ₽",
+        "Миниэкскаватор 300мм: 32 000 ₽",
+        "400мм: 40 000 ₽"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "Ширина, мм",
+        "Объем, л",
+        "Зубья, шт.",
+        "Масса ковша, кг",
+        "Стоимость, руб."
+      ],
+      "specRowsCaptured": true,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/kovsh-serpovidnyj",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 11
+    },
+    {
+      "id": "p-kovsh-proseivaushiy",
+      "slug": "kovsh-proseivaushiy",
+      "name": "Ковш просеивающий",
+      "h1Source": "КОВШ ПРОСЕИВАЮЩИЙ",
+      "categoryId": "cat-kovshi",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-frontalnyj-pogruzchik",
+        "mt-teleskopicheskij-pogruzchik"
+      ],
+      "priceFrom": 120000,
+      "priceRawSamples": [
+        "от 120 000 ₽",
+        "Минипогрузчик 1800мм: 120 000 ₽",
+        "Фронтальный 3т/4т/5т: 260 000/285 000/335 000 ₽",
+        "Телескопический: 210 000-285 000 ₽",
+        "комплект зубьев +23 000 ₽",
+        "сменная кромка +25 000 ₽"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/kovsh-proseivaushiy",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 12
+    },
+    {
+      "id": "p-kovsh-s-prijimom",
+      "slug": "kovsh-s-prijimom",
+      "name": "Ковш с прижимом",
+      "h1Source": "КОВШ С ПРИЖИМОМ",
+      "categoryId": "cat-kovshi",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-frontalnyj-pogruzchik"
+      ],
+      "priceFrom": 155000,
+      "priceRawSamples": [
+        "от 220 000 ₽ (заголовок)",
+        "Минипогрузчик 1600мм: 155 000 ₽",
+        "1800мм: 160 000 ₽",
+        "Фронтальный: 445 000 ₽ / 495 000 ₽"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "ширина, мм",
+        "г/п, т",
+        "объем, л",
+        "нож, мм",
+        "стоимость, руб",
+        "сменная кромка, руб",
+        "комплект зубьев, руб"
+      ],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/kovsh-s-prijimom",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [
+        "DR-12"
+      ],
+      "notes": "Заголовочная цена 'от 220 000 ₽' противоречит таблице (минимум 155 000 ₽).",
+      "catalogOrder": 13
+    },
+    {
+      "id": "p-kovsh-zernovoi",
+      "slug": "kovsh-zernovoi",
+      "name": "Ковш зерновой",
+      "h1Source": "КОВШ ЗЕРНОВОЙ",
+      "categoryId": "cat-kovshi",
+      "machineTypeIds": [
+        "mt-teleskopicheskij-pogruzchik",
+        "mt-frontalnyj-pogruzchik"
+      ],
+      "priceFrom": 210000,
+      "priceRawSamples": [
+        "от 210 000 ₽",
+        "2 м3: 210 000 ₽",
+        "2.5 м3: 225 000 ₽",
+        "3 м3: 230 000 ₽",
+        "3.5 м3: 285 000 ₽",
+        "сменная кромка +25 000 ₽"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "ширина, мм",
+        "объем, куб.м.",
+        "масса, кг",
+        "нож, мм",
+        "стоимость"
+      ],
+      "specRowsCaptured": true,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/kovsh-zernovoi",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 14
+    },
+    {
+      "id": "p-skreper",
+      "slug": "skreper",
+      "name": "Скрепер (скалыватель льда)",
+      "h1Source": "СКРЕПЕР",
+      "categoryId": "cat-zimnee-soderzhanie",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-vilochnyj-pogruzchik",
+        "mt-ehkskavator-pogruzchik"
+      ],
+      "priceFrom": 60000,
+      "priceRawSamples": [
+        "от 60 000 ₽",
+        "Минипогрузчик: 60 000 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": true,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/skreper",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": "В навигации анкор иногда 'Скалыватель льда (скрепер)'.",
+      "catalogOrder": 15
+    },
+    {
+      "id": "p-snegomet",
+      "slug": "snegomet",
+      "name": "Шнекороторный снегометатель",
+      "h1Source": "ШНЕКОРОТОРНЫЙ СНЕГОМЕТАТЕЛЬ",
+      "categoryId": "cat-zimnee-soderzhanie",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-ehkskavator-pogruzchik",
+        "mt-frontalnyj-pogruzchik",
+        "mt-teleskopicheskij-pogruzchik",
+        "mt-traktor"
+      ],
+      "priceFrom": 190000,
+      "priceRawSamples": [
+        "Мини-погрузчик 1800 мм: от 190 000 ₽",
+        "Экскаватор-погрузчик 2400 мм: от 300 000 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": true,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/snegomet",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [
+        "DR-15"
+      ],
+      "notes": null,
+      "catalogOrder": 16
+    },
+    {
+      "id": "p-lulka",
+      "slug": "lulka",
+      "name": "Люлька",
+      "h1Source": "ЛЮЛЬКА",
+      "categoryId": "cat-osnastka",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-vilochnyj-pogruzchik",
+        "mt-teleskopicheskij-pogruzchik"
+      ],
+      "priceFrom": 95000,
+      "priceRawSamples": [
+        "от 95 000 ₽",
+        "800х1000: 95 000 ₽",
+        "1000х1200: 100 000 ₽",
+        "1200х1400: 115 000 ₽",
+        "2000х1200: 125 000 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/lulka",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [
+        "DR-11"
+      ],
+      "notes": "Единицы размеров на странице указаны как 'см' - вероятная ошибка (см. DATA_REVIEW). В каталоге/меню иногда встречается написание URL с заглавной 'Lulka'; канонический slug (sitemap) - 'lulka'.",
+      "catalogOrder": 17
+    },
+    {
+      "id": "p-peskorazbrasuvatel",
+      "slug": "peskorazbrasuvatel",
+      "name": "Разбрасыватель реагентов (пескоразбрасыватель)",
+      "h1Source": "Разбрасыватель реагентов (пескоразбрасыватель)",
+      "categoryId": "cat-zimnee-soderzhanie",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-ehkskavator-pogruzchik"
+      ],
+      "priceFrom": 95000,
+      "priceRawSamples": [
+        "Объем 0.5 м3: 95 000 ₽",
+        "0.8 м3: 115 000 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/peskorazbrasuvatel",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 18
+    },
+    {
+      "id": "p-bsu",
+      "slug": "bsu",
+      "name": "Быстросъёмное устройство (БСУ)",
+      "h1Source": "БЫСТРОСЪЕМНОЕ УСТРОЙСТВО (БСУ)",
+      "categoryId": "cat-osnastka",
+      "machineTypeIds": [
+        "mt-mini-ehkskavator",
+        "mt-ehkskavator-pogruzchik",
+        "mt-frontalnyj-pogruzchik"
+      ],
+      "priceFrom": 2500,
+      "priceRawSamples": [
+        "от 40 000 ₽ (заголовок)",
+        "миниэкскаватор 0-2т: 40 000 ₽",
+        "2-4т: 50 000 ₽",
+        "4-7т: 55 000 ₽",
+        "экскаватор-погрузчик задний: 55 000 ₽",
+        "фронтальный: 85 000 ₽",
+        "фронтальный г/п 3т: от 180 000 ₽",
+        "г/п 5т: от 210 000 ₽",
+        "палец - от 2 500 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/bsu",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": "priceFrom=2500 относится к отдельной детали 'палец'; базовое изделие от 40 000 ₽.",
+      "catalogOrder": 19
+    },
+    {
+      "id": "p-planirovshhik-vyiravnivatel-grunta",
+      "slug": "planirovshhik-vyiravnivatel-grunta",
+      "name": "Планировщик-выравниватель грунта",
+      "h1Source": "ПЛАНИРОВЩИК-ВЫРАВНИВАТЕЛЬ ГРУНТА",
+      "categoryId": "cat-zemlyanye-i-selhoz",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-vilochnyj-pogruzchik",
+        "mt-ehkskavator-pogruzchik",
+        "mt-frontalnyj-pogruzchik",
+        "mt-teleskopicheskij-pogruzchik",
+        "mt-traktor",
+        "mt-mini-ehkskavator"
+      ],
+      "priceFrom": 60000,
+      "priceRawSamples": [
+        "от 60 000 ₽",
+        "1500х1200: 60 000 ₽",
+        "1800х1200: 70 000 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/planirovshhik-vyiravnivatel-grunta",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 20
+    },
+    {
+      "id": "p-navesnoj-kultivator",
+      "slug": "navesnoj-kultivator",
+      "name": "Навесной культиватор",
+      "h1Source": "НАВЕСНОЙ КУЛЬТИВАТОР",
+      "categoryId": "cat-zemlyanye-i-selhoz",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-traktor"
+      ],
+      "priceFrom": 220000,
+      "priceRawSamples": [
+        "от 220 000 ₽",
+        "1,5 м: 220 000 ₽",
+        "1,8 м: 250 000 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/navesnoj-kultivator",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 21
+    },
+    {
+      "id": "p-zaxvat-dlya-sena",
+      "slug": "zaxvat-dlya-sena",
+      "name": "Захват для сена",
+      "h1Source": "ЗАХВАТ ДЛЯ СЕНА",
+      "categoryId": "cat-zahvaty-i-vily",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-teleskopicheskij-pogruzchik",
+        "mt-mini-ehkskavator"
+      ],
+      "priceFrom": 240000,
+      "priceRawSamples": [
+        "от 240 000 ₽",
+        "L=2100 мм: 240 000 ₽",
+        "L=2400 мм: 270 000 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/zaxvat-dlya-sena",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 22
+    },
+    {
+      "id": "p-kovsh-betonosmesitelnyij",
+      "slug": "kovsh-betonosmesitelnyij",
+      "name": "Ковш бетоносмеситель",
+      "h1Source": "КОВШ БЕТОНОСМЕСИТЕЛЬ",
+      "categoryId": "cat-kovshi",
+      "machineTypeIds": [
+        "mt-minipogruzchik"
+      ],
+      "priceFrom": 250000,
+      "priceRawSamples": [
+        "от 250 000 ₽",
+        "L=1500 мм, 0.32 м3: 250 000 ₽",
+        "L=1800 мм, 0.6 м3: 300 000 ₽",
+        "гидр. открытие заслонки: 45 000 ₽",
+        "рукав подачи смеси: 14 000 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/kovsh-betonosmesitelnyij",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 23
+    },
+    {
+      "id": "p-klyik-ryixlitel",
+      "slug": "klyik-ryixlitel",
+      "name": "Клык-рыхлитель",
+      "h1Source": "КОВШ КЛЫК РЫХЛИТЕЛЬ",
+      "categoryId": "cat-zemlyanye-i-selhoz",
+      "machineTypeIds": [
+        "mt-mini-ehkskavator",
+        "mt-ehkskavator-pogruzchik",
+        "mt-ehkskavator"
+      ],
+      "priceFrom": 30000,
+      "priceRawSamples": [
+        "от 30 000 ₽",
+        "миниэкскаватор <=4т (L=400): 30 000 ₽",
+        "4-7т: 37 000 ₽",
+        "экскаватор-погрузчик L=800/900: 43 000/45 000 ₽",
+        "экскаватор <=27т L=1000/1200: 150 000/190 000 ₽",
+        "27-36т L=1500/1600: 240 000/300 000 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/klyik-ryixlitel",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 24
+    },
+    {
+      "id": "p-korchevatel-kopatel",
+      "slug": "korchevatel-kopatel",
+      "name": "Корчеватель (копатель)",
+      "h1Source": "КОРЧЕВАТЕЛЬ (КОПАТЕЛЬ)",
+      "categoryId": "cat-zemlyanye-i-selhoz",
+      "machineTypeIds": [
+        "mt-minipogruzchik"
+      ],
+      "priceFrom": 78000,
+      "priceRawSamples": [
+        "78 000 ₽ (1450х300 мм, масса 250 кг)"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/korchevatel-kopatel",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 25
+    },
+    {
+      "id": "p-bunker-samosvalnyj",
+      "slug": "bunker-samosvalnyj",
+      "name": "Бункер самосвальный",
+      "h1Source": "БУНКЕР САМОСВАЛЬНЫЙ",
+      "categoryId": "cat-osnastka",
+      "machineTypeIds": [
+        "mt-vilochnyj-pogruzchik",
+        "mt-frontalnyj-pogruzchik",
+        "mt-traktor",
+        "mt-mini-ehkskavator"
+      ],
+      "priceFrom": 150000,
+      "priceRawSamples": [
+        "от 150 000 ₽",
+        "DM_SS-0,8: 150 000 руб",
+        "DM_SS-1,2: 200 000 руб",
+        "DM_SS-2,0: 235 000 руб"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "Модель",
+        "Объем, л",
+        "Ширина, мм",
+        "Грузоподъемность, кг",
+        "Опорные колеса",
+        "Масса, кг",
+        "Стоимость, руб"
+      ],
+      "specRowsCaptured": true,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/bunker-samosvalnyj",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 26
+    },
+    {
+      "id": "p-mojka-vysokogo-davleniya",
+      "slug": "mojka-vysokogo-davleniya",
+      "name": "Мойка высокого давления",
+      "h1Source": "МОЙКА ВЫСОКОГО ДАВЛЕНИЯ",
+      "categoryId": "cat-osnastka",
+      "machineTypeIds": [
+        "mt-minipogruzchik"
+      ],
+      "priceFrom": 250000,
+      "priceRawSamples": [
+        "от 250 000 ₽",
+        "500 л: 250 000 руб",
+        "800 л: 280 000 руб",
+        "доп. форсунки +5 000 руб/шт",
+        "роторные форсунки +11 000 руб/шт"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "Объем бака, л",
+        "Расход воды, л/мин",
+        "Давление воды",
+        "Длина рукава, м",
+        "Кол-во форсунок, шт.",
+        "Длина рампы, мм",
+        "Масса, кг",
+        "Стоимость, руб"
+      ],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/mojka-vysokogo-davleniya",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 27
+    },
+    {
+      "id": "p-kryukovoj-podves",
+      "slug": "kryukovoj-podves",
+      "name": "Крюковой подвес (вариант A)",
+      "h1Source": "КРЮКОВОЙ ПОДВЕС",
+      "categoryId": null,
+      "machineTypeIds": [
+        "mt-minipogruzchik"
+      ],
+      "priceFrom": 98000,
+      "priceRawSamples": [
+        "от 100 000 ₽",
+        "HK_SS-1500 - 98 000 руб"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "Модель",
+        "Мин. вылет стрелы, мм",
+        "Г/п при мин. вылете, кг",
+        "Макс. вылет стрелы, мм",
+        "Г/п при макс. вылете, кг",
+        "Такелаж",
+        "Масса, кг",
+        "Стоимость, руб."
+      ],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/kryukovoj-podves",
+      "duplicateOf": "p-kruykovoi-podves",
+      "visible": false,
+      "dataReview": [
+        "DR-01"
+      ],
+      "notes": null,
+      "catalogOrder": 28
+    },
+    {
+      "id": "p-navesnaya-rukoyat-povorotnaya",
+      "slug": "navesnaya-rukoyat-povorotnaya",
+      "name": "Навесная рукоять (поворотная)",
+      "h1Source": "НАВЕСНАЯ РУКОЯТЬ (ПОВОРОТНАЯ)",
+      "categoryId": "cat-gidravlicheskoe",
+      "machineTypeIds": [
+        "mt-minipogruzchik"
+      ],
+      "priceFrom": 190000,
+      "priceRawSamples": [
+        "ЦЕНА: 190 000 ₽ (заголовок)",
+        "200 000 руб (в таблице)"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "Максимальная глубина копания, мм",
+        "Номинальная глубина копания, мм",
+        "Максимальный угол поворота, град",
+        "Ковш в базовой комплектации",
+        "Масса, кг",
+        "Стоимость, руб"
+      ],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/navesnaya-rukoyat-povorotnaya",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [
+        "DR-12"
+      ],
+      "notes": "Цена в заголовке (190 000) не совпадает с ценой в таблице (200 000).",
+      "catalogOrder": 29
+    },
+    {
+      "id": "p-navesnoj-ehkskavator",
+      "slug": "navesnoj-ehkskavator",
+      "name": "Навесной экскаватор",
+      "h1Source": "НАВЕСНОЙ ЭКСКАВАТОР",
+      "categoryId": "cat-gidravlicheskoe",
+      "machineTypeIds": [
+        "mt-minipogruzchik"
+      ],
+      "priceFrom": 500000,
+      "priceRawSamples": [
+        "500 000 ₽",
+        "гидравлический удлинитель аутригера: 60 000 ₽",
+        "вынос сиденья оператора: 60 000 ₽"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "Глубина копания, мм",
+        "Вылет стрелы, мм",
+        "Угол поворота стрелы",
+        "Перемещение стрелы",
+        "Максимальный объем ковша, м3",
+        "Масса, кг",
+        "Стоимость, руб"
+      ],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/navesnoj-ehkskavator",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 30
+    },
+    {
+      "id": "p-gidromolot",
+      "slug": "gidromolot",
+      "name": "Гидромолот",
+      "h1Source": "ГИДРОМОЛОТ",
+      "categoryId": "cat-gidravlicheskoe",
+      "machineTypeIds": [
+        "mt-mini-ehkskavator",
+        "mt-minipogruzchik",
+        "mt-ehkskavator-pogruzchik"
+      ],
+      "priceFrom": 180000,
+      "priceRawSamples": [
+        "от 180 000 ₽",
+        "Миниэкскаватор ST-4 - 180 000 ₽",
+        "Минипогрузчик ST-5 - 190 000 ₽",
+        "Экскаватор-погрузчик ST-5 - 190 000 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/gidromolot",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": "Текст: 'Полный аналог гидромолотов Delta'.",
+      "catalogOrder": 31
+    },
+    {
+      "id": "p-transheekopatel",
+      "slug": "transheekopatel",
+      "name": "Траншеекопатель",
+      "h1Source": "ТРАНШЕЕКОПАТЕЛЬ",
+      "categoryId": "cat-gidravlicheskoe",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-vilochnyj-pogruzchik",
+        "mt-ehkskavator-pogruzchik",
+        "mt-frontalnyj-pogruzchik",
+        "mt-teleskopicheskij-pogruzchik",
+        "mt-traktor",
+        "mt-mini-ehkskavator"
+      ],
+      "priceFrom": 420000,
+      "priceRawSamples": [
+        "от 400 000 ₽ (заголовок)",
+        "скребковая цепь 1200х160: 420 000 ₽ ... 1700х200: 648 000 ₽",
+        "резцовая цепь 1200х160: 456 000 ₽ ... 1700х200: 660 000 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/transheekopatel",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 32
+    },
+    {
+      "id": "p-kosilka",
+      "slug": "kosilka",
+      "name": "Косилка",
+      "h1Source": "КОСИЛКА",
+      "categoryId": "cat-zemlyanye-i-selhoz",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-vilochnyj-pogruzchik",
+        "mt-ehkskavator-pogruzchik",
+        "mt-frontalnyj-pogruzchik",
+        "mt-teleskopicheskij-pogruzchik",
+        "mt-traktor",
+        "mt-mini-ehkskavator"
+      ],
+      "priceFrom": 230000,
+      "priceRawSamples": [
+        "Косилка с ножами или дисковая - 230 000 руб",
+        "Косилка мульчерного типа с повышенным потоком - 450 000 руб"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/kosilka",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": "H2 на странице - 'КОСИЛКА-КУСТОРЕЗ'.",
+      "catalogOrder": 33
+    },
+    {
+      "id": "p-brevnozaxvat",
+      "slug": "brevnozaxvat",
+      "name": "Бревнозахват",
+      "h1Source": "БРЕВНОЗАХВАТ",
+      "categoryId": "cat-zahvaty-i-vily",
+      "machineTypeIds": [
+        "mt-vilochnyj-pogruzchik",
+        "mt-ehkskavator-pogruzchik",
+        "mt-minipogruzchik"
+      ],
+      "priceFrom": 180000,
+      "priceRawSamples": [
+        "от 180 000 ₽",
+        "0.8 т: 180 000 руб",
+        "3 т: 320 000 руб",
+        "4 т: 400 000 руб",
+        "5 т: 500 000 руб"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/brevnozaxvat",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 34
+    },
+    {
+      "id": "p-zaxvatu",
+      "slug": "zaxvatu",
+      "name": "Захват для рулонов",
+      "h1Source": "ЗАХВАТ ДЛЯ РУЛОНОВ",
+      "categoryId": "cat-zahvaty-i-vily",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-ehkskavator-pogruzchik",
+        "mt-frontalnyj-pogruzchik",
+        "mt-teleskopicheskij-pogruzchik"
+      ],
+      "priceFrom": 220000,
+      "priceRawSamples": [
+        "от 220 000 ₽",
+        "диаметр захвата 900-1750 мм - 220 000 руб"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/zaxvatu",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": "Slug 'zaxvatu' и анкор 'Захваты' в меню могут наводить на мысль о категории, но страница - один конкретный товар (захват для рулонов). В каталоге анкор - 'ЗАХВАТЫ ДЛЯ РУЛОНОВ'.",
+      "catalogOrder": 35
+    },
+    {
+      "id": "p-kruykovoi-podves",
+      "slug": "kruykovoi-podves",
+      "name": "Крюковой подвес",
+      "h1Source": "КРЮКОВОЙ ПОДВЕС",
+      "categoryId": "cat-osnastka",
+      "machineTypeIds": [
+        "mt-minipogruzchik"
+      ],
+      "priceFrom": 100000,
+      "priceRawSamples": [
+        "от 100 000 ₽",
+        "Стрела 700 мм, г/п 3 т - 100 000 руб",
+        "Стрела 1200 мм, г/п 3 т - 115 000 руб",
+        "Стрела 700 мм, г/п 5 т - 140 000 руб"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/kruykovoi-podves",
+      "duplicateOf": "p-kryukovoj-podves",
+      "visible": true,
+      "dataReview": [
+        "DR-01"
+      ],
+      "notes": null,
+      "catalogOrder": 36
+    },
+    {
+      "id": "p-gydrobur",
+      "slug": "gydrobur",
+      "name": "Гидробур",
+      "h1Source": "ГИДРОБУР",
+      "categoryId": "cat-gidravlicheskoe",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-vilochnyj-pogruzchik",
+        "mt-ehkskavator-pogruzchik",
+        "mt-frontalnyj-pogruzchik",
+        "mt-teleskopicheskij-pogruzchik",
+        "mt-traktor",
+        "mt-mini-ehkskavator"
+      ],
+      "priceFrom": 135000,
+      "priceRawSamples": [
+        "от 135 000 ₽",
+        "ST-3: 155 000 ₽",
+        "ST-5: 160 000 ₽",
+        "ST-7: 200 000 ₽",
+        "адаптер под 2 пальца: 37 000 ₽",
+        "крепежная плита: 45 000 ₽",
+        "блок реверса: 50 000 ₽",
+        "шнеки и удлинители: 17 000-52 000 ₽"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "Длина",
+        "S4",
+        "S5"
+      ],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/gydrobur",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": "Две таблицы: ШНЕКИ и УДЛИНИТЕЛИ.",
+      "catalogOrder": 37
+    },
+    {
+      "id": "p-bigbag",
+      "slug": "bigbag",
+      "name": "Наполнитель для биг-бэгов",
+      "h1Source": "НАПОЛНИТЕЛЬ ДЛЯ БИГ-БЭГОВ",
+      "categoryId": "cat-osnastka",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-ehkskavator-pogruzchik",
+        "mt-frontalnyj-pogruzchik"
+      ],
+      "priceFrom": 165000,
+      "priceRawSamples": [
+        "от 165 000 ₽",
+        "1 куб - 165 000 ₽",
+        "1.5 куба - 200 000 ₽",
+        "2 куба - 225 000 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/bigbag",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 38
+    },
+    {
+      "id": "p-otvaldlyanavoza",
+      "slug": "otvaldlyanavoza",
+      "name": "Отвал для навоза",
+      "h1Source": "ОТВАЛ ДЛЯ НАВОЗА",
+      "categoryId": "cat-otvaly",
+      "machineTypeIds": [
+        "mt-minipogruzchik",
+        "mt-vilochnyj-pogruzchik",
+        "mt-ehkskavator-pogruzchik",
+        "mt-frontalnyj-pogruzchik",
+        "mt-teleskopicheskij-pogruzchik",
+        "mt-traktor",
+        "mt-mini-ehkskavator"
+      ],
+      "priceFrom": 250000,
+      "priceRawSamples": [
+        "от 250 000 ₽",
+        "2200 мм: 250 000 ₽",
+        "2600 мм: 300 000 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/otvaldlyanavoza",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 39
+    },
+    {
+      "id": "p-otvalburtovshik",
+      "slug": "otvalburtovshik",
+      "name": "Отвал-буртовщик",
+      "h1Source": "ОТВАЛ-БУРТОВЩИК",
+      "categoryId": "cat-otvaly",
+      "machineTypeIds": [
+        "mt-frontalnyj-pogruzchik",
+        "mt-teleskopicheskij-pogruzchik"
+      ],
+      "priceFrom": 190000,
+      "priceRawSamples": [
+        "от 190 000 ₽",
+        "'Стоимость складывается от ширины, длины и г/п погрузчика' - точные варианты не указаны"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/otvalburtovshik",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 40
+    },
+    {
+      "id": "p-zaxvat-dlya-bigbagov",
+      "slug": "zaxvat-dlya-bigbagov",
+      "name": "Захват для биг-бэгов",
+      "h1Source": "ЗАХВАТ ДЛЯ БИГ-БЭГОВ",
+      "categoryId": "cat-zahvaty-i-vily",
+      "machineTypeIds": [
+        "mt-teleskopicheskij-pogruzchik",
+        "mt-frontalnyj-pogruzchik"
+      ],
+      "priceFrom": 230000,
+      "priceRawSamples": [
+        "от 230 000 ₽ (варианты не детализированы)"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/zaxvat-dlya-bigbagov",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 41
+    },
+    {
+      "id": "p-zahvatvilochniy",
+      "slug": "zahvatvilochniy",
+      "name": "Захват вилочный",
+      "h1Source": "ЗАХВАТ ВИЛОЧНЫЙ",
+      "categoryId": "cat-zahvaty-i-vily",
+      "machineTypeIds": [
+        "mt-vilochnyj-pogruzchik",
+        "mt-minipogruzchik"
+      ],
+      "priceFrom": 180000,
+      "priceRawSamples": [
+        "от 180 000 ₽",
+        "L=1700 мм - 180 000 ₽"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/zahvatvilochniy",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": "Витрины типов техники ссылаются на этот товар слагом '/zaxvat-vilochnyij', который отдаёт 404. Канонический slug (sitemap, каталог) - 'zahvatvilochniy'. candidateBrokenLink.",
+      "catalogOrder": 42
+    },
+    {
+      "id": "p-prijim-dlya-vil",
+      "slug": "prijim-dlya-vil",
+      "name": "Прижим для паллетных вил",
+      "h1Source": "ПРИЖИМ ДЛЯ ПАЛЛЕТНЫХ ВИЛ",
+      "categoryId": "cat-zahvaty-i-vily",
+      "machineTypeIds": [
+        "mt-minipogruzchik"
+      ],
+      "priceFrom": 65000,
+      "priceRawSamples": [
+        "65 000 ₽ (только прижим, без вил)"
+      ],
+      "hasSpecTable": false,
+      "specColumns": [],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/prijim-dlya-vil",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": "В каталоге анкор - 'ПРИЖИМ ДЛЯ ВИЛ'.",
+      "catalogOrder": 43
+    },
+    {
+      "id": "p-gydro-korchevatel",
+      "slug": "gydro-korchevatel",
+      "name": "Гидравлический корчеватель",
+      "h1Source": "ГИДРАВЛИЧЕСКИЙ КОРЧЕВАТЕЛЬ",
+      "categoryId": "cat-zemlyanye-i-selhoz",
+      "machineTypeIds": [
+        "mt-minipogruzchik"
+      ],
+      "priceFrom": 250000,
+      "priceRawSamples": [
+        "250 000 ₽"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "Длина челюстей, мм",
+        "Максимальное раскрытие челюстей, мм",
+        "Ширина, мм",
+        "Длина, мм",
+        "Мин/макс. диаметр дерева, мм"
+      ],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/gydro-korchevatel",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 44
+    },
+    {
+      "id": "p-izmelchitel-vetok",
+      "slug": "izmelchitel-vetok",
+      "name": "Измельчитель веток",
+      "h1Source": "ИЗМЕЛЬЧИТЕЛЬ ВЕТОК",
+      "categoryId": "cat-zemlyanye-i-selhoz",
+      "machineTypeIds": [
+        "mt-traktor"
+      ],
+      "priceFrom": 150000,
+      "priceRawSamples": [
+        "150 000 ₽"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "Тип оборудования",
+        "Габаритный размер (рабочее положение), мм",
+        "Габаритный размер (транспортное положение), мм",
+        "Страна производителя",
+        "Тип носителя",
+        "Масса оборудования",
+        "Максимальный размер веток, мм",
+        "Производительность",
+        "Количество ножей",
+        "Мощность трактора",
+        "Диаметр ротора, мм",
+        "Размер щепы, мм"
+      ],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/izmelchitel-vetok",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 45
+    },
+    {
+      "id": "p-otval-mtz",
+      "slug": "otval-mtz",
+      "name": "Отвал МТЗ",
+      "h1Source": "ОТВАЛ МТЗ",
+      "categoryId": "cat-otvaly",
+      "machineTypeIds": [
+        "mt-traktor"
+      ],
+      "priceFrom": 105000,
+      "priceRawSamples": [
+        "105 000 ₽",
+        "гидравлический поворот - 15 000 ₽"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "Масса, кг",
+        "Ширина захвата, см",
+        "Диапазон поворота рабочей кромки",
+        "Высота, см",
+        "Давление в гидросистеме, МПа"
+      ],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/otval-mtz",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 46
+    },
+    {
+      "id": "p-schetka-mtz",
+      "slug": "schetka-mtz",
+      "name": "Щётка МТЗ",
+      "h1Source": "ЩЕТКА МТЗ",
+      "categoryId": "cat-shchetki",
+      "machineTypeIds": [
+        "mt-traktor"
+      ],
+      "priceFrom": 125000,
+      "priceRawSamples": [
+        "125 000 ₽",
+        "оборудование 'ЛЮКС' поливо-моечное, бак 500 л - 60 000 руб"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "Масса, кг",
+        "Ширина захвата, мм",
+        "Рабочая скорость, не более",
+        "Транспортная скорость, не более",
+        "Привод рабочего органа",
+        "Номинальная частота вращения ВОМ, об/мин",
+        "Угол установки щетки относительно продольной оси трактора",
+        "Комплект"
+      ],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/schetka-mtz",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 47
+    },
+    {
+      "id": "p-peskorazbrasuvatel-mtz",
+      "slug": "peskorazbrasuvatel-mtz",
+      "name": "Пескоразбрасыватель МТЗ",
+      "h1Source": "ПЕСКОРАЗБРАСЫВАТЕЛЬ МТЗ",
+      "categoryId": "cat-zimnee-soderzhanie",
+      "machineTypeIds": [
+        "mt-traktor"
+      ],
+      "priceFrom": 100000,
+      "priceRawSamples": [
+        "100 000 ₽"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "Производительность, м2/час",
+        "Рабочая скорость, км/ч",
+        "Транспортная скорость, км/ч",
+        "Рабочая ширина разбрасывания, м",
+        "Масса, кг",
+        "Объем бункера, м3"
+      ],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/peskorazbrasuvatel-mtz",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 48
+    },
+    {
+      "id": "p-peskorazbrasuvatel-vibrazionniy-mtz",
+      "slug": "peskorazbrasuvatel-vibrazionniy-mtz",
+      "name": "Пескоразбрасыватель вибрационный МТЗ",
+      "h1Source": "ПЕСКОРАЗБРАСЫВАТЕЛЬ ВИБРАЦИОННЫЙ МТЗ",
+      "categoryId": "cat-zimnee-soderzhanie",
+      "machineTypeIds": [
+        "mt-traktor"
+      ],
+      "priceFrom": 300000,
+      "priceRawSamples": [
+        "300 000 ₽"
+      ],
+      "hasSpecTable": true,
+      "specColumns": [
+        "Производительность, м2/час",
+        "Рабочая скорость, км/ч",
+        "Транспортная скорость, км/ч",
+        "Рабочая ширина разбрасывания, м",
+        "Масса, кг",
+        "Объем бункера, м3"
+      ],
+      "specRowsCaptured": false,
+      "hasVideo": false,
+      "media": [],
+      "sourceUrl": "https://st-technics.ru/peskorazbrasuvatel-vibrazionniy-mtz",
+      "duplicateOf": null,
+      "visible": true,
+      "dataReview": [],
+      "notes": null,
+      "catalogOrder": 49
+    }
+  ]
+}

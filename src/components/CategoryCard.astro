@@ -1,0 +1,80 @@
+---
+/**
+ * Плитка категории (Homepage §3). Провизорная группировка — не официальная
+ * классификация компании. Счётчик — реальное число видимых товаров.
+ */
+import type { Category } from '../types/catalog';
+import { pluralPozitsiya } from '../data/plural';
+
+interface Props {
+  category: Category;
+}
+const { category } = Astro.props;
+---
+
+<a class="card card--link cat-card" href={`/catalog/category/${category.slug}`}>
+  <span class="cat-card__name">{category.name}</span>
+  <span class="cat-card__count tnum">
+    {category.productCount}
+    <span class="text-muted"> {pluralPozitsiya(category.productCount)}</span>
+  </span>
+</a>
+
+<style>
+  .cat-card {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    min-height: var(--tap-min);
+  }
+  .cat-card__name {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    /* разрешает названию сжиматься/переноситься в flex-row вместо того, чтобы
+       раздвигать карточку — длинные слова переносятся, не обрезаются в середине */
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+  .cat-card:hover .cat-card__name {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .cat-card__count {
+    font-size: var(--fs-small);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* На самых узких карточках строка «заголовок + счётчик» не помещается даже
+     после переноса названия — счётчик уходит за границу (source bug). Ниже
+     420px карточки и так в 1 колонку (index.astro), поэтому колонка становится
+     заметно шире; тем не менее оставляем структурный, а не overflow:hidden,
+     фикс и здесь — переносим счётчик под заголовок. */
+  @media (max-width: 640px) {
+    .cat-card {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .cat-card__count {
+      margin-top: 7px;
+      white-space: normal;
+    }
+  }
+
+  /* Плотность и читаемость на mobile: title/count заметно крупнее шага между
+     собой не были — count визуально спорил с названием (тот же вес контраста). */
+  @media (max-width: 768px) {
+    .cat-card__name {
+      font-size: 15px;
+      line-height: 1.3;
+    }
+    .cat-card__count {
+      font-size: 12px;
+      color: var(--text-muted); /* явно вторичный — раньше только слово-«позиций» было muted */
+    }
+  }
+</style>

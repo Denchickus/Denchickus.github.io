@@ -1,0 +1,33 @@
+# build output
+dist/
+.output/
+
+# dependencies
+node_modules/
+
+# astro
+.astro/
+
+# env / logs
+.env
+.env.production
+*.log
+npm-debug.log*
+
+# editor / OS
+.DS_Store
+.vscode/
+.idea/
+Thumbs.db
+
+# claude code — локальные, машинно-специфичные, не для репозитория
+.claude/settings.local.json
+.playwright-mcp/
+
+# черновые скриншоты/визуализации сессий, не часть проекта
+codebase-map.html
+product-*.png
+
+# визуальные референсы конкурентов (Behance и т.п.) — внутренний research,
+# не наш контент, не для публичного репозитория
+references/

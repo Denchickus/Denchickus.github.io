@@ -1,0 +1,358 @@
+---
+/**
+ * Галерея товара (SITE_STRUCTURE.md §7, блок 3).
+ *
+ * Правила, заданные этапом:
+ *  - реальные фотографии продукции с st-technics.ru; при их отсутствии — явная
+ *    техническая заглушка, а НЕ фото другого товара;
+ *  - миниатюры показываются только если изображений больше одного;
+ *  - высота кадра задана соотношением сторон, изображение позиционируется
+ *    абсолютно -> переключение кадров не двигает вёрстку (нет layout shift);
+ *  - object-fit берётся из манифеста; при contain фон белый, чтобы у кадров на
+ *    нейтральном фоне не появлялись серые боковые полосы.
+ *
+ * Carousel (запрос по visual review Product Page, доработано в запросе №31):
+ * свои prev/next controls на главном кадре, свайп/drag через Pointer Events,
+ * лента миниатюр со скрытым нативным scrollbar (тот же приём, что
+ * Breadcrumbs.astro). Стрелки у ленты миниатюр листают сами фотографии (не
+ * просто скроллят ленту) и блокируются на первом/последнем кадре — активная
+ * миниатюра при этом сама доезжает в видимую область через scrollIntoView.
+ * Никакой carousel-библиотеки — весь код локальный.
+ *
+ * Без JS галерея остаётся осмысленной: главный кадр виден, миниатюры видны как
+ * изображения, теряется только переключение.
+ */
+import type { ProductImage } from '../data/productImages';
+import Placeholder from './Placeholder.astro';
+
+interface Props {
+  images: ProductImage[];
+  productName: string;
+}
+const { images, productName } = Astro.props;
+
+// Карточный кадр — первым: это тот, который пользователь уже видел в каталоге.
+const ordered = [...images].sort((a, b) => {
+  if (a.role === 'card' && b.role !== 'card') return -1;
+  if (b.role === 'card' && a.role !== 'card') return 1;
+  return 0;
+});
+const hasImages = ordered.length > 0;
+const hasMultiple = ordered.length > 1;
+---
+
+<div class="gallery" data-gallery>
+  <div
+    class="gallery__stage"
+    data-stage
+    tabindex={hasMultiple ? 0 : -1}
+    role={hasMultiple ? 'group' : undefined}
+    aria-roledescription={hasMultiple ? 'карусель' : undefined}
+    aria-label={hasMultiple ? `Фотографии товара: ${productName}` : undefined}
+  >
+    {hasImages ? (
+      ordered.map((im, i) => (
+        <img
+          class:list={['gallery__img', i === 0 && 'is-active']}
+          src={im.localPath}
+          alt={im.alt ?? `${productName} — фотография ${i + 1}`}
+          width={im.width ?? undefined}
+          height={im.height ?? undefined}
+          loading={i === 0 ? 'eager' : 'lazy'}
+          decoding="async"
+          draggable="false"
+          data-index={i}
+          style={`object-fit: ${im.fit ?? 'contain'}; object-position: ${im.objectPosition ?? 'center'};`}
+        />
+      ))
+    ) : (
+      <Placeholder ratio="3 / 2" />
+    )}
+
+    {hasMultiple && (
+      <Fragment>
+        <button type="button" class="gallery__nav gallery__nav--prev" data-prev aria-label="Предыдущая фотография">
+          <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+            <polyline points="11,3 5,9 11,15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <button type="button" class="gallery__nav gallery__nav--next" data-next aria-label="Следующая фотография">
+          <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+            <polyline points="7,3 13,9 7,15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <p class="gallery__counter tnum" data-counter aria-hidden="true">1 / {ordered.length}</p>
+      </Fragment>
+    )}
+  </div>
+
+  {hasMultiple && (
+    <div class="gallery__thumbs-row">
+      <button type="button" class="gallery__thumbnav" data-thumb-prev aria-label="Прокрутить миниатюры назад">
+        <svg width="12" height="12" viewBox="0 0 18 18" aria-hidden="true">
+          <polyline points="11,3 5,9 11,15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+      <ul class="gallery__thumbs" data-thumbs role="list">
+        {ordered.map((im, i) => (
+          <li>
+            <button
+              type="button"
+              class:list={['gallery__thumb', i === 0 && 'is-active']}
+              data-goto={i}
+              aria-current={i === 0 ? 'true' : 'false'}
+              aria-label={`Показать фотографию ${i + 1} из ${ordered.length}`}
+            >
+              <img src={im.localPath} alt="" loading="lazy" decoding="async" draggable="false" />
+            </button>
+          </li>
+        ))}
+      </ul>
+      <button type="button" class="gallery__thumbnav" data-thumb-next aria-label="Прокрутить миниатюры вперёд">
+        <svg width="12" height="12" viewBox="0 0 18 18" aria-hidden="true">
+          <polyline points="7,3 13,9 7,15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+  )}
+</div>
+
+<script>
+  for (const gallery of document.querySelectorAll<HTMLElement>('[data-gallery]')) {
+    const stage = gallery.querySelector<HTMLElement>('[data-stage]');
+    const imgs = gallery.querySelectorAll<HTMLImageElement>('.gallery__img');
+    const thumbs = gallery.querySelectorAll<HTMLButtonElement>('.gallery__thumb');
+    const counter = gallery.querySelector<HTMLElement>('[data-counter]');
+    const prevBtn = gallery.querySelector<HTMLButtonElement>('[data-prev]');
+    const nextBtn = gallery.querySelector<HTMLButtonElement>('[data-next]');
+    const thumbPrev = gallery.querySelector<HTMLButtonElement>('[data-thumb-prev]');
+    const thumbNext = gallery.querySelector<HTMLButtonElement>('[data-thumb-next]');
+    if (!stage || imgs.length < 2) continue;
+
+    const total = imgs.length;
+    let active = 0;
+
+    // Стрелки у ленты миниатюр листают сами фотографии (не только скроллят
+    // ленту) и отключаются на первом/последнем кадре — дальше листать некуда,
+    // а не декоративно остаются кликабельными без эффекта.
+    const updateThumbNav = () => {
+      if (thumbPrev) thumbPrev.disabled = active <= 0;
+      if (thumbNext) thumbNext.disabled = active >= total - 1;
+    };
+
+    const show = (index: number) => {
+      active = (index + total) % total;
+      imgs.forEach((im, i) => im.classList.toggle('is-active', i === active));
+      thumbs.forEach((t, i) => {
+        t.classList.toggle('is-active', i === active);
+        t.setAttribute('aria-current', i === active ? 'true' : 'false');
+      });
+      if (counter) counter.textContent = `${active + 1} / ${total}`;
+      thumbs[active]?.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: 'smooth' });
+      updateThumbNav();
+    };
+
+    thumbs.forEach((thumb, i) => thumb.addEventListener('click', () => show(i)));
+    prevBtn?.addEventListener('click', () => show(active - 1));
+    nextBtn?.addEventListener('click', () => show(active + 1));
+
+    stage.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); show(active - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); show(active + 1); }
+    });
+
+    // Свайп/drag по главному кадру — без внешней библиотеки.
+    let startX = 0;
+    let dragging = false;
+    stage.addEventListener('pointerdown', (e) => {
+      dragging = true;
+      startX = e.clientX;
+    });
+    stage.addEventListener('pointerup', (e) => {
+      if (!dragging) return;
+      dragging = false;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 40) show(active + (dx < 0 ? 1 : -1));
+    });
+    stage.addEventListener('pointercancel', () => { dragging = false; });
+
+    thumbPrev?.addEventListener('click', () => {
+      if (active > 0) show(active - 1);
+    });
+    thumbNext?.addEventListener('click', () => {
+      if (active < total - 1) show(active + 1);
+    });
+
+    updateThumbNav();
+  }
+</script>
+
+<style>
+  /* Высоту задаёт ТОЛЬКО соотношение сторон — смена кадра не двигает страницу */
+  .gallery__stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    /* Белый, а не --bg-muted: у contain-кадров на нейтральном фоне иначе
+       появляются серые боковые полосы (см. ProductCard.astro) */
+    background: var(--bg);
+    touch-action: pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .gallery__stage:focus-visible {
+    outline-offset: -2px;
+  }
+
+  .gallery__img {
+    position: absolute;
+    inset: var(--space-4);
+    width: calc(100% - var(--space-4) * 2);
+    height: calc(100% - var(--space-4) * 2);
+    display: block;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-user-drag: none;
+  }
+  .gallery__img.is-active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* --- prev/next на главном кадре ------------------------------------- */
+  .gallery__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--text);
+    cursor: pointer;
+  }
+  .gallery__nav:hover {
+    border-color: var(--text);
+  }
+  .gallery__nav--prev {
+    left: var(--space-3);
+  }
+  .gallery__nav--next {
+    right: var(--space-3);
+  }
+
+  .gallery__counter {
+    display: none;
+    position: absolute;
+    right: var(--space-3);
+    bottom: var(--space-3);
+    z-index: 2;
+    margin: 0;
+    padding: 2px 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+
+  /* --- лента миниатюр --------------------------------------------------- */
+  .gallery__thumbs-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+  }
+  .gallery__thumbs {
+    display: flex;
+    gap: var(--space-2);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    padding-bottom: var(--space-1);
+    /* Нативный scrollbar скрыт визуально — прокрутка остаётся (touch/JS) */
+    scrollbar-width: none;
+  }
+  .gallery__thumbs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery__thumbnav {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+  .gallery__thumbnav:hover {
+    color: var(--text);
+    border-color: var(--text);
+  }
+  .gallery__thumbnav:disabled {
+    opacity: 0.35;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .gallery__thumb {
+    flex: 0 0 auto;
+    width: 72px;
+    height: 54px;
+    padding: 0;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .gallery__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  .gallery__thumb.is-active {
+    border-color: var(--text);
+    box-shadow: inset 0 0 0 1px var(--text);
+  }
+  .gallery__thumb:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 768px) {
+    .gallery__img {
+      inset: var(--space-3);
+      width: calc(100% - var(--space-3) * 2);
+      height: calc(100% - var(--space-3) * 2);
+    }
+    .gallery__counter {
+      display: block;
+    }
+    .gallery__nav {
+      width: 32px;
+      height: 32px;
+    }
+    /* Touch target по высоте не меньше 44px */
+    .gallery__thumb {
+      width: 64px;
+      height: 48px;
+    }
+    .gallery__thumbs-row {
+      padding-bottom: var(--space-1);
+    }
+  }
+</style>

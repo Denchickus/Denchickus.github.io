@@ -1,0 +1,173 @@
+---
+/**
+ * Таблица характеристик (SITE_STRUCTURE.md §7, .claude/rules/design.md).
+ *
+ * Несущий элемент страницы товара, а не приложение к описанию. Поэтому:
+ *  - структура источника переносится дословно, включая colspan/rowspan: реальные
+ *    таблицы объединяют ячейки (группирующие заголовки, общее значение на
+ *    несколько строк), и «выпрямление» сдвинуло бы технические значения;
+ *  - ни одна колонка не удаляется ради мобильной ширины;
+ *  - горизонтальный скролл живёт ВНУТРИ контейнера таблицы — страница по
+ *    горизонтали не едет;
+ *  - на mobile первая колонка липкая, иначе при скролле теряется, к чему
+ *    относится значение.
+ */
+import type { SpecTable } from '../types/catalog';
+
+interface Props {
+  table: SpecTable;
+  /** Заголовок секции уже показан снаружи — не дублировать подпись. */
+  hideCaption?: boolean;
+}
+const { table, hideCaption = false } = Astro.props;
+
+const headerRows = table.rows.slice(0, table.headerRowCount);
+const bodyRows = table.rows.slice(table.headerRowCount);
+---
+
+<figure class="spec">
+  {!hideCaption && table.caption && (
+    <figcaption class="spec__caption">{table.caption}</figcaption>
+  )}
+
+  <div class="spec__scroll" tabindex="0" role="region" aria-label={table.caption ?? 'Таблица характеристик'}>
+    <table class="spec__table">
+      {headerRows.length > 0 && (
+        <thead>
+          {headerRows.map((row) => (
+            <tr>
+              {row.map((cell) => (
+                <th
+                  scope="col"
+                  colspan={cell.colspan > 1 ? cell.colspan : undefined}
+                  rowspan={cell.rowspan > 1 ? cell.rowspan : undefined}
+                >{cell.text}</th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+      )}
+      <tbody>
+        {bodyRows.map((row) => (
+          <tr>
+            {row.map((cell, i) => (
+              <td
+                class:list={[i === 0 && 'spec__first', /^[\d\s.,+-]+$/.test(cell.text) && 'tnum']}
+                colspan={cell.colspan > 1 ? cell.colspan : undefined}
+                rowspan={cell.rowspan > 1 ? cell.rowspan : undefined}
+              >{cell.text}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</figure>
+
+<style>
+  .spec {
+    margin: 0 0 var(--space-6);
+  }
+  .spec__caption {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: var(--space-3);
+  }
+
+  /* Скролл только здесь. Страница по горизонтали не двигается. */
+  .spec__scroll {
+    /* inline-block вместо block: обёртка сжимается по ширине содержимого
+       (узкая таблица не растягивается на всю колонку), но не шире контейнера
+       — при переполнении включается overflow-x ниже, значения не обрезаются */
+    display: inline-block;
+    max-width: 100%;
+    vertical-align: top;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    border: 1px solid var(--line);
+    /*
+     * У таблицы, в отличие от галереи/крошек, нет своих стрелок — полоса
+     * прокрутки здесь единственная подсказка, что контент можно докрутить
+     * вправо (design.md: таблицы не должны обрезать значения). Поэтому не
+     * прячем её полностью, а делаем тонкой и нейтральной вместо тяжёлого
+     * нативного скроллбара с кнопками.
+     */
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+  .spec__scroll::-webkit-scrollbar {
+    height: 6px;
+  }
+  .spec__scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .spec__scroll::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 999px;
+  }
+  .spec__scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+  }
+  .spec__scroll:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .spec__table {
+    border-collapse: collapse;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .spec__table th,
+  .spec__table td {
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--line);
+    text-align: left;
+    vertical-align: middle;
+    /*
+     * Перенос разрешён намеренно: при auto table-layout браузер сам ужимает
+     * колонки под доступную ширину контейнера, перенося длинный текст на
+     * несколько строк, вместо горизontального скролла — значения при этом не
+     * обрезаются (design.md), просто занимают больше высоты. .spec__scroll
+     * ниже остаётся защитным запасным вариантом на случай контента, который
+     * не помещается вообще ни при какой ширине колонок.
+     */
+    min-width: 8ch;
+  }
+
+  .spec__table th {
+    font-family: var(--font-display);
+    font-weight: 600;
+    background: var(--bg-muted);
+    position: sticky;
+    top: 0;
+  }
+
+  /* Зебра — по строкам данных, чтобы длинную строку было легче вести глазом */
+  .spec__table tbody tr:nth-child(even) {
+    background: color-mix(in srgb, var(--bg-muted) 55%, var(--bg));
+  }
+
+  @media (max-width: 768px) {
+    .spec__table {
+      font-size: 13px;
+    }
+    .spec__table th,
+    .spec__table td {
+      padding: var(--space-2);
+    }
+    /* Первая колонка липкая: при скролле видно, к чему относится значение */
+    .spec__table td.spec__first {
+      position: sticky;
+      left: 0;
+      background: var(--bg);
+      border-right-color: var(--text-muted);
+    }
+    .spec__table tbody tr:nth-child(even) td.spec__first {
+      background: color-mix(in srgb, var(--bg-muted) 55%, var(--bg));
+    }
+  }
+</style>

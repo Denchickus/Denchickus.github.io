@@ -1,0 +1,135 @@
+---
+/**
+ * Floating Telegram CTA — глобальный элемент (рендерится один раз из Base.astro,
+ * присутствует на всех страницах, не завязан на контент Homepage).
+ *
+ * URL — отдельное подтверждённое UI-размещение источника, отличное от Footer
+ * (DR-04, см. src/data/site.ts -> CONTACTS.telegram.floating). href не менялся.
+ * Картинка — android-chrome-512x512.png из пакета favicon.io, не менялась.
+ *
+ * Ripple — ДВА явных <span>, не ::before/::after на <img> и не псевдоэлементы
+ * вовсе. Причина смены подхода: прежняя реализация (два ::before/::after на
+ * .floating-telegram) технически анимировалась и красилась НАД картинкой
+ * (z-index:auto у position:absolute уже красится выше статичного <img> — это
+ * проверено, а не предположено), но была практически незаметна из-за
+ * двухточечных keyframes (0%/100%) под общий animation-timing-function:
+ * ease-out — opacity гасла, пока кольцо было ещё маленьким/перекрывало
+ * картинку, да ещё и близким по тону синим цветом. Явные span'ы с
+ * z-index:0 (кольца) под <img> с z-index:1 и 4-точечной кривой opacity
+ * (0/15/70/100%) держат видимую яркость бОльшую часть цикла и выходят за
+ * контур картинки, прежде чем погаснуть.
+ */
+import { CONTACTS } from '../data/site';
+
+const { url } = CONTACTS.telegram.floating;
+---
+
+<a
+  class="floating-telegram"
+  href={url}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Написать в Telegram СТ-ТЕХНИКС"
+>
+  <span class="telegram-ripple telegram-ripple--1" aria-hidden="true"></span>
+  <span class="telegram-ripple telegram-ripple--2" aria-hidden="true"></span>
+  <img
+    class="floating-telegram__img"
+    src="/android-chrome-512x512.png"
+    width="512"
+    height="512"
+    alt=""
+    loading="eager"
+    decoding="async"
+  />
+</a>
+
+<style>
+  .floating-telegram {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    z-index: 60; /* выше sticky-хедера (50), ниже нативного <dialog> мобильного меню */
+    display: flex;
+    width: 60px; /* 56–64px, не менялось */
+    height: 60px;
+    border-radius: 50%;
+    overflow: visible; /* кольца должны выходить за пределы картинки */
+    isolation: isolate; /* собственный стек z-index:0/1 внутри не зависит от внешних */
+    text-decoration: none;
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.22));
+    transition: transform var(--dur) var(--easing);
+  }
+  .floating-telegram:hover {
+    transform: translateY(-2px);
+  }
+  .floating-telegram:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 50%;
+  }
+  .floating-telegram__img {
+    position: relative;
+    z-index: 1; /* картинка поверх колец */
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  /* --- Ripple: явные элементы, не псевдоклассы на <img> --------------- */
+  .telegram-ripple {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* за картинкой, но выше фона страницы (stacking context кнопки) */
+    border-radius: 50%;
+    border: 1px solid rgba(40, 170, 230, 0.75);
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+    pointer-events: none;
+    animation: telegram-ripple 2.6s ease-out infinite;
+  }
+  .telegram-ripple--2 {
+    animation-delay: 1.3s; /* вторая волна — половина цикла */
+  }
+  @keyframes telegram-ripple {
+    0% {
+      transform: translate(-50%, -50%) scale(0.95);
+      opacity: 0;
+    }
+    15% {
+      opacity: 0.65;
+    }
+    70% {
+      opacity: 0.25;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1.65);
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .floating-telegram {
+      right: 16px;
+      bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+      width: 50px; /* 48–54px, не менялось */
+      height: 50px;
+    }
+  }
+
+  /* Кнопка остаётся видимой и кликабельной — гасятся только кольца */
+  @media (prefers-reduced-motion: reduce) {
+    .floating-telegram:hover {
+      transform: none;
+    }
+    .telegram-ripple {
+      animation: none;
+      display: none;
+    }
+  }
+</style>

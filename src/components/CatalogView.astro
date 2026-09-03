@@ -1,0 +1,743 @@
+---
+/**
+ * Каталог: сетка товаров + фасеты + поиск + сортировка (SITE_STRUCTURE.md §6).
+ *
+ * Один компонент обслуживает и /catalog, и /catalog/category/[category]:
+ * категорийная страница — это тот же каталог с зафиксированной категорией,
+ * собственным H1 и хлебными крошками, а не отдельный шаблон.
+ *
+ * Как устроена фильтрация (решение №1):
+ *  - все товары присутствуют в HTML, фильтр скрывает карточки на клиенте;
+ *  - состояние живёт в URL (?cat=&mt=&price=&q=&sort=), поэтому ссылку на
+ *    выборку можно переслать коллеге — для B2B это важнее анимаций;
+ *  - без JS страница остаётся полностью рабочей: виден весь список и работают
+ *    ссылки на категории и типы техники.
+ *
+ * Панель фасетов — ОДИН DOM-узел <dialog>: на desktop он статичен в колонке,
+ * на mobile открывается модально. Дублировать контролы для двух ширин нельзя —
+ * это два независимых состояния одного фильтра, которые неизбежно разъезжаются.
+ */
+import type { Product } from '../types/catalog';
+import type { Crumb } from './Breadcrumbs.astro';
+import {
+  getCategories,
+  getCategory,
+  getVisibleMachineTypes,
+  getProductMachineTypes,
+} from '../data/catalog';
+import { plural } from '../data/plural';
+import ProductCard from './ProductCard.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+
+interface Props {
+  products: Product[];
+  crumbs: Crumb[];
+  heading: string;
+  intro?: string | null;
+  /** Категорийная страница: фасет «Категория» не показывается, сброс её сохраняет. */
+  fixedCategoryId?: string | null;
+}
+const { products, crumbs, heading, intro = null, fixedCategoryId = null } = Astro.props;
+
+/** Пороги подтверждены пересчётом по данным: 5 / 18 / 23 / 3 (SITE_STRUCTURE §6.2). */
+const PRICE_BUCKETS = [
+  { id: 'lt50', label: 'до 50 000 ₽', min: 0, max: 50_000 },
+  { id: '50-150', label: '50 000 — 150 000 ₽', min: 50_000, max: 150_000 },
+  { id: '150-300', label: '150 000 — 300 000 ₽', min: 150_000, max: 300_000 },
+  { id: 'gte300', label: 'от 300 000 ₽', min: 300_000, max: Infinity },
+];
+
+const bucketOf = (price: number | null): string =>
+  PRICE_BUCKETS.find((b) => price !== null && price >= b.min && price < b.max)?.id ?? '';
+
+const machineTypes = getVisibleMachineTypes();
+const categories = getCategories();
+
+/** Фасеты показывают только те значения, которые есть в этой выборке. */
+const rows = products.map((p) => {
+  const mts = getProductMachineTypes(p);
+  const category = getCategory(p.categoryId);
+  return {
+    product: p,
+    mtIds: mts.map((m) => m.id),
+    bucket: bucketOf(p.priceFrom),
+    search: [p.name, category?.name ?? '', ...mts.map((m) => m.name)]
+      .join(' ')
+      .toLocaleLowerCase('ru-RU'),
+  };
+});
+
+const countBy = <T,>(items: T[], match: (x: T) => boolean) => items.filter(match).length;
+
+const categoryFacet = categories
+  .map((c) => ({ ...c, count: countBy(rows, (r) => r.product.categoryId === c.id) }))
+  .filter((c) => c.count > 0);
+
+const machineFacet = machineTypes
+  .map((m) => ({ ...m, count: countBy(rows, (r) => r.mtIds.includes(m.id)) }))
+  .filter((m) => m.count > 0);
+
+const priceFacet = PRICE_BUCKETS
+  .map((b) => ({ ...b, count: countBy(rows, (r) => r.bucket === b.id) }))
+  .filter((b) => b.count > 0);
+
+const total = rows.length;
+---
+
+<div class="container">
+  <Breadcrumbs items={crumbs} />
+</div>
+
+<section class="catalog container">
+  <header class="catalog__head">
+    <h1>{heading}</h1>
+    {intro && <p class="catalog__intro">{intro}</p>}
+  </header>
+
+  <div class="catalog__toolbar">
+    <div class="catalog__search">
+      <label class="visually-hidden" for="catalog-search">Поиск по каталогу</label>
+      <input
+        type="search"
+        id="catalog-search"
+        class="catalog__search-input"
+        placeholder="Поиск: название, категория, техника"
+        autocomplete="off"
+        enterkeyhint="search"
+      />
+    </div>
+
+    <div class="catalog__sort">
+      <label class="visually-hidden" for="catalog-sort">Сортировка</label>
+      <select id="catalog-sort" class="catalog__select">
+        <option value="default">По порядку каталога</option>
+        <option value="price-asc">Сначала дешевле</option>
+        <option value="price-desc">Сначала дороже</option>
+        <option value="name">По названию</option>
+      </select>
+    </div>
+
+    <button type="button" class="btn btn--secondary catalog__filters-open" data-filters-open>
+      Фильтры<span class="catalog__filters-badge" data-active-count hidden></span>
+    </button>
+
+    <p class="catalog__count tnum" data-count aria-live="polite">
+      {total} {plural(total, 'позиция', 'позиции', 'позиций')}
+    </p>
+  </div>
+
+  <div class="catalog__chips" data-chips hidden>
+    <ul class="catalog__chips-list" role="list" data-chips-list></ul>
+    <button type="button" class="link catalog__reset" data-reset>Сбросить всё</button>
+  </div>
+
+  <div class="catalog__layout">
+    <dialog id="catalog-filters" class="facets" aria-label="Фильтры каталога">
+      <div class="facets__inner">
+        <div class="facets__top">
+          <h2 class="facets__title">Фильтры</h2>
+          <button type="button" class="facets__close" aria-label="Закрыть фильтры" data-filters-close>
+            <span aria-hidden="true">✕</span>
+          </button>
+        </div>
+
+        {!fixedCategoryId && categoryFacet.length > 1 && (
+          <fieldset class="facet">
+            <legend class="facet__legend">Категория</legend>
+            {categoryFacet.map((c) => (
+              <label class="facet__option">
+                <input type="checkbox" name="cat" value={c.id} />
+                <span class="facet__label">{c.name}</span>
+                <span class="facet__count tnum">{c.count}</span>
+              </label>
+            ))}
+          </fieldset>
+        )}
+
+        {machineFacet.length > 1 && (
+          <fieldset class="facet">
+            <legend class="facet__legend">Тип техники</legend>
+            {machineFacet.map((m) => (
+              <label class="facet__option">
+                <input type="checkbox" name="mt" value={m.id} />
+                <span class="facet__label">{m.name}</span>
+                <span class="facet__count tnum">{m.count}</span>
+              </label>
+            ))}
+          </fieldset>
+        )}
+
+        {priceFacet.length > 1 && (
+          <fieldset class="facet">
+            <legend class="facet__legend">Цена от</legend>
+            {priceFacet.map((b) => (
+              <label class="facet__option">
+                <input type="checkbox" name="price" value={b.id} />
+                <span class="facet__label">{b.label}</span>
+                <span class="facet__count tnum">{b.count}</span>
+              </label>
+            ))}
+          </fieldset>
+        )}
+
+        <div class="facets__actions">
+          <button type="button" class="btn btn--secondary btn--block" data-reset>Сбросить</button>
+          <button type="button" class="btn btn--primary btn--block facets__apply" data-filters-close>
+            Показать <span data-count-short>{total}</span>
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <div class="catalog__results">
+      <ul class="card-grid card-grid--3 catalog__grid" role="list" data-grid>
+        {rows.map((r, i) => (
+          <li
+            class="catalog__item"
+            data-cat={r.product.categoryId}
+            data-mt={r.mtIds.join(' ')}
+            data-price-bucket={r.bucket}
+            data-price={r.product.priceFrom ?? 0}
+            data-name={r.product.name.toLocaleLowerCase('ru-RU')}
+            data-search={r.search}
+            data-order={i}
+          >
+            <ProductCard product={r.product} eager={i < 3} />
+          </li>
+        ))}
+      </ul>
+
+      <div class="catalog__empty" data-empty hidden>
+        <p class="catalog__empty-title">По выбранным условиям ничего не найдено</p>
+        <p class="catalog__empty-hint" data-empty-hint></p>
+        <div class="catalog__empty-actions">
+          <button type="button" class="btn btn--primary" data-reset>Сбросить фильтры</button>
+          <a class="btn btn--secondary" href="/machines">Подобрать по типу техники</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('.catalog');
+  if (root) {
+    const grid = root.querySelector<HTMLElement>('[data-grid]')!;
+    const items = Array.from(root.querySelectorAll<HTMLElement>('.catalog__item'));
+    const countEl = root.querySelector<HTMLElement>('[data-count]')!;
+    const countShort = root.querySelector<HTMLElement>('[data-count-short]');
+    const chipsBox = root.querySelector<HTMLElement>('[data-chips]')!;
+    const chipsList = root.querySelector<HTMLElement>('[data-chips-list]')!;
+    const emptyBox = root.querySelector<HTMLElement>('[data-empty]')!;
+    const emptyHint = root.querySelector<HTMLElement>('[data-empty-hint]')!;
+    const searchInput = root.querySelector<HTMLInputElement>('#catalog-search')!;
+    const sortSelect = root.querySelector<HTMLSelectElement>('#catalog-sort')!;
+    const dialog = root.querySelector<HTMLDialogElement>('#catalog-filters')!;
+    const openBtn = root.querySelector<HTMLButtonElement>('[data-filters-open]')!;
+    const activeBadge = root.querySelector<HTMLElement>('[data-active-count]')!;
+    const boxes = Array.from(dialog.querySelectorAll<HTMLInputElement>('input[type="checkbox"]'));
+
+    const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
+
+    const wordForms = (n: number, one: string, few: string, many: string) => {
+      const mod100 = n % 100;
+      const mod10 = n % 10;
+      if (mod100 >= 11 && mod100 <= 14) return many;
+      if (mod10 === 1) return one;
+      if (mod10 >= 2 && mod10 <= 4) return few;
+      return many;
+    };
+
+    /* --- состояние ------------------------------------------------------- */
+
+    const selected = (name: string) =>
+      boxes.filter((b) => b.name === name && b.checked).map((b) => b.value);
+
+    function readUrl() {
+      const params = new URLSearchParams(location.search);
+      for (const box of boxes) {
+        const values = (params.get(box.name) ?? '').split(',').filter(Boolean);
+        box.checked = values.includes(box.value);
+      }
+      searchInput.value = params.get('q') ?? '';
+      const sort = params.get('sort');
+      if (sort) sortSelect.value = sort;
+    }
+
+    function writeUrl() {
+      const params = new URLSearchParams();
+      for (const name of ['cat', 'mt', 'price']) {
+        const values = selected(name);
+        if (values.length) params.set(name, values.join(','));
+      }
+      const q = searchInput.value.trim();
+      if (q) params.set('q', q);
+      if (sortSelect.value !== 'default') params.set('sort', sortSelect.value);
+      // Сохраняем hash: apply() вызывается уже на первой загрузке (в т.ч. по
+      // ссылке /catalog#search из шапки), и до этого фикса writeUrl() стирал
+      // #search раньше, чем успевал сработать фокус поля ниже.
+      const query = params.toString();
+      history.replaceState(null, '', `${location.pathname}${query ? '?' + query : ''}${location.hash}`);
+    }
+
+    /* --- применение фильтров -------------------------------------------- */
+
+    function apply() {
+      const cats = selected('cat');
+      const mts = selected('mt');
+      const prices = selected('price');
+      const q = searchInput.value.trim().toLocaleLowerCase('ru-RU');
+
+      let visible = 0;
+      for (const item of items) {
+        // Внутри фасета — ИЛИ, между фасетами — И (SITE_STRUCTURE §6.2)
+        const okCat = cats.length === 0 || cats.includes(item.dataset.cat ?? '');
+        const itemMts = (item.dataset.mt ?? '').split(' ').filter(Boolean);
+        const okMt = mts.length === 0 || mts.some((m) => itemMts.includes(m));
+        const okPrice =
+          prices.length === 0 || prices.includes(item.dataset.priceBucket ?? '');
+        const okSearch = q === '' || (item.dataset.search ?? '').includes(q);
+        const show = okCat && okMt && okPrice && okSearch;
+        item.hidden = !show;
+        if (show) visible++;
+      }
+
+      sortItems();
+      renderCount(visible);
+      renderChips();
+      emptyBox.hidden = visible > 0;
+      grid.hidden = visible === 0;
+      if (visible === 0) renderEmptyHint(cats, mts, prices, q);
+      writeUrl();
+    }
+
+    function sortItems() {
+      const mode = sortSelect.value;
+      const ordered = [...items].sort((a, b) => {
+        if (mode === 'price-asc') return Number(a.dataset.price) - Number(b.dataset.price);
+        if (mode === 'price-desc') return Number(b.dataset.price) - Number(a.dataset.price);
+        if (mode === 'name') {
+          return (a.dataset.name ?? '').localeCompare(b.dataset.name ?? '', 'ru');
+        }
+        return Number(a.dataset.order) - Number(b.dataset.order);
+      });
+      ordered.forEach((item, i) => { item.style.order = String(i); });
+    }
+
+    function renderCount(visible: number) {
+      const word = wordForms(visible, 'позиция', 'позиции', 'позиций');
+      countEl.textContent =
+        visible === items.length
+          ? `${visible} ${word}`
+          : `Найдено ${visible} из ${items.length}`;
+      if (countShort) countShort.textContent = String(visible);
+
+      const activeCount = selected('cat').length + selected('mt').length + selected('price').length;
+      activeBadge.hidden = activeCount === 0;
+      activeBadge.textContent = activeCount ? ` (${activeCount})` : '';
+    }
+
+    function renderChips() {
+      const chips: { label: string; clear: () => void }[] = [];
+      for (const box of boxes) {
+        if (!box.checked) continue;
+        const label = box.parentElement?.querySelector('.facet__label')?.textContent ?? '';
+        chips.push({ label, clear: () => { box.checked = false; } });
+      }
+      const q = searchInput.value.trim();
+      if (q) chips.push({ label: `Поиск: ${q}`, clear: () => { searchInput.value = ''; } });
+
+      chipsList.replaceChildren();
+      for (const chip of chips) {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'catalog__chip';
+        btn.textContent = chip.label;
+        btn.setAttribute('aria-label', `Убрать фильтр: ${chip.label}`);
+        btn.addEventListener('click', () => { chip.clear(); apply(); });
+        li.append(btn);
+        chipsList.append(li);
+      }
+      chipsBox.hidden = chips.length === 0;
+    }
+
+    function renderEmptyHint(cats: string[], mts: string[], prices: string[], q: string) {
+      const parts: string[] = [];
+      if (q) parts.push(`поисковый запрос «${q}»`);
+      if (cats.length) parts.push(cats.length === 1 ? 'фильтр по категории' : 'фильтры по категориям');
+      if (mts.length) parts.push(mts.length === 1 ? 'фильтр по типу техники' : 'фильтры по типам техники');
+      if (prices.length) parts.push('фильтр по цене');
+      emptyHint.textContent = parts.length
+        ? `Попробуйте снять ${parts.join(' или ')}.`
+        : '';
+    }
+
+    /* --- панель фильтров на mobile --------------------------------------- */
+
+    // Сброс состояния вызывается НАПРЯМУЮ из close(), а не только по событию
+    // 'close' диалога: в запросе №29 именно эта зависимость оставляла
+    // залипший scroll-lock после закрытия. Слушатель 'close' оставлен как
+    // резервный путь для нативного закрытия по Esc.
+    const resetDialogState = () => {
+      openBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    };
+    const closeFilters = () => {
+      if (dialog.open) dialog.close();
+      resetDialogState();
+      openBtn.focus();
+    };
+    openBtn.addEventListener('click', () => {
+      dialog.showModal();
+      openBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    });
+    dialog.addEventListener('close', resetDialogState);
+    for (const btn of dialog.querySelectorAll<HTMLButtonElement>('[data-filters-close]')) {
+      btn.addEventListener('click', closeFilters);
+    }
+    // Клик по подложке модального диалога
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) closeFilters();
+    });
+
+    /* --- подписки -------------------------------------------------------- */
+
+    for (const box of boxes) box.addEventListener('change', apply);
+    sortSelect.addEventListener('change', apply);
+    let searchTimer: number | undefined;
+    searchInput.addEventListener('input', () => {
+      window.clearTimeout(searchTimer);
+      searchTimer = window.setTimeout(apply, 120);
+    });
+    for (const btn of root.querySelectorAll<HTMLButtonElement>('[data-reset]')) {
+      btn.addEventListener('click', () => {
+        for (const box of boxes) box.checked = false;
+        searchInput.value = '';
+        sortSelect.value = 'default';
+        apply();
+        if (isMobile() && dialog.open) closeFilters();
+      });
+    }
+
+    openBtn.setAttribute('aria-expanded', 'false');
+    openBtn.setAttribute('aria-haspopup', 'dialog');
+    openBtn.setAttribute('aria-controls', 'catalog-filters');
+
+    readUrl();
+    apply();
+
+    // Вход из шапки: /catalog#search фокусирует поле поиска
+    if (location.hash === '#search') {
+      searchInput.focus();
+      searchInput.scrollIntoView({ block: 'center' });
+    }
+  }
+</script>
+
+<style>
+  .catalog {
+    padding-bottom: var(--section-y);
+  }
+  .catalog__head {
+    margin-bottom: var(--space-6);
+  }
+  .catalog__intro {
+    max-width: 60ch;
+    margin-top: var(--space-3);
+    color: var(--text-muted);
+  }
+
+  /* --- панель управления --------------------------------------------- */
+  .catalog__toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--line);
+  }
+  .catalog__search {
+    flex: 1 1 280px;
+    min-width: 0;
+  }
+  .catalog__search-input,
+  .catalog__select {
+    width: 100%;
+    min-height: 44px;
+    padding: 0 var(--space-3);
+    font: inherit;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .catalog__select {
+    min-width: 200px;
+  }
+  .catalog__search-input:focus-visible,
+  .catalog__select:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 1px;
+  }
+  .catalog__count {
+    margin-left: auto;
+    font-family: var(--font-display);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .catalog__filters-open {
+    display: none;
+  }
+
+  /* --- чипы применённых фильтров ------------------------------------- */
+  .catalog__chips {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4) 0 0;
+  }
+  .catalog__chips-list {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    min-width: 0;
+  }
+  .catalog__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 32px;
+    padding: 0 var(--space-3);
+    font: inherit;
+    font-size: 13px;
+    color: var(--text);
+    background: var(--bg-muted);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    cursor: pointer;
+  }
+  .catalog__chip::after {
+    content: '✕';
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .catalog__chip:hover {
+    border-color: var(--text-muted);
+  }
+  .catalog__reset {
+    white-space: nowrap;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  /* --- раскладка ------------------------------------------------------ */
+  .catalog__layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: var(--space-8);
+    align-items: start;
+    padding-top: var(--space-6);
+  }
+  .catalog__results {
+    min-width: 0;
+  }
+
+  /* --- фасеты: на desktop обычная колонка, на mobile модальный диалог -- */
+  .facets {
+    display: block;
+    position: static;
+    inset: auto;
+    max-width: none;
+    max-height: none;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    overflow: visible;
+  }
+  .facets__top {
+    display: none;
+  }
+  .facet {
+    border: 0;
+    border-top: 1px solid var(--line);
+    padding: var(--space-4) 0;
+    margin: 0;
+  }
+  .facet:first-of-type {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .facet__legend {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    padding: 0 0 var(--space-3);
+  }
+  .facet__option {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: 36px;
+    cursor: pointer;
+  }
+  .facet__option input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent);
+    flex: 0 0 auto;
+  }
+  .facet__label {
+    flex: 1 1 auto;
+    font-size: 15px;
+    line-height: 1.3;
+  }
+  .facet__count {
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .facets__actions {
+    display: none;
+  }
+
+  /* --- сетка и пустое состояние --------------------------------------- */
+  .catalog__grid {
+    margin: 0;
+  }
+  .catalog__item[hidden] {
+    display: none;
+  }
+  .catalog__empty {
+    padding: var(--space-12) 0;
+    text-align: center;
+  }
+  .catalog__empty-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .catalog__empty-hint {
+    margin-top: var(--space-2);
+    color: var(--text-muted);
+  }
+  .catalog__empty-actions {
+    display: flex;
+    gap: var(--space-3);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: var(--space-6);
+  }
+
+  @media (max-width: 1024px) {
+    .catalog__layout {
+      grid-template-columns: 220px 1fr;
+      gap: var(--space-6);
+    }
+  }
+
+  /* --- mobile: фасеты уезжают в нижний лист --------------------------- */
+  @media (max-width: 768px) {
+    .catalog__layout {
+      display: block;
+      padding-top: var(--space-4);
+    }
+    .catalog__toolbar {
+      gap: var(--space-2);
+    }
+    .catalog__search {
+      flex: 1 1 100%;
+    }
+    .catalog__sort {
+      flex: 1 1 auto;
+    }
+    .catalog__select {
+      min-width: 0;
+    }
+    .catalog__filters-open {
+      display: inline-flex;
+      flex: 0 0 auto;
+      min-height: 44px;
+    }
+    .catalog__count {
+      flex: 1 1 100%;
+      margin-left: 0;
+      font-size: 14px;
+    }
+    .catalog__chips-list {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      padding-bottom: var(--space-1);
+    }
+    .catalog__chip {
+      min-height: 36px;
+      white-space: nowrap;
+    }
+
+    .facets:not([open]) {
+      display: none;
+    }
+    .facets[open] {
+      display: block;
+      position: fixed;
+      inset: auto 0 0 0;
+      width: 100%;
+      max-height: 85vh;
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      border-top: 1px solid var(--line);
+      box-shadow: var(--shadow-overlay);
+      overflow-y: auto;
+    }
+    .facets::backdrop {
+      background: rgb(0 0 0 / 0.45);
+    }
+    .facets__inner {
+      padding: var(--space-4);
+      padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
+    }
+    .facets__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: var(--space-4);
+    }
+    .facets__title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .facets__close {
+      width: 44px;
+      height: 44px;
+      font-size: 18px;
+      background: none;
+      border: 0;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .facet__option {
+      min-height: 44px;
+    }
+    .facets__actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3);
+      position: sticky;
+      bottom: 0;
+      padding-top: var(--space-4);
+      background: var(--bg);
+    }
+  }
+</style>

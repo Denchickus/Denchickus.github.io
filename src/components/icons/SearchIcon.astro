@@ -1,0 +1,29 @@
+---
+/**
+ * Иконка поиска для компактной точки входа в шапке (SITE_STRUCTURE.md §9, п.3).
+ * Геометрия выведена вручную и элементарна: окружность r=7 с центром (10.5,10.5)
+ * и отрезок ручки от (15.5,15.5) до (21,21). Штриховая, а не заливная — так она
+ * не спорит по весу с заливной иконкой телефона рядом.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<svg
+  class={className}
+  width="20"
+  height="20"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  <circle cx="10.5" cy="10.5" r="7" />
+  <line x1="15.5" y1="15.5" x2="21" y2="21" />
+</svg>

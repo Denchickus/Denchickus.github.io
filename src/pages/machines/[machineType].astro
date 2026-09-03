@@ -1,0 +1,94 @@
+---
+/**
+ * /machines/[machineType] — совместимое оборудование (journey B, SITE_STRUCTURE §4).
+ *
+ * getStaticPaths строго по getVisibleMachineTypes(): неподтверждённый
+ * «Экскаватор» (DR-10) страницы не получает вообще — это не пустой список,
+ * а отсутствие маршрута.
+ *
+ * Связь товар↔тип техники — PARTIALLY VERIFIED (выведена из блоков
+ * «АГРЕГАТИРОВАНИЕ» источника), поэтому формулировка — «агрегатируется с»,
+ * а не гарантия совместимости.
+ */
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { getVisibleMachineTypes, getProductsByMachineType } from '../../data/catalog';
+import { pluralPozitsiya } from '../../data/plural';
+
+export const getStaticPaths = (() =>
+  getVisibleMachineTypes().map((machineType) => {
+    // Инвариант данных: у confirmed:true типа техники slug всегда строка
+    // (см. scripts/build-catalog-data.mjs) — null бывает только у скрытого
+    // «Экскаватора», а он сюда не попадает благодаря getVisibleMachineTypes().
+    if (!machineType.slug) {
+      throw new Error(`Подтверждённый тип техники ${machineType.id} без slug`);
+    }
+    return { params: { machineType: machineType.slug }, props: { machineType } };
+  })) satisfies GetStaticPaths;
+
+const { machineType } = Astro.props;
+const products = getProductsByMachineType(machineType.id);
+const total = products.length;
+---
+
+<Base
+  title={machineType.name}
+  description={`Навесное оборудование, агрегатируемое с «${machineType.name}»: ${total} ${pluralPozitsiya(total)}.`}
+>
+  <div class="container">
+    <Breadcrumbs
+      items={[
+        { label: 'Главная', href: '/' },
+        { label: 'Тип техники', href: '/machines' },
+        { label: machineType.name },
+      ]}
+    />
+  </div>
+
+  <section class="machine-hub container">
+    <header class="machine-hub__head">
+      <h1>{machineType.name}</h1>
+      <p class="machine-hub__count tnum">
+        {total} {pluralPozitsiya(total)} совместимого оборудования
+      </p>
+      <a class="link" href={`/catalog?mt=${machineType.id}`}>
+        Показать в каталоге: {total} {pluralPozitsiya(total)}
+      </a>
+    </header>
+
+    {total > 0 ? (
+      <ul class="card-grid card-grid--3" role="list">
+        {products.map((p, i) => (
+          <li><ProductCard product={p} mtSlug={machineType.slug ?? undefined} eager={i < 3} /></li>
+        ))}
+      </ul>
+    ) : (
+      <p class="machine-hub__empty">
+        Совместимое оборудование для этого типа техники пока не подтверждено.
+      </p>
+    )}
+  </section>
+</Base>
+
+<style>
+  .machine-hub {
+    padding-bottom: var(--section-y);
+  }
+  .machine-hub__head {
+    margin-bottom: var(--space-8);
+  }
+  .machine-hub__count {
+    margin-top: var(--space-3);
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+  .machine-hub__head .link {
+    display: inline-block;
+    margin-top: var(--space-2);
+  }
+  .machine-hub__empty {
+    color: var(--text-muted);
+  }
+</style>

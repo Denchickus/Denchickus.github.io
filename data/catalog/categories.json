@@ -1,0 +1,88 @@
+{
+  "_generatedBy": "scripts/build-catalog-data.mjs",
+  "_generatedAt": "2026-09-02",
+  "_source": "data/content-inventory.json",
+  "_note": "Провизорная группировка категорий и связи товар<->тип техники — см. docs/DATA_MODEL.md. confirmed:false типы техники в пользовательском UI не показываются (getVisibleMachineTypes).",
+  "categories": [
+    {
+      "id": "cat-kovshi",
+      "slug": "kovshi",
+      "name": "Ковши",
+      "order": 1,
+      "description": null,
+      "provenance": "prototype-grouping",
+      "sourceUrl": null,
+      "productCount": 11
+    },
+    {
+      "id": "cat-otvaly",
+      "slug": "otvaly",
+      "name": "Отвалы",
+      "order": 2,
+      "description": null,
+      "provenance": "prototype-grouping",
+      "sourceUrl": null,
+      "productCount": 4
+    },
+    {
+      "id": "cat-shchetki",
+      "slug": "shchetki",
+      "name": "Щётки",
+      "order": 3,
+      "description": null,
+      "provenance": "prototype-grouping",
+      "sourceUrl": null,
+      "productCount": 3
+    },
+    {
+      "id": "cat-zimnee-soderzhanie",
+      "slug": "zimnee-soderzhanie",
+      "name": "Зимнее содержание",
+      "order": 4,
+      "description": null,
+      "provenance": "prototype-grouping",
+      "sourceUrl": null,
+      "productCount": 5
+    },
+    {
+      "id": "cat-zahvaty-i-vily",
+      "slug": "zahvaty-i-vily",
+      "name": "Захваты и вилы",
+      "order": 5,
+      "description": null,
+      "provenance": "prototype-grouping",
+      "sourceUrl": null,
+      "productCount": 7
+    },
+    {
+      "id": "cat-gidravlicheskoe",
+      "slug": "gidravlicheskoe",
+      "name": "Гидравлическое навесное",
+      "order": 6,
+      "description": null,
+      "provenance": "prototype-grouping",
+      "sourceUrl": null,
+      "productCount": 6
+    },
+    {
+      "id": "cat-zemlyanye-i-selhoz",
+      "slug": "zemlyanye-i-selhoz",
+      "name": "Земляные работы и сельхоз",
+      "order": 7,
+      "description": null,
+      "provenance": "prototype-grouping",
+      "sourceUrl": null,
+      "productCount": 7
+    },
+    {
+      "id": "cat-osnastka",
+      "slug": "osnastka",
+      "name": "Оснастка и прочее",
+      "order": 8,
+      "description": null,
+      "provenance": "prototype-grouping",
+      "sourceUrl": null,
+      "productCount": 6
+    }
+  ]
+}

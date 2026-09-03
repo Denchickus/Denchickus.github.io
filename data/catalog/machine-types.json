@@ -1,0 +1,98 @@
+{
+  "_generatedBy": "scripts/build-catalog-data.mjs",
+  "_generatedAt": "2026-09-02",
+  "_source": "data/content-inventory.json",
+  "_note": "Провизорная группировка категорий и связи товар<->тип техники — см. docs/DATA_MODEL.md. confirmed:false типы техники в пользовательском UI не показываются (getVisibleMachineTypes).",
+  "machineTypes": [
+    {
+      "id": "mt-minipogruzchik",
+      "slug": "minipogruzchik",
+      "name": "Минипогрузчик",
+      "h1Source": "ОБОРУДОВАНИЕ ДЛЯ МИНИПОГРУЗЧИКА",
+      "confirmed": true,
+      "order": 1,
+      "sourceUrl": "https://st-technics.ru/minipogruzchik",
+      "dataReview": [],
+      "productCount": 35
+    },
+    {
+      "id": "mt-ehkskavator-pogruzchik",
+      "slug": "ehkskavator-pogruzchik",
+      "name": "Экскаватор-погрузчик",
+      "h1Source": "ОБОРУДОВАНИЕ ДЛЯ ЭКСКАВАТОРА-ПОГРУЗЧИКА",
+      "confirmed": true,
+      "order": 2,
+      "sourceUrl": "https://st-technics.ru/ehkskavator-pogruzchik",
+      "dataReview": [],
+      "productCount": 25
+    },
+    {
+      "id": "mt-frontalnyj-pogruzchik",
+      "slug": "frontalnyj-pogruzchik",
+      "name": "Фронтальный погрузчик",
+      "h1Source": "ОБОРУДОВАНИЕ ДЛЯ ФРОНТАЛЬНОГО ПОГРУЗЧИКА",
+      "confirmed": true,
+      "order": 3,
+      "sourceUrl": "https://st-technics.ru/frontalnyj-pogruzchik",
+      "dataReview": [],
+      "productCount": 23
+    },
+    {
+      "id": "mt-teleskopicheskij-pogruzchik",
+      "slug": "teleskopicheskij-pogruzchik",
+      "name": "Телескопический погрузчик",
+      "h1Source": "ОБОРУДОВАНИЕ ДЛЯ ТЕЛЕСКОПИЧЕСКОГО ПОГРУЗЧИКА",
+      "confirmed": true,
+      "order": 4,
+      "sourceUrl": "https://st-technics.ru/teleskopicheskij-pogruzchik",
+      "dataReview": [],
+      "productCount": 19
+    },
+    {
+      "id": "mt-traktor",
+      "slug": "traktor",
+      "name": "Трактор (МТЗ)",
+      "h1Source": "ОБОРУДОВАНИЕ ДЛЯ ТРАКТОРА",
+      "confirmed": true,
+      "order": 5,
+      "sourceUrl": "https://st-technics.ru/traktor",
+      "dataReview": [],
+      "productCount": 16
+    },
+    {
+      "id": "mt-vilochnyj-pogruzchik",
+      "slug": "vilochnyj-pogruzchik",
+      "name": "Вилочный погрузчик",
+      "h1Source": "ОБОРУДОВАНИЕ ДЛЯ ВИЛОЧНОГО ПОГРУЗЧИКА",
+      "confirmed": true,
+      "order": 6,
+      "sourceUrl": "https://st-technics.ru/vilochnyj-pogruzchik",
+      "dataReview": [],
+      "productCount": 13
+    },
+    {
+      "id": "mt-mini-ehkskavator",
+      "slug": "mini-ehkskavator",
+      "name": "Мини-экскаватор",
+      "h1Source": "ОБОРУДОВАНИЕ ДЛЯ МИНИ-ЭКСКАВАТОРА",
+      "confirmed": true,
+      "order": 7,
+      "sourceUrl": "https://st-technics.ru/mini-ehkskavator",
+      "dataReview": [],
+      "productCount": 13
+    },
+    {
+      "id": "mt-ehkskavator",
+      "slug": null,
+      "name": "Экскаватор",
+      "h1Source": null,
+      "confirmed": false,
+      "order": 99,
+      "sourceUrl": null,
+      "dataReview": [
+        "DR-10"
+      ],
+      "productCount": 3
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+---
+/**
+ * /catalog — весь ассортимент (SITE_STRUCTURE.md §6).
+ * Вся логика выдачи в CatalogView: категорийная страница использует её же.
+ */
+import Base from '../../layouts/Base.astro';
+import CatalogView from '../../components/CatalogView.astro';
+import { getProducts } from '../../data/catalog';
+import { pluralPozitsiya } from '../../data/plural';
+
+const products = getProducts();
+const total = products.length;
+---
+
+<Base
+  title="Каталог оборудования"
+  description={`Навесное оборудование СТ-ТЕХНИКС: ${total} ${pluralPozitsiya(total)} собственного производства.`}
+>
+  <CatalogView
+    products={products}
+    crumbs={[{ label: 'Главная', href: '/' }, { label: 'Каталог' }]}
+    heading="Каталог оборудования"
+    intro="Навесное оборудование собственного производства. Фильтры по категории, типу техники и цене работают вместе; ссылку на выборку можно переслать."
+  />
+</Base>

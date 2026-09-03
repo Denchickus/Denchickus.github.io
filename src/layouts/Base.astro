@@ -1,0 +1,53 @@
+---
+/**
+ * Базовый layout прототипа. Один <h1> на страницу задаётся контентом страницы,
+ * не здесь. Метаданные <head> источника недоступны (NOT VERIFIED) — пишутся заново.
+ */
+import '../styles/tokens.css';
+import '../styles/base.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FloatingTelegram from '../components/FloatingTelegram.astro';
+import { BRAND } from '../data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const fullTitle = title ? `${title} — ${BRAND.name}` : BRAND.name;
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    {description && <meta name="description" content={description} />}
+    <meta name="robots" content="noindex, nofollow" />
+    <!-- Прототип: не production. Индексация запрещена намеренно. -->
+    <!-- Пакет favicon.io (apple-touch-icon.png, favicon-32x32.png,
+         favicon-16x16.png, site.webmanifest, android-chrome-*.png) был
+         сгенерирован из логотипа Telegram и ошибочно подключался как favicon
+         сайта — убрано. android-chrome-512x512.png не удалялся из public/ и
+         продолжает использоваться ТОЛЬКО внутри floating Telegram CTA
+         (см. FloatingTelegram.astro), не как favicon.
+         Восстановлено исходное favicon.svg СТ-ТЕХНИКС (было подключено до
+         установки Telegram-пакета). Он PROVISIONAL — нейтральная тёмная
+         плитка с текстом «СТ», не официальный логотип.
+         NEXT: заменить на официальный favicon СТ-ТЕХНИКС после получения
+         подтверждённого logo asset. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">К содержанию</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <FloatingTelegram />
+  </body>
+</html>

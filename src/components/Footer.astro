@@ -1,0 +1,332 @@
+---
+/**
+ * Footer (SITE_STRUCTURE.md §2, DESIGN_PLAN.md §6).
+ * Тёмная зона. Только подтверждённые контакты. Ссылки на политику
+ * конфиденциальности НЕТ — подтверждённого текста не существует.
+ * Полный адрес verbatim (DR-06 остаётся открытым по корректности как почтового адреса —
+ * см. src/data/site.ts).
+ *
+ * Никаких <details>/<summary> и disclosure-стрелок: заголовки колонок — обычные <h2>.
+ *
+ * ВАЖНО: все четыре блока — ПРЯМЫЕ дети .site-footer__grid, без единой обёртки вокруг
+ * трёх <nav>. Обёртка с `display: contents` уже один раз ломала desktop (см. историю
+ * запроса о восстановлении 4-колоночной сетки) — вместо неё mobile-раскладка ниже
+ * получена только через grid-column на brand-блоке и обычный grid auto-flow для <nav>.
+ * Раскладка: >=1024 — 4 колонки в ряд (не менялась). 768-1023 — 2 колонки, brand делит
+ * первую ячейку с «Оборудованием» (не менялась). <=768 — brand на всю ширину сверху
+ * (grid-column: 1/-1), под ним 3 nav-группы по 2 в ряд; <420 — nav-группы в 1 колонку.
+ */
+import { getCategories, getVisibleMachineTypes } from '../data/catalog';
+import { BRAND, CONTACTS, NAV, telHref } from '../data/site';
+
+const categories = getCategories();
+const machineTypes = getVisibleMachineTypes();
+---
+
+<footer class="site-footer surface-dark">
+  <div class="container site-footer__grid">
+    <div class="site-footer__col site-footer__brand">
+      <span class="brand__name">{BRAND.name}</span>
+      <p class="site-footer__tagline">{BRAND.tagline}</p>
+      <ul role="list" class="site-footer__contacts">
+        {CONTACTS.phones.map((p) => (
+          <li><a class="site-footer__link site-footer__phone tnum" href={telHref(p)}>{p}</a></li>
+        ))}
+        <li><a class="site-footer__link site-footer__email" href={`mailto:${CONTACTS.emailPrimary}`}>{CONTACTS.emailPrimary}</a></li>
+        <li>
+          <a
+            class="site-footer__telegram"
+            href={CONTACTS.telegram.footer.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Telegram СТ-ТЕХНИКС"
+          >
+            <img
+              class="site-footer__telegram-img"
+              src="/icons/telegram-footer.svg"
+              width="30"
+              height="30"
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+          </a>
+        </li>
+        <li class="site-footer__address">{CONTACTS.locality}</li>
+        <li class="site-footer__hours">{CONTACTS.workingHours}</li>
+      </ul>
+    </div>
+
+    <nav class="site-footer__col" aria-label="Каталог оборудования">
+      <h2 class="site-footer__heading">Оборудование</h2>
+      <ul role="list" class="site-footer__list">
+        {categories.map((c) => (
+          <li>
+            <a class="site-footer__link" href={`/catalog/category/${c.slug}`}>
+              {c.name} <span class="text-muted tnum">{c.productCount}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <nav class="site-footer__col" aria-label="Тип техники">
+      <h2 class="site-footer__heading">Тип техники</h2>
+      <ul role="list" class="site-footer__list">
+        {machineTypes.map((mt) => (
+          <li>
+            <a class="site-footer__link" href={`/machines/${mt.slug}`}>{mt.name}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <nav class="site-footer__col" aria-label="Разделы">
+      <h2 class="site-footer__heading">Разделы</h2>
+      <ul role="list" class="site-footer__list">
+        {NAV.map((item) => (
+          <li><a class="site-footer__link" href={item.href}>{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container site-footer__bottom">
+    <p>{BRAND.copyright}</p>
+    <p>Демонстрационная версия сайта. Формы обратной связи данные не отправляют.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--dark-line);
+  }
+  /* Одна колонка по умолчанию (<768). Ниже — 2 колонки, затем 4.
+     Все четыре .site-footer__col — прямые дети этой сетки, без обёрток. */
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    column-gap: clamp(48px, 4vw, 72px);
+    row-gap: var(--space-8);
+    align-items: start;
+    padding-top: clamp(56px, 5vw, 64px);
+    padding-bottom: clamp(32px, 3vw, 40px);
+  }
+  @media (min-width: 768px) {
+    .site-footer__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: var(--space-12);
+    }
+  }
+  @media (min-width: 1024px) {
+    .site-footer__grid {
+      grid-template-columns:
+        minmax(240px, 1.3fr)
+        minmax(180px, 1fr)
+        minmax(210px, 1fr)
+        minmax(150px, 0.8fr);
+      row-gap: var(--space-8);
+    }
+  }
+  .site-footer__col {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  /* --- Brand / contacts: визуально сильнее остальных колонок ------------ */
+  .site-footer__brand .brand__name {
+    color: var(--dark-text);
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+  .site-footer__tagline {
+    margin-top: var(--space-3);
+    max-width: 30ch;
+    font-size: 0.9375rem; /* 15px */
+    line-height: 1.5;
+    color: var(--dark-text-muted);
+  }
+  .site-footer__contacts {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+  .site-footer__phone {
+    font-size: 1.0625rem; /* 17px */
+    font-weight: 600;
+  }
+  .site-footer__email {
+    font-size: 0.9375rem; /* 15px */
+  }
+  .site-footer__address {
+    max-width: 26ch; /* естественный перенос в 2 строки; текст НЕ меняется */
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.45;
+    color: var(--dark-text-muted);
+  }
+  .site-footer__hours {
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.45;
+    color: var(--dark-text-muted);
+  }
+
+  /* --- Заголовки колонок: обычные heading, без controls и стрелок ------- */
+  .site-footer__heading {
+    margin: 0 0 var(--space-4);
+    font-family: var(--font-display);
+    font-size: 0.875rem; /* 14px */
+    font-weight: 700;
+    line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--dark-text-muted);
+  }
+
+  /* --- Ссылки ------------------------------------------------------------ */
+  .site-footer__list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .site-footer__link {
+    color: var(--dark-text);
+    font-size: 0.9375rem; /* 15px */
+    line-height: 1.5;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--dur) var(--easing);
+  }
+  .site-footer__link:hover {
+    border-bottom-color: currentColor;
+  }
+
+  /* --- Telegram: локальный самостоятельный SVG-asset (28–34px), не тот же
+     файл/компонент, что у floating-кнопки — см. public/icons/telegram-footer.svg */
+  .site-footer__telegram {
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    transition: transform var(--dur) var(--easing);
+  }
+  .site-footer__telegram-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .site-footer__telegram:hover {
+    transform: scale(1.08);
+  }
+  /* Специфичнее, чем `.surface-dark :focus-visible` из base.css — иначе белый
+     контур на белом круге был бы не виден. */
+  .site-footer__contacts .site-footer__telegram:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  /* --- Нижняя мета-строка: единственная разделительная линия ------------ */
+  .site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-8);
+    padding-block: var(--space-6);
+    border-top: 1px solid var(--dark-line);
+  }
+  .site-footer__bottom p {
+    max-width: 70ch;
+    font-size: 0.8125rem; /* 13px */
+    line-height: 1.5;
+    color: var(--dark-text-muted);
+  }
+
+  /* --- Mobile (<=768): brand-блок центрирован, 3 nav-группы — 2-колоночная
+     сетка, затем 1 колонка на самых узких экранах. Без accordion, без обёртки
+     с display:contents (см. комментарий в шапке файла — этот приём уже один раз
+     сломал desktop). Вместо этого .site-footer__brand просто растягивается на всю
+     строку (grid-column:1/-1) в ТОЙ ЖЕ плоской сетке, а три <nav> естественным
+     grid auto-flow укладываются по 2 в ряд следом — без единого нового элемента
+     в разметке. -------------------------------------------------------------- */
+  @media (max-width: 768px) {
+    .site-footer__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: var(--space-6);
+      row-gap: 28px;
+    }
+    .site-footer__brand {
+      grid-column: 1 / -1;
+      align-items: center;
+      text-align: center;
+    }
+    .site-footer__brand .brand__name {
+      font-size: 19px; /* было 21px */
+    }
+    .site-footer__tagline {
+      margin-top: 14px; /* было var(--space-3)=12px — чуть больше воздуха */
+      max-width: 270px;
+      font-size: 0.875rem; /* 14px — было 15px */
+      text-align: center;
+    }
+    .site-footer__contacts {
+      align-items: center;
+      gap: 14px; /* было var(--space-3)=12px — чуть больше воздуха между контактами */
+    }
+    .site-footer__heading {
+      letter-spacing: 0.06em; /* было 0.05em — чуть больше трекинг */
+    }
+    .site-footer__list {
+      gap: 8px; /* было 12px */
+    }
+    /* .site-footer__link — общее правило раньше в этом блоке, чем
+       .site-footer__phone/.site-footer__email/.site-footer__address ниже: у
+       обоих селекторов один класс (одинаковая специфичность), поэтому порядок
+       в источнике решает — конкретные классы должны идти ПОСЛЕ общего, иначе
+       их значение молча перебивается общим (та же логика верна и для базовых,
+       немедийных правил файла, которые здесь не трогаем — desktop не менялся). */
+    .site-footer__link {
+      font-size: 0.875rem; /* 14px — было 15px */
+      line-height: 1.45; /* было 1.5 */
+    }
+    .site-footer__phone {
+      font-size: 1rem; /* 16px — было 17px */
+    }
+    .site-footer__email {
+      font-size: 0.875rem; /* 14px — было унаследовано 15px, теперь явно закреплено */
+    }
+    .site-footer__address {
+      max-width: 280px; /* было 26ch */
+      font-size: 0.875rem; /* 14px, без изменений — уже в диапазоне 13–14 */
+      text-align: center;
+    }
+    .site-footer__hours {
+      font-size: 0.8125rem; /* 13px — было 14px */
+    }
+    .site-footer__bottom {
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+      text-align: center;
+      /* высота floating-кнопки + запас: мета-строка не уходит под неё */
+      padding-bottom: calc(var(--space-6) + 64px);
+    }
+    .site-footer__bottom p {
+      font-size: 0.75rem; /* 12px — было 13px */
+      line-height: 1.4; /* было 1.5 */
+    }
+    .site-footer__bottom p:last-of-type {
+      max-width: 300px;
+    }
+  }
+
+  /* Совсем узкие экраны — 2 колонки навигации уже не помещаются комфортно */
+  @media (max-width: 419px) {
+    .site-footer__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,44 @@
+---
+/**
+ * /catalog/category/[category] — каталог с зафиксированной категорией.
+ *
+ * Категория остаётся навигационным контекстом и НЕ входит в canonical URL товара
+ * (SITE_STRUCTURE.md §1): группировка провизорная и может быть переразбита после
+ * ревью владельца, а адреса товаров от этого меняться не должны.
+ *
+ * В пользовательском тексте слово «провизорная» не появляется — провенанс живёт
+ * в данных и документации.
+ */
+import type { GetStaticPaths } from 'astro';
+import Base from '../../../layouts/Base.astro';
+import CatalogView from '../../../components/CatalogView.astro';
+import { getCategories, getProductsByCategory } from '../../../data/catalog';
+import { pluralPozitsiya } from '../../../data/plural';
+
+export const getStaticPaths = (() =>
+  getCategories().map((category) => ({
+    params: { category: category.slug },
+    props: { category },
+  }))) satisfies GetStaticPaths;
+
+const { category } = Astro.props;
+const products = getProductsByCategory(category.id);
+const total = products.length;
+---
+
+<Base
+  title={category.name}
+  description={`${category.name}: ${total} ${pluralPozitsiya(total)} навесного оборудования СТ-ТЕХНИКС.`}
+>
+  <CatalogView
+    products={products}
+    crumbs={[
+      { label: 'Главная', href: '/' },
+      { label: 'Каталог', href: '/catalog' },
+      { label: category.name },
+    ]}
+    heading={category.name}
+    intro={category.description}
+    fixedCategoryId={category.id}
+  />
+</Base>

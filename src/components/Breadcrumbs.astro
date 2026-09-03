@@ -1,0 +1,105 @@
+---
+/**
+ * Хлебные крошки (SITE_STRUCTURE.md §2).
+ *
+ * Последний элемент — текущая страница: не ссылка, помечен aria-current="page".
+ * На mobile строка не переносится и не сжимает текст до нечитаемого — вместо
+ * этого она скроллится горизонтально ВНУТРИ своего контейнера, чтобы страница
+ * по горизонтали не ехала.
+ */
+export interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: Crumb[];
+}
+const { items } = Astro.props;
+---
+
+<nav class="breadcrumbs" aria-label="Хлебные крошки">
+  <ol class="breadcrumbs__list" role="list">
+    {items.map((item, i) => (
+      <li class="breadcrumbs__item" data-crumb-index={i}>
+        {item.href && i < items.length - 1 ? (
+          <a class="breadcrumbs__link" href={item.href}>{item.label}</a>
+        ) : (
+          <span class="breadcrumbs__current" aria-current="page">{item.label}</span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  .breadcrumbs {
+    /* Скролл живёт здесь, а не на странице. Полоса прокрутки не скрыта
+       полностью (тот же приём, что .spec__scroll в SpecTable.astro) — иначе
+       длинная цепочка крошек на mobile выглядит обрезанной без подсказки,
+       что её можно докрутить. */
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+    padding: var(--space-4) 0;
+  }
+  .breadcrumbs::-webkit-scrollbar {
+    height: 6px;
+  }
+  .breadcrumbs::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .breadcrumbs::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 999px;
+  }
+  .breadcrumbs::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+  }
+
+  .breadcrumbs__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    white-space: nowrap;
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--text-muted);
+  }
+
+  .breadcrumbs__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  /* Разделитель рисуется псевдоэлементом: в разметке его нет, значит он не
+     попадает в текст для скринридера */
+  .breadcrumbs__item + .breadcrumbs__item::before {
+    content: '/';
+    color: var(--line);
+  }
+
+  .breadcrumbs__link {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+  .breadcrumbs__link:hover {
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .breadcrumbs__current {
+    color: var(--text);
+  }
+
+  @media (max-width: 768px) {
+    .breadcrumbs {
+      padding: var(--space-3) 0;
+    }
+    .breadcrumbs__list {
+      font-size: 13px;
+    }
+  }
+</style>

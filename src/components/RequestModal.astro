@@ -1,0 +1,281 @@
+---
+/**
+ * Mock-модалка запроса цены (Product Page visual review, SITE_STRUCTURE.md §5).
+ *
+ * ВАЖНО: форма НИЧЕГО не отправляет — нет fetch/XHR, нет action на внешний адрес,
+ * нет обращения к st-technics.ru, email-API, CRM, Telegram, WhatsApp.
+ * После submit — только локальное сообщение «Демо-режим: заявка не отправлена.».
+ *
+ * Одна модалка на страницу, открывается любой кнопкой с [data-open-request-modal]
+ * (purchase box, нижняя мобильная полоса, pre-footer CTA) — так вместо трёх копий
+ * формы на странице одна, и цена/тип техники обновляются в одном месте.
+ * Нативный <dialog>: Esc и focus-trap работают без ручной реализации.
+ *
+ * Чекбокс согласия — текст без ссылки на страницу политики (её здесь нет).
+ */
+import { REQUEST_BLOCK, CONTACTS, telHref } from '../data/site';
+
+interface Props {
+  /** Предзаполнение названия товара. */
+  productName?: string;
+  /**
+   * Предзаполнение типа техники — для журнея B (Тип техники → товар → запрос,
+   * SITE_STRUCTURE.md §4): в заявку попадают и товар, и техника клиента.
+   * Значение поля дальше обновляется скриптом страницы при смене варианта.
+   */
+  machineTypeName?: string;
+}
+const { productName, machineTypeName } = Astro.props;
+---
+
+<dialog class="request-modal" id="request-modal" aria-labelledby="request-modal-title">
+  <button type="button" class="request-modal__close" data-close-request-modal aria-label="Закрыть">
+    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+      <line x1="3" y1="3" x2="13" y2="13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+      <line x1="13" y1="3" x2="3" y2="13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+    </svg>
+  </button>
+
+  <div class="request-modal__body">
+    <h2 id="request-modal-title" class="request-modal__title">{REQUEST_BLOCK.heading}</h2>
+    <p class="request-modal__text">{REQUEST_BLOCK.text}</p>
+
+    <form class="request-modal__form" novalidate data-mock-form>
+      {productName && (
+        <label class="field">
+          <span class="field__label">Оборудование</span>
+          <input class="field__input" type="text" name="product" value={productName} readonly />
+        </label>
+      )}
+
+      {machineTypeName && (
+        <label class="field">
+          <span class="field__label">Тип техники</span>
+          <input
+            id="request-machine-type"
+            class="field__input"
+            type="text"
+            name="machineType"
+            value={machineTypeName}
+            readonly
+          />
+        </label>
+      )}
+
+      <label class="field">
+        <span class="field__label">Как к вам обращаться</span>
+        <input class="field__input" type="text" name="name" autocomplete="name" required />
+      </label>
+
+      <label class="field">
+        <span class="field__label">Телефон</span>
+        <input class="field__input tnum" type="tel" name="phone" autocomplete="tel" required />
+      </label>
+
+      <label class="field">
+        <span class="field__label">Комментарий <span class="text-muted">— необязательно</span></span>
+        <textarea class="field__input" name="message" rows="3"></textarea>
+      </label>
+
+      <label class="field field--check">
+        <input type="checkbox" name="consent" required />
+        <span class="text-small">Согласен на обработку персональных данных</span>
+      </label>
+
+      <button type="submit" class="btn btn--primary btn--block">Отправить заявку</button>
+
+      <p class="request-modal__status" data-mock-status role="status" aria-live="polite" hidden></p>
+    </form>
+
+    <ul role="list" class="request-modal__contacts">
+      {CONTACTS.phones.map((p) => (
+        <li><a class="link tnum" href={telHref(p)}>{p}</a></li>
+      ))}
+      <li><a class="link" href={`mailto:${CONTACTS.emailPrimary}`}>{CONTACTS.emailPrimary}</a></li>
+    </ul>
+  </div>
+</dialog>
+
+<script>
+  const modal = document.getElementById('request-modal') as HTMLDialogElement | null;
+  let lastFocused: HTMLElement | null = null;
+
+  if (modal) {
+    document.querySelectorAll<HTMLElement>('[data-open-request-modal]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        lastFocused = document.activeElement as HTMLElement | null;
+        modal.showModal();
+      });
+    });
+
+    modal.querySelector('[data-close-request-modal]')?.addEventListener('click', () => modal.close());
+
+    // Клик по backdrop (target === сам dialog, а не его содержимое) закрывает модалку.
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.close();
+    });
+
+    modal.addEventListener('close', () => {
+      lastFocused?.focus?.();
+    });
+  }
+
+  const form = document.querySelector<HTMLFormElement>('[data-mock-form]');
+  const status = document.querySelector<HTMLParagraphElement>('[data-mock-status]');
+
+  form?.addEventListener('submit', (e) => {
+    // Никаких сетевых запросов. Только локальное состояние.
+    e.preventDefault();
+    if (!status) return;
+
+    if (!form.checkValidity()) {
+      status.hidden = false;
+      status.dataset.kind = 'error';
+      status.textContent = 'Заполните обязательные поля.';
+      form.reportValidity();
+      return;
+    }
+
+    status.hidden = false;
+    status.dataset.kind = 'ok';
+    status.textContent = 'Демо-режим: заявка не отправлена.';
+    form.querySelectorAll('input:not([readonly]), textarea').forEach((el) => {
+      const node = el as HTMLInputElement | HTMLTextAreaElement;
+      if (node.type === 'checkbox') (node as HTMLInputElement).checked = false;
+      else node.value = '';
+    });
+  });
+</script>
+
+<style>
+  .request-modal {
+    position: fixed;
+    margin: auto;
+    max-width: 480px;
+    width: calc(100% - 32px);
+    max-height: 90vh;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-overlay);
+    color: var(--text);
+    background: var(--bg);
+  }
+  .request-modal::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+  .request-modal:not([open]) {
+    display: none;
+  }
+
+  .request-modal__body {
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: var(--space-8);
+  }
+  .request-modal__title {
+    font-size: var(--fs-h3);
+    line-height: var(--lh-h3);
+    padding-right: var(--space-8);
+  }
+  .request-modal__text {
+    margin-top: var(--space-2);
+    color: var(--text-muted);
+  }
+
+  .request-modal__close {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--text);
+    cursor: pointer;
+  }
+  .request-modal__close:hover {
+    border-color: var(--text);
+  }
+
+  .request-modal__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .field__label {
+    font-size: var(--fs-small);
+    font-weight: 500;
+  }
+  .field__input {
+    font: inherit;
+    width: 100%;
+    min-width: 0;
+    min-height: var(--control-h);
+    padding: var(--space-2) var(--space-3);
+    background: var(--bg);
+    border: 1px solid var(--text-muted);
+    border-radius: var(--radius);
+    color: var(--text);
+  }
+  textarea.field__input {
+    min-height: calc(var(--control-h) * 1.6);
+    padding: var(--space-3);
+    resize: vertical;
+  }
+  .field--check {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+  .field--check input {
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .request-modal__status {
+    margin: 0;
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--bg-muted);
+    font-size: var(--fs-small);
+  }
+  .request-modal__status[data-kind='error'] {
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+  .request-modal__status[data-kind='ok'] {
+    border-color: var(--text);
+  }
+
+  .request-modal__contacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6);
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--line);
+  }
+
+  @media (max-width: 768px) {
+    .request-modal__body {
+      padding: var(--space-6);
+    }
+  }
+</style>

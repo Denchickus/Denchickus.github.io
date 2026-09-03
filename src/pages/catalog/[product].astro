@@ -1,0 +1,608 @@
+---
+/**
+ * /catalog/[product] — canonical Product Page, один шаблон на все 50 маршрутов
+ * (49 видимых + скрытый дубль kryukovoj-podves, доступный только по прямому URL
+ * — DR-01, решение №10). Блоки условны: секция рендерится только если данные
+ * реально есть (SITE_STRUCTURE.md §7). Ничего не выдумывается, UNKNOWN и
+ * DATA_REVIEW_REQUIRED пользователю не показываются.
+ *
+ * Категория остаётся навигационным контекстом, а не частью URL (SITE_STRUCTURE
+ * §1): переразбор категорий владельцем не должен ломать адреса товаров.
+ */
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ProductGallery from '../../components/ProductGallery.astro';
+import VariantSelector from '../../components/VariantSelector.astro';
+import SpecTable from '../../components/SpecTable.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import RequestModal from '../../components/RequestModal.astro';
+import PhoneIcon from '../../components/icons/PhoneIcon.astro';
+import {
+  getAllProductsUnsafe,
+  getCategory,
+  getProductMachineTypes,
+  getProductVariants,
+  getPreselectedVariant,
+  getProductsByCategory,
+} from '../../data/catalog';
+import { getProductImages } from '../../data/productImages';
+import {
+  getDescriptionSections,
+  getCompatibilityText,
+  getSpecTables,
+  getUnmatchedSpecTables,
+  getTechCharacteristicsTable,
+} from '../../data/productContent';
+import { CONTACTS, telHref, REQUEST_BLOCK } from '../../data/site';
+
+export const getStaticPaths = (() =>
+  getAllProductsUnsafe().map((product) => ({
+    params: { product: product.slug },
+    props: { product },
+  }))) satisfies GetStaticPaths;
+
+const { product } = Astro.props;
+
+const category = getCategory(product.categoryId);
+const confirmedMts = getProductMachineTypes(product);
+const variants = getProductVariants(product.id);
+const defaultVariant = variants.length > 0 ? getPreselectedVariant(product.id, null) : undefined;
+
+const images = getProductImages(product.id);
+const descriptionSections = getDescriptionSections(product.id);
+const compatibilityText = getCompatibilityText(product.id);
+// Источник сам разделяет типы техники «;» внутри одной строки («Тип: бренды; Тип: бренды; …») —
+// раскладываем по этому разделителю для читаемости, текст внутри строк не меняется.
+const compatibilityLines = compatibilityText
+  ? compatibilityText.split(';').map((s) => s.trim()).filter(Boolean)
+  : [];
+// Товары без вариантов показывают свои таблицы напрямую; у товаров с вариантами
+// таблица живёт внутри VariantSelector — здесь показывать её ещё раз не нужно.
+const directSpecTables = variants.length === 0 ? getSpecTables(product.id) : [];
+// Только у товаров без единой захваченной таблицы: собранная из текстовой секции
+// «ТЕХНИЧЕСКИЕ ХАРАКТЕРИСТИКИ» — там, где реальная таблица есть, функция сама
+// возвращает null (см. getTechCharacteristicsTable).
+const techTable = getTechCharacteristicsTable(product.id);
+// DR-16: таблицы канонической страницы без соответствующей bucket-страницы —
+// см. data/content-inventory.json → dataReviewRequired. Функция уже отфильтровала
+// то, что относится к неподтверждённым типам техники.
+const unmatchedTables = getUnmatchedSpecTables(product.id);
+
+// «Похожие товары» — только внутри своей категории и только при ≥ 3 кандидатах
+// (решение №5): категория провизорна, подборка должна быть заведомо не пустой
+// формальностью.
+const similar = category
+  ? getProductsByCategory(category.id).filter((p) => p.id !== product.id)
+  : [];
+const showSimilar = similar.length >= 3;
+
+const priceLabel =
+  typeof product.priceFrom === 'number'
+    ? `от ${product.priceFrom.toLocaleString('ru-RU')} ₽`
+    : 'Цена по запросу';
+
+// «Варианты и цены»: сырые строки источника («ширина 400 мм - 480 000Р») просто
+// раскладываются по уже существующему в самой строке разделителе — никакого
+// разбора/додумывания структуры, которой в источнике нет.
+const priceSampleRows = product.priceRawSamples.map((sample) => {
+  const match = sample.match(/^(.*?)\s+[-–—]\s+(.*)$/);
+  return match
+    ? { label: match[1].trim(), price: match[2].trim() }
+    : { label: sample.trim(), price: null as string | null };
+});
+
+const phone = CONTACTS.phones[0];
+
+const crumbs = category
+  ? [
+      { label: 'Главная', href: '/' },
+      { label: 'Каталог', href: '/catalog' },
+      { label: category.name, href: `/catalog/category/${category.slug}` },
+      { label: product.name },
+    ]
+  : [
+      { label: 'Главная', href: '/' },
+      { label: 'Каталог', href: '/catalog' },
+      { label: product.name },
+    ];
+
+// Данные для клиентского скрипта: сопоставление slug/id/name подтверждённых
+// типов техники, чтобы ?mt= из журнея B мог поменять и вариант, и крошки без
+// повторного обращения к серверу (страница полностью статическая).
+const mtLookup = confirmedMts.map((mt) => ({ id: mt.id, slug: mt.slug, name: mt.name }));
+---
+
+<Base
+  title={product.name}
+  description={descriptionSections[0]?.text.slice(0, 160)}
+>
+  <div class="container">
+    <Breadcrumbs items={crumbs} />
+  </div>
+
+  <div class="container">
+    <header class="product__head">
+      <h1>{product.name}</h1>
+    </header>
+  </div>
+
+  <article class="product container" data-product data-mt-lookup={JSON.stringify(mtLookup)}>
+    <div class="product__main">
+      <ProductGallery images={images} productName={product.name} />
+
+      {variants.length > 1 && defaultVariant && (
+        <VariantSelector variants={variants} selectedId={defaultVariant.id} />
+      )}
+
+      {variants.length === 1 && defaultVariant && (
+        <div class="product__single-variant">
+          <p class="product__variant-price tnum">
+            {typeof defaultVariant.priceFrom === 'number'
+              ? `от ${defaultVariant.priceFrom.toLocaleString('ru-RU')} ₽`
+              : 'Цена по запросу'}
+          </p>
+          {getSpecTables(defaultVariant.id).map((t) => <SpecTable table={t} />)}
+        </div>
+      )}
+
+      {(directSpecTables.length > 0 || techTable) && (
+        <section class="product__section">
+          <h2>Технические характеристики</h2>
+          {directSpecTables.map((t) => <SpecTable table={t} />)}
+          {techTable && <SpecTable table={techTable} />}
+        </section>
+      )}
+
+      {priceSampleRows.length > 0 && (
+        <section class="product__section">
+          <h2>Варианты и цены</h2>
+          {variants.length > 0 && (
+            // DR-09: у товара сразу два уровня цены — «от X ₽» на канонической
+            // странице и отдельные цены по вариантам выше. Оба сохраняются, ни
+            // один не выбирается как «правильный» (SITE_STRUCTURE §7, DATA_MODEL §4).
+            <p class="price-list-lead text-muted">Цены на странице оборудования:</p>
+          )}
+          <ul class="price-list" role="list">
+            {priceSampleRows.map((row) => (
+              <li class="price-list__row">
+                <span class="price-list__label">{row.label}</span>
+                {row.price && <span class="price-list__value tnum">{row.price}</span>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {unmatchedTables.length > 0 && (
+        <section class="product__section">
+          <h2>Дополнительные конфигурации</h2>
+          {unmatchedTables.map((t) => <SpecTable table={t} />)}
+        </section>
+      )}
+
+      {descriptionSections.length > 0 && (
+        <section class="product__section">
+          <h2>Описание</h2>
+          {descriptionSections.map((s) => (
+            <div class="product__desc-block">
+              {s.label && s.label !== 'ОПИСАНИЕ' && <h3>{s.label}</h3>}
+              {s.text.split('\n').filter(Boolean).map((line) => <p>{line}</p>)}
+            </div>
+          ))}
+        </section>
+      )}
+
+      {(compatibilityText || confirmedMts.length > 0) && (
+        <section class="product__section">
+          <h2>Агрегатируется с</h2>
+          {compatibilityLines.length > 0 && (
+            <ul class="product__compat-list" role="list">
+              {compatibilityLines.map((line) => <li>{line}</li>)}
+            </ul>
+          )}
+          {confirmedMts.length > 0 && (
+            <ul class="product__mts" role="list" aria-label="Типы техники">
+              {confirmedMts.map((mt) => (
+                <li>
+                  <a class="chip" href={`/machines/${mt.slug}`}>{mt.name}</a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      )}
+
+      {showSimilar && (
+        <section class="product__section">
+          <h2>Похожие товары</h2>
+          <ul class="card-grid card-grid--3" role="list">
+            {similar.slice(0, 3).map((p) => (
+              <li><ProductCard product={p} /></li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </div>
+
+    <aside class="product__side" data-product-side>
+      <div class="product__side-inner">
+        <p class="product__side-price tnum" data-price>{priceLabel}</p>
+        <button type="button" class="btn btn--primary btn--block" data-open-request-modal>Запросить цену</button>
+        <a class="product__side-phone tnum" href={telHref(phone)}>{phone}</a>
+      </div>
+    </aside>
+  </article>
+
+  <section class="product__cta" aria-labelledby="product-cta-h">
+    <div class="container">
+      <div class="product__cta-inner">
+        <div class="product__cta-copy">
+          <h2 id="product-cta-h" class="product__cta-title">Нужна консультация по оборудованию?</h2>
+          <p class="product__cta-text">{REQUEST_BLOCK.text}</p>
+        </div>
+        <div class="product__cta-actions">
+          <a class="product__cta-phone tnum" href={telHref(phone)}>{phone}</a>
+          <button type="button" class="btn btn--primary" data-open-request-modal>Запросить цену</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <RequestModal
+    productName={product.name}
+    machineTypeName={defaultVariant ? mtLookup.find((m) => m.id === defaultVariant.machineTypeId)?.name : undefined}
+  />
+
+  <div class="product__mobile-bar" data-mobile-bar>
+    <span class="tnum" data-price>{priceLabel}</span>
+    <a class="product__mobile-bar-phone" href={telHref(phone)} aria-label={`Позвонить: ${phone}`}>
+      <PhoneIcon />
+    </a>
+    <button type="button" class="btn btn--primary" data-open-request-modal>Запросить цену</button>
+  </div>
+</Base>
+
+<script>
+  // Журней B: /machines/:type → /catalog/:product?mt=:type предвыбирает
+  // вариант и меняет хлебные крошки (SITE_STRUCTURE §4, решение №6). Страница
+  // полностью статическая, поэтому ?mt= обрабатывается только на клиенте.
+  const root = document.querySelector<HTMLElement>('[data-product]');
+  if (root) {
+    const params = new URLSearchParams(location.search);
+    const mtSlug = params.get('mt');
+    if (mtSlug) {
+      const lookup: { id: string; slug: string | null; name: string }[] = JSON.parse(
+        root.dataset.mtLookup ?? '[]',
+      );
+      const mt = lookup.find((m) => m.slug === mtSlug);
+      if (mt) {
+        const radio = root.querySelector<HTMLInputElement>(
+          `[data-variant-radio][data-mt="${mt.id}"]`,
+        );
+        if (radio && !radio.checked) {
+          radio.checked = true;
+          radio.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        const crumbCategory = root
+          .closest('body')
+          ?.querySelector<HTMLElement>('[data-crumb-index="1"] a');
+        const crumbLeaf = root
+          .closest('body')
+          ?.querySelector<HTMLElement>('[data-crumb-index="2"] a');
+        if (crumbCategory) {
+          crumbCategory.textContent = 'Тип техники';
+          crumbCategory.setAttribute('href', '/machines');
+        }
+        if (crumbLeaf) {
+          crumbLeaf.textContent = mt.name;
+          crumbLeaf.setAttribute('href', `/machines/${mt.slug}`);
+        }
+
+        const requestMtField = document.getElementById('request-machine-type') as HTMLInputElement | null;
+        if (requestMtField) requestMtField.value = mt.name;
+      }
+    }
+  }
+
+  // Цена в липкой панели/нижней полосе и тип техники в форме заявки
+  // переключаются вместе с вариантом — цены разных вариантов смешивать нельзя
+  // (SITE_STRUCTURE §7), а заявка должна отражать реально выбранный вариант.
+  document.addEventListener('variant-change', (e) => {
+    const detail = (e as CustomEvent<{ id: string }>).detail;
+    const panel = document.querySelector<HTMLElement>(`[data-variant-panel="${detail.id}"]`);
+    const priceText = panel?.querySelector('.variants__price')?.textContent;
+    if (priceText) {
+      document.querySelectorAll<HTMLElement>('[data-price]').forEach((el) => {
+        el.textContent = priceText;
+      });
+    }
+
+    const radio = document.querySelector<HTMLInputElement>(
+      `[data-variant-radio][value="${detail.id}"]`,
+    );
+    const mtId = radio?.dataset.mt;
+    const lookup: { id: string; slug: string | null; name: string }[] = root
+      ? JSON.parse(root.dataset.mtLookup ?? '[]')
+      : [];
+    const mt = lookup.find((m) => m.id === mtId);
+    const requestMtField = document.getElementById('request-machine-type') as HTMLInputElement | null;
+    if (mt && requestMtField) requestMtField.value = mt.name;
+  });
+</script>
+
+<style>
+  .product {
+    padding-bottom: var(--space-12);
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: var(--space-12);
+    align-items: start;
+  }
+  .product__main {
+    min-width: 0;
+  }
+
+  /*
+   * Заголовок + чипы техники — ПОЛНАЯ ширина, отдельно от grid ниже. Раньше
+   * это была первая строка левой колонки — из-за этого purchase box (тот же
+   * grid-row, align-items:start) выравнивался по верху заголовка, а не по
+   * верху галереи. Вынесено наружу именно поэтому, а не ради типографики.
+   */
+  .product__head {
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-8);
+  }
+  .product__mts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+  .chip {
+    display: inline-flex;
+    font-size: 13px;
+    line-height: 1.4;
+    padding: 4px 10px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--text);
+  }
+  a.chip:hover {
+    border-color: var(--text);
+    background: var(--bg-muted);
+  }
+
+  .product__single-variant {
+    margin-bottom: var(--space-6);
+  }
+  .product__variant-price {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: var(--space-3);
+  }
+
+  .price-list-lead {
+    font-size: var(--fs-small);
+    margin-bottom: var(--space-3);
+  }
+  .price-list {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .price-list__row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+  }
+  .price-list__row + .price-list__row {
+    border-top: 1px solid var(--line);
+  }
+  .price-list__row:nth-child(even) {
+    background: color-mix(in srgb, var(--bg-muted) 55%, var(--bg));
+  }
+  .price-list__value {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .product__section {
+    margin-top: var(--space-8);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--line);
+  }
+  .product__section h2 {
+    font-size: var(--fs-h2);
+    line-height: var(--lh-h2);
+    margin-bottom: var(--space-4);
+  }
+  .product__desc-block + .product__desc-block {
+    margin-top: var(--space-4);
+  }
+  .product__desc-block h3 {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: var(--space-2);
+  }
+  .product__desc-block p {
+    max-width: 70ch;
+    margin-bottom: var(--space-2);
+  }
+  .product__compat-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+    color: var(--text-muted);
+  }
+
+  /* --- боковая панель: цена + CTA + телефон, липкая на desktop --------- */
+  .product__side-inner {
+    position: sticky;
+    top: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--bg-muted);
+  }
+  .product__side-price {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 600;
+  }
+  .product__side-phone {
+    text-align: center;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .product__side-phone:hover {
+    color: var(--accent);
+  }
+
+  /* --- pre-footer CTA: компактный блок (запрос №31 — прежний большой
+     split-section с полной формой убран с product page, полная форма
+     остаётся только для Contact page будущей задачи) --------------------- */
+  .product__cta {
+    padding-block: var(--space-12);
+    background: var(--bg-muted);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .product__cta-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+  }
+  .product__cta-copy {
+    min-width: 0;
+    max-width: 46ch;
+  }
+  .product__cta-title {
+    margin: 0;
+  }
+  .product__cta-text {
+    margin: var(--space-2) 0 0;
+    color: var(--text-muted);
+  }
+  .product__cta-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    flex: 0 0 auto;
+  }
+  .product__cta-phone {
+    font-family: var(--font-text);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .product__cta-phone:hover {
+    color: var(--accent);
+  }
+
+  .product__mobile-bar {
+    display: none;
+  }
+
+  /*
+   * Липкая боковая панель существует только при достаточной ширине колонки
+   * (>1024px). Ниже неё, ВКЛЮЧАЯ планшетный диапазон 769–1024px, CTA переезжает
+   * в нижнюю полосу — без этого на планшете страница осталась бы вовсе без
+   * цены и кнопки запроса до самой формы внизу.
+   */
+  @media (max-width: 1024px) {
+    .product {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+    .product__side {
+      display: none;
+    }
+    .product__mobile-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      position: fixed;
+      inset: auto 0 0 0;
+      z-index: 20;
+      padding: var(--space-3) var(--container-pad);
+      padding-bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
+      background: var(--bg);
+      border-top: 1px solid var(--line);
+      box-shadow: var(--shadow-overlay);
+      /* Резерв места под плавающую кнопку Telegram (FloatingTelegram.astro,
+         глобальный виджет сайта, z-index:60 — выше этой полосы): без этого
+         кнопка "Запросить цену" частично уходит под неё и часть клика
+         перехватывает Telegram. В этом диапазоне (769–1024px) виджет ещё
+         desktop-размера: right:28px, width:60px. */
+      padding-right: calc(28px + 60px + var(--space-3));
+    }
+    .product__mobile-bar span {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .product__mobile-bar-phone {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      width: var(--tap-min);
+      height: var(--tap-min);
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--text);
+    }
+    .product__mobile-bar-phone svg {
+      width: 18px;
+      height: 18px;
+    }
+    .product__mobile-bar .btn {
+      flex: 0 0 auto;
+    }
+    /* Полоса перекрывает низ страницы — оставляем ей место */
+    .product {
+      padding-bottom: calc(var(--section-y) + 72px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .product__mobile-bar {
+      /* Ниже 768px FloatingTelegram переключается на мобильный размер:
+         right:16px, width:50px (см. FloatingTelegram.astro) — резерв места
+         пересчитывается под него. */
+      padding-right: calc(16px + 50px + var(--space-3));
+    }
+    .product__cta-inner {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .product__cta-copy {
+      max-width: none;
+    }
+    .product__cta-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .product__cta-actions .btn {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>

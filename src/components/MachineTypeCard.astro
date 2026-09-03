@@ -1,0 +1,52 @@
+---
+/**
+ * Плитка типа техники (Homepage §4). Только confirmed:true записи —
+ * вызывающий код обязан брать их из getVisibleMachineTypes().
+ * Число совместимых позиций — PARTIALLY VERIFIED (выведено из блоков
+ * «АГРЕГАТИРОВАНИЕ»); оговорка даётся один раз на уровне секции.
+ */
+import type { MachineType } from '../types/catalog';
+import { pluralPozitsiya } from '../data/plural';
+
+interface Props {
+  machineType: MachineType;
+}
+const { machineType } = Astro.props;
+---
+
+<a class="card card--link mt-card" href={`/machines/${machineType.slug}`}>
+  <span class="mt-card__name">{machineType.name}</span>
+  <span class="mt-card__count text-small text-muted">
+    <span class="tnum">{machineType.productCount}</span> {pluralPozitsiya(machineType.productCount)} оборудования
+  </span>
+</a>
+
+<style>
+  .mt-card {
+    gap: var(--space-2);
+    padding: var(--space-4);
+    min-height: var(--tap-min);
+  }
+  .mt-card__name {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .mt-card:hover .mt-card__name {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* На mobile карточка читалась как строка мелкой таблицы — крупнее интервал
+     между title и count, count явно вторичный размер. */
+  @media (max-width: 768px) {
+    .mt-card__name {
+      font-size: 15px;
+      line-height: 1.35;
+    }
+    .mt-card__count {
+      font-size: 12px;
+      line-height: 1.4;
+    }
+  }
+</style>

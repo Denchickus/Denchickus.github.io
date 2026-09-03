@@ -1,0 +1,51 @@
+---
+/**
+ * /machines — хаб типов техники, вход в journey B (SITE_STRUCTURE.md §4).
+ * Только подтверждённые типы: getVisibleMachineTypes() — единственный
+ * легальный источник для этого списка (confirmed:false «Экскаватор», DR-10,
+ * сюда не попадает и страницы не получает).
+ */
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import MachineTypeCard from '../../components/MachineTypeCard.astro';
+import { getVisibleMachineTypes } from '../../data/catalog';
+
+const machineTypes = getVisibleMachineTypes();
+---
+
+<Base
+  title="Подбор по типу техники"
+  description="Навесное оборудование СТ-ТЕХНИКС, сгруппированное по типу базовой машины: минипогрузчик, экскаватор-погрузчик, фронтальный и телескопический погрузчик и другие."
+>
+  <div class="container">
+    <Breadcrumbs items={[{ label: 'Главная', href: '/' }, { label: 'Тип техники' }]} />
+  </div>
+
+  <section class="machines container">
+    <header class="machines__head">
+      <h1>Тип техники</h1>
+      <p class="machines__intro">
+        Укажите базовую машину — увидите совместимое навесное оборудование. Связи
+        товар↔техника собраны с публичной информации производителя.
+      </p>
+    </header>
+
+    <ul class="card-grid" role="list">
+      {machineTypes.map((mt) => <li><MachineTypeCard machineType={mt} /></li>)}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .machines {
+    padding-bottom: var(--section-y);
+  }
+  .machines__head {
+    margin-bottom: var(--space-8);
+  }
+  .machines__intro {
+    max-width: 60ch;
+    margin-top: var(--space-3);
+    color: var(--text-muted);
+  }
+</style>

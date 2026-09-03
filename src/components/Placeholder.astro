@@ -1,0 +1,34 @@
+---
+/**
+ * Явная техническая заглушка изображения (DESIGN_PLAN.md §5).
+ * Используется, пока в проекте нет реальных локальных фотографий оборудования.
+ * Обязана читаться КАК ЗАГЛУШКА и не выдаваться за фото продукции СТ-ТЕХНИКС.
+ *
+ * Компонент занимает ту же область, что займёт будущий <img>, поэтому замена
+ * заглушки реальным ассетом не меняет layout.
+ */
+interface Props {
+  ratio?: string; // "4 / 3" | "3 / 2" | "21 / 9"
+  label?: string;
+}
+const { ratio = '4 / 3', label = 'Фото готовится' } = Astro.props;
+---
+
+<div class="img-placeholder" style={`--ph-ratio: ${ratio};`} role="img" aria-label={`Изображение оборудования отсутствует: ${label}`}>
+  <svg class="img-placeholder__mark" width="48" height="48" viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="4" y="10" width="40" height="28" />
+    <path d="M4 30l10-9 8 7 9-10 13 12" />
+    <circle cx="16" cy="19" r="3" />
+  </svg>
+  <span class="img-placeholder__label">{label}</span>
+</div>
+
+<style>
+  .img-placeholder__mark {
+    position: absolute;
+    opacity: 0.5;
+  }
+  .img-placeholder__label {
+    position: relative;
+  }
+</style>

@@ -1,0 +1,68 @@
+{
+  "meta": {
+    "generatedAt": "2026-08-30",
+    "sourceSite": "https://st-technics.ru/",
+    "status": "INCOMPLETE / NOT VERIFIED",
+    "reason": "Ассеты собираются через инструмент, который конвертирует страницу в Markdown и отдаёт её краткому модели-экстрактору. Полный, надёжный перечень <img>/<source>/<a href*.pdf> с их URL и alt-текстами получить этим способом нельзя: экстрактор пропускает и переписывает URL. Для полноценного asset-manifest нужен доступ к сырому HTML/DOM каждой страницы (или к экспорту Tilda).",
+    "howToComplete": [
+      "Получить сырой HTML каждой из 99 страниц (см. data/content-map.csv).",
+      "Извлечь все https://*.tildacdn.com/... ссылки на изображения, из атрибутов src, data-original, srcset, style background-image.",
+      "Сохранить для каждого ассета: sourceUrl (точный CDN-URL), страницу-владельца, alt, роль (logo/hero/gallery/spec-table-image/icon), размеры если есть.",
+      "Отдельно проверить, что таблицы характеристик — это HTML-таблицы, а не картинки (на части карточек спецификации могут быть изображением)."
+    ]
+  },
+
+  "cdnHosts": [
+    "https://static.tildacdn.com/",
+    "https://thb.tildacdn.com/",
+    "https://optim.tildacdn.com/"
+  ],
+
+  "verifiedAssets": [
+    {
+      "id": "asset-logo",
+      "role": "logo",
+      "sourceUrl": "https://static.tildacdn.com/tild3163-6532-4630-a132-363163626661/logo111.png",
+      "seenOn": "почти все страницы (шапка)",
+      "alt": null,
+      "altNotVerified": true
+    },
+    {
+      "id": "asset-empty-placeholder",
+      "role": "placeholder/lazy",
+      "sourceUrl": "https://thb.tildacdn.com/tild6361-6334-4663-b762-393865663736/-/empty/2.png",
+      "seenOn": "https://st-technics.ru/teleskopicheskij-pogruzchik (карточки оборудования)",
+      "alt": null,
+      "altNotVerified": true
+    }
+  ],
+
+  "documents": {
+    "pdf": [],
+    "doc": [],
+    "note": "На всех просмотренных страницах ссылок на .pdf/.doc НЕ обнаружено. Полнота охвата НЕ гарантирована (NOT VERIFIED)."
+  },
+
+  "video": {
+    "note": "Секция 'ВИДЕО' присутствует на карточках: navesnaya-dorognaya-freza, povorotnaya-shetka-dorozhnaya, bynkernaya-schetka, otvalu, skreper, snegomet. Платформа (YouTube/RuTube/VK) и URL роликов НЕ ПРОВЕРЕНЫ — требуется сырой HTML/iframe src.",
+    "pagesWithVideoSection": [
+      "https://st-technics.ru/navesnaya-dorognaya-freza",
+      "https://st-technics.ru/povorotnaya-shetka-dorozhnaya",
+      "https://st-technics.ru/bynkernaya-schetka",
+      "https://st-technics.ru/otvalu",
+      "https://st-technics.ru/skreper",
+      "https://st-technics.ru/snegomet"
+    ]
+  },
+
+  "imagesByPage": {
+    "note": "Точный перечень изображений и alt по каждой странице НЕ СОБРАН (см. meta.reason). Ниже — только грубая оценка количества, где экстрактор её дал; считать ориентировочной, НЕ фактической.",
+    "roughCountsNotVerified": {
+      "https://st-technics.ru/povorotnaya-shetka-dorozhnaya": "~8-10",
+      "https://st-technics.ru/bynkernaya-schetka": "~6",
+      "https://st-technics.ru/kovsh-vysokoobjemniy": "~12-15",
+      "https://st-technics.ru/gidromolot": "~1+",
+      "https://st-technics.ru/snegomet": "~5"
+    }
+  }
+}

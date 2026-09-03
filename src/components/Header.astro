@@ -1,0 +1,394 @@
+---
+/**
+ * Responsive Header (SITE_STRUCTURE.md §2, DESIGN_PLAN.md §6).
+ * Desktop (>=1025px, не менялся): identity + 4 пункта + телефон + primary CTA, flex-строка.
+ * Mobile (<=768px): отдельная 3-зонная композиция — бургер слева / brand по центру /
+ * phone-иконка справа (grid-template-columns: 44px 1fr 44px на .site-header__inner).
+ * Бургер и phone-иконка — те же DOM-узлы, что и раньше (бургер) либо новый прямой
+ * ребёнок .site-header__inner (phone-иконка): на desktop оба display:none и не влияют
+ * на существующий flex-layout ни размером, ни местом в потоке.
+ * Открытое меню — нативный <dialog> (Esc закрывает и фокус запирается — поведение
+ * самого элемента, без кастомного JS для этого).
+ * Телефон берётся из подтверждённого списка (site.contacts.phones).
+ */
+import { NAV, CONTACTS, BRAND, telHref } from '../data/site';
+import PhoneIcon from './icons/PhoneIcon.astro';
+import SearchIcon from './icons/SearchIcon.astro';
+
+const phone = CONTACTS.phones[0];
+const requestHref = '/#request';
+// Поля поиска в шапке нет: единственный поисковый интерфейс живёт в каталоге,
+// сюда добавлена только точка входа (SITE_STRUCTURE.md §9, п.3).
+const searchHref = '/catalog#search';
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <button
+      type="button"
+      class="burger"
+      aria-label="Открыть меню"
+      aria-haspopup="dialog"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      data-menu-open
+    >
+      <span class="burger__box" aria-hidden="true"><span class="burger__bar"></span></span>
+    </button>
+
+    <a href="/" class="brand" aria-label={`${BRAND.name} — на главную`}>
+      <span class="brand__name">{BRAND.name}</span>
+    </a>
+
+    <nav class="site-nav" aria-label="Основная навигация">
+      <ul role="list" class="site-nav__list">
+        {NAV.map((item) => (
+          <li><a href={item.href} class="site-nav__link">{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <a class="site-header__search" href={searchHref} aria-label="Поиск по каталогу">
+        <SearchIcon class="site-header__search-svg" />
+      </a>
+      <a class="site-header__phone tnum" href={telHref(phone)}>{phone}</a>
+      <a class="btn btn--primary site-header__cta" href={requestHref}>Запросить цену</a>
+    </div>
+
+    <a class="site-header__phone-icon" href={telHref(phone)} aria-label="Позвонить СТ-ТЕХНИКС">
+      <PhoneIcon class="site-header__phone-icon-svg" />
+    </a>
+  </div>
+
+  <dialog id="mobile-menu" class="mobile-menu" aria-label="Меню">
+    <div class="mobile-menu__inner surface-dark">
+      <div class="mobile-menu__top">
+        <span class="brand__name">{BRAND.name}</span>
+        <button type="button" class="mobile-menu__close" aria-label="Закрыть меню" data-menu-close>
+          <span aria-hidden="true">✕</span>
+        </button>
+      </div>
+      <nav aria-label="Мобильная навигация">
+        <ul role="list" class="mobile-menu__list">
+          {NAV.map((item) => (
+            <li><a href={item.href} class="mobile-menu__link" data-menu-close>{item.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+      <a class="mobile-menu__search" href={searchHref} data-menu-close>
+        <SearchIcon class="mobile-menu__search-svg" />
+        Поиск по каталогу
+      </a>
+      <a class="mobile-menu__phone tnum" href={telHref(phone)} data-menu-close>{phone}</a>
+      <a class="btn btn--primary btn--block" href={requestHref} data-menu-close>Запросить цену</a>
+    </div>
+  </dialog>
+</header>
+
+<script>
+  const dialog = document.getElementById('mobile-menu') as HTMLDialogElement | null;
+  const openBtn = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+
+  if (dialog && openBtn) {
+    // Сброс aria-expanded/scroll-lock вынесен в отдельную функцию и вызывается
+    // НАПРЯМУЮ из close(), а не только через событие 'close' на диалоге: в
+    // реальном браузерном тестировании обнаружилось, что 'close' не всегда
+    // долетает синхронно/вовремя (в т.ч. не сработал в тестовом окружении даже
+    // на изолированном пустом <dialog>, не связанном с этим кодом — похоже на
+    // особенность конкретного движка/автоматизации, а не баг именно этого
+    // скрипта). Раньше это давало реальный залипающий bodyOverflow:hidden после
+    // закрытия — страница переставала скроллиться. Слушатель 'close' оставлен
+    // как resilience-сеть для нативного закрытия по Esc (там cleanup не проходит
+    // через close() ниже) — двойной вызов идемпотентен, повторный вред не наносит.
+    const resetState = () => {
+      openBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      openBtn.focus();
+    };
+    const open = () => {
+      if (typeof dialog.showModal === 'function') dialog.showModal();
+      else dialog.setAttribute('open', '');
+      openBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    };
+    const close = () => {
+      dialog.close();
+      resetState();
+    };
+
+    openBtn.addEventListener('click', open);
+    dialog.addEventListener('close', resetState);
+    // клик по фону (::backdrop приходит на сам dialog)
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) close();
+    });
+    dialog.querySelectorAll('[data-menu-close]').forEach((el) =>
+      el.addEventListener('click', close),
+    );
+  }
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    min-height: var(--header-h);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    text-decoration: none;
+    color: var(--text);
+    flex-shrink: 0;
+  }
+  .brand__name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    margin-right: auto;
+  }
+  .site-nav__list {
+    display: flex;
+    gap: var(--space-6);
+  }
+  .site-nav__link {
+    display: inline-block;
+    padding: var(--space-2) 0;
+    text-decoration: none;
+    color: var(--text);
+    border-bottom: 2px solid transparent;
+    transition: border-color var(--dur) var(--easing);
+  }
+  .site-nav__link:hover {
+    border-bottom-color: var(--accent);
+  }
+
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    flex-shrink: 0;
+  }
+  .site-header__phone {
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .site-header__phone:hover {
+    color: var(--accent);
+  }
+
+  /* Точка входа в поиск: только иконка-ссылка на /catalog#search. Поля ввода в
+     шапке нет — единственный поисковый интерфейс живёт в каталоге. Занимает
+     место внутри уже существующего .site-header__actions и не трогает ни
+     .site-nav, ни mobile-сетку шапки. */
+  .site-header__search {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--tap-min);
+    height: var(--tap-min);
+    margin-right: calc(var(--space-6) * -1 + var(--space-3));
+    color: var(--text);
+    text-decoration: none;
+    border-radius: var(--radius);
+  }
+  .site-header__search:hover {
+    color: var(--accent);
+  }
+
+  /* Компактная icon-only кнопка звонка — видна только в mobile-раскладке (<=768px,
+     см. точки перелома ниже). На desktop/tablet скрыта и не занимает места. */
+  .site-header__phone-icon {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: var(--tap-min);
+    height: var(--tap-min);
+    color: var(--text);
+    text-decoration: none;
+    border-radius: var(--radius);
+  }
+  .site-header__phone-icon-svg {
+    width: 20px;
+    height: 20px;
+  }
+  .site-header__phone-icon:hover,
+  .site-header__phone-icon:focus-visible {
+    color: var(--accent);
+  }
+
+  .burger {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: var(--tap-min);
+    height: var(--tap-min);
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    cursor: pointer;
+  }
+  .burger__box {
+    position: relative;
+    width: 20px;
+    height: 2px;
+    background: var(--text);
+    display: block;
+  }
+  .burger__box::before,
+  .burger__box::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 20px;
+    height: 2px;
+    background: var(--text);
+  }
+  .burger__box::before { top: -6px; }
+  .burger__box::after { top: 6px; }
+
+  /* --- Мобильное меню (dialog) --------------------------------------- */
+  .mobile-menu {
+    padding: 0;
+    border: none;
+    max-width: 100%;
+    max-height: 100%;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+  }
+  .mobile-menu::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+  .mobile-menu__inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    min-height: 100%;
+    padding: var(--space-4) var(--container-pad) var(--space-12);
+  }
+  .mobile-menu__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--header-h);
+  }
+  .mobile-menu__top .brand__name {
+    color: var(--dark-text);
+  }
+  .mobile-menu__close {
+    width: var(--tap-min);
+    height: var(--tap-min);
+    background: none;
+    border: 1px solid var(--dark-line);
+    border-radius: var(--radius);
+    color: var(--dark-text);
+    font-size: 18px;
+    cursor: pointer;
+  }
+  .mobile-menu__list {
+    display: flex;
+    flex-direction: column;
+  }
+  .mobile-menu__link {
+    display: block;
+    padding: var(--space-4) 0;
+    font-family: var(--font-display);
+    font-size: 18px;
+    line-height: 1.4;
+    text-decoration: none;
+    color: var(--dark-text);
+    border-bottom: 1px solid var(--dark-line);
+  }
+  /* Точка входа в поиск на mobile — внутри меню. Закрытая шапка не меняется:
+     перегружать её третьей иконкой рядом с бургером и телефоном нельзя. */
+  .mobile-menu__search {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: var(--tap-min);
+    font-size: 18px;
+    line-height: 1.4;
+    text-decoration: none;
+    color: var(--dark-text);
+  }
+  .mobile-menu__phone {
+    font-size: 20px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--dark-text);
+  }
+
+  /* --- Точки перелома ------------------------------------------------- */
+  @media (max-width: 1024px) {
+    .site-header__inner {
+      gap: var(--space-6);
+    }
+    .site-nav,
+    .site-header__phone {
+      display: none;
+    }
+    .burger {
+      display: inline-flex;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .site-header__cta {
+      display: none; /* CTA доступен внутри мобильного меню */
+    }
+    /* Три зоны вместо сжатого desktop-ряда: бургер слева, brand по центру,
+       телефон-иконка справа. .site-header__actions (текстовый телефон + CTA — оба
+       уже скрыты выше/на 1024) явно скрыт, чтобы пустой flex-контейнер не занял
+       место в сетке как отдельная ячейка. */
+    .site-header__inner {
+      display: grid;
+      grid-template-columns: var(--tap-min) minmax(0, 1fr) var(--tap-min);
+      gap: 0;
+    }
+    .site-header__actions {
+      display: none;
+    }
+    .burger {
+      grid-column: 1;
+      justify-self: start;
+    }
+    .brand {
+      grid-column: 2;
+      justify-self: center;
+      text-align: center;
+    }
+    .brand__name {
+      white-space: nowrap;
+    }
+    .site-header__phone-icon {
+      display: inline-flex;
+      grid-column: 3;
+      justify-self: end;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    .mobile-menu[open] {
+      display: none; /* на desktop меню не используется */
+    }
+  }
+</style>

@@ -1,0 +1,22 @@
+---
+/**
+ * Иконка телефонной трубки для компактной mobile-кнопки звонка в Header
+ * (полный номер на mobile не показывается в основной строке — см. Header.astro).
+ * Простой заливной силуэт классической трубки, одна цельная фигура без вырезов.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<svg
+  class={className}
+  viewBox="0 0 24 24"
+  fill="currentColor"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path d="M6.6 10.8a15.7 15.7 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.2 9.5 9.5 0 0 0 3 .5 1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1A17 17 0 0 1 2.5 4a1 1 0 0 1 1-1H7a1 1 0 0 1 1 1 9.5 9.5 0 0 0 .5 3 1 1 0 0 1-.2 1z" />
+</svg>
