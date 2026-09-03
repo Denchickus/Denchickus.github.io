@@ -1,0 +1,140 @@
+---
+/**
+ * /oplata-i-dostavka — условия доставки и оплаты (SITE_STRUCTURE.md §1, был в PLANNED).
+ *
+ * Только подтверждённые данные из src/data/site.ts -> PAYMENT_DELIVERY (6 фактов со
+ * страницы-источника https://st-technics.ru/oplata-i-dostavka). Страница не читает
+ * data/content-inventory.json напрямую.
+ *
+ * Сознательно НЕ добавлено (в инвентаре помечено notVerified либо отсутствует): раздел
+ * «способы оплаты» (наличные / карта / безнал, эквайеринг), список городов и тарифов
+ * доставки по РФ, сроки доставки и изготовления. Их в источнике нет — остаются
+ * невысказанными, без «уточняйте у менеджера» и «индивидуальных условий».
+ *
+ * Intro-текста под H1 нет: редакционного текста для посетителя источник под этим URL не
+ * содержит (только перечень фактов) — писать от себя нельзя.
+ *
+ * CTA внизу открывает существующий mock RequestModal без пропсов (ни товара, ни типа
+ * техники предзаполнить нечем) — новая форма не создаётся. Паттерн как в contacts.astro.
+ */
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import RequestModal from '../components/RequestModal.astro';
+import { PAYMENT_DELIVERY, REQUEST_BLOCK } from '../data/site';
+---
+
+<Base
+  title="Оплата и доставка"
+  description="Оплата и доставка СТ-ТЕХНИКС: собственная служба доставки по Москве и Московской области, доставка до терминала «Деловые Линии» в Ступино, работа с физическими и юридическими лицами."
+>
+  <div class="container">
+    <Breadcrumbs items={[{ label: 'Главная', href: '/' }, { label: 'Оплата и доставка' }]} />
+  </div>
+
+  <section class="payment-page container">
+    <h1>Оплата и доставка</h1>
+
+    <div class="payment-block">
+      <h2 class="payment-block__title">Доставка</h2>
+      <ul class="payment-list">
+        {PAYMENT_DELIVERY.delivery.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+
+    <div class="payment-block">
+      <h2 class="payment-block__title">Оплата и документы</h2>
+      <ul class="payment-list">
+        <li>{PAYMENT_DELIVERY.audience}</li>
+        <li>{PAYMENT_DELIVERY.pricing}</li>
+        <li>{PAYMENT_DELIVERY.documents}</li>
+      </ul>
+    </div>
+
+    <div class="payment-cta">
+      <div class="payment-cta__copy">
+        <h2 class="payment-cta__title">Есть вопрос по оплате или доставке?</h2>
+        <p class="payment-cta__text">{REQUEST_BLOCK.text}</p>
+      </div>
+      <button type="button" class="btn btn--primary" data-open-request-modal>Задать вопрос</button>
+    </div>
+  </section>
+
+  <RequestModal />
+</Base>
+
+<style>
+  .payment-page {
+    padding-bottom: var(--section-y);
+  }
+
+  .payment-page h1 {
+    margin-bottom: var(--space-8);
+  }
+
+  .payment-block {
+    max-width: 44rem;
+    margin-bottom: var(--space-12);
+  }
+  .payment-block__title {
+    font-size: var(--fs-h3);
+    line-height: var(--lh-h3);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .payment-list {
+    list-style: none;
+    display: grid;
+    gap: var(--space-3);
+  }
+  .payment-list li {
+    position: relative;
+    padding-left: var(--space-6);
+    font-size: 1.0625rem;
+    line-height: 1.5;
+  }
+  .payment-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .payment-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+    max-width: 44rem;
+    margin-top: var(--space-12);
+    padding: var(--space-8);
+    background: var(--bg-muted);
+    border-radius: var(--radius);
+  }
+  .payment-cta__title {
+    font-size: var(--fs-h3);
+    line-height: var(--lh-h3);
+  }
+  .payment-cta__text {
+    margin-top: var(--space-2);
+    max-width: 40ch;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 768px) {
+    .payment-cta {
+      flex-direction: column;
+      align-items: stretch;
+      padding: var(--space-6);
+    }
+    .payment-cta .btn {
+      width: 100%;
+    }
+  }
+</style>

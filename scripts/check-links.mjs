@@ -34,7 +34,8 @@ const { machineTypes } = read('data/catalog/machine-types.json');
  * сокращается по мере реализации — иначе он превращается в глушитель ошибок.
  */
 const PLANNED = new Set([
-  '/oplata-i-dostavka',
+  // Пусто: все публичные маршруты SITE_STRUCTURE.md §1 реализованы.
+  // Служебная /_data-review сюда не входит — на неё нет и не должно быть ссылок.
 ]);
 
 /**
@@ -51,6 +52,7 @@ const EXPECTED_ROUTES = [
   '/catalog',
   '/machines',
   '/contacts',
+  '/oplata-i-dostavka',
   ...categories.map((c) => `/catalog/category/${c.slug}`),
   ...products.map((p) => `/catalog/${p.slug}`),
   ...machineTypes.filter((m) => m.confirmed).map((m) => `/machines/${m.slug}`),
