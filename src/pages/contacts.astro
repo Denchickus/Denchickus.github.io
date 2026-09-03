@@ -1,0 +1,176 @@
+---
+/**
+ * /contacts — контактная информация (SITE_STRUCTURE.md §1, был в PLANNED).
+ *
+ * Только подтверждённые данные из src/data/site.ts (CONTACTS) — та же модель,
+ * что уже используется в Header/Footer/mock-форме. Отдельного редакционного
+ * intro-текста под H1 источник не содержит: content-inventory.json ->
+ * otherPages, url .../contacts несёт только служебную заметку "Телефоны,
+ * email, адрес, часы работы, Telegram" (перечисление полей для инвентаризации,
+ * не текст для посетителя) — секция intro сознательно не рендерится, чтобы не
+ * писать текст от себя.
+ *
+ * Telegram: в data model подтверждены два РАЗНЫХ по назначению URL (DR-04,
+ * site.ts:43-47) — floating (t.me/sttechnics) уже присутствует на этой же
+ * странице через глобальный FloatingTelegram-виджет (Base.astro), footer
+ * (t.me/Sttechnics1) — тот канал, что в Footer сайта. Здесь показан только
+ * footer-канал, чтобы не дублировать то, что уже видно на экране под другим
+ * текстом; URL не объединялись и не подменяли друг друга.
+ *
+ * Карты нет: адрес — только текст (DR-06, корректность как почтового адреса
+ * не подтверждена; сама строка — да). Координат в данных нет.
+ */
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import RequestModal from '../components/RequestModal.astro';
+import { CONTACTS, REQUEST_BLOCK, telHref } from '../data/site';
+
+const phone = CONTACTS.phones[0];
+const telegramFooterHandle = CONTACTS.telegram.footer.url.replace(/^https:\/\//, '');
+---
+
+<Base
+  title="Контакты"
+  description="Контакты СТ-ТЕХНИКС: телефон, email, адрес, режим работы, Telegram."
+>
+  <div class="container">
+    <Breadcrumbs items={[{ label: 'Главная', href: '/' }, { label: 'Контакты' }]} />
+  </div>
+
+  <section class="contacts-page container">
+    <h1>Контакты</h1>
+
+    <dl class="contacts-list">
+      <div class="contacts-list__row">
+        <dt class="contacts-list__label">Телефон</dt>
+        <dd class="contacts-list__value">
+          <a class="contacts-list__link tnum" href={telHref(phone)}>{phone}</a>
+        </dd>
+      </div>
+
+      <div class="contacts-list__row">
+        <dt class="contacts-list__label">Email</dt>
+        <dd class="contacts-list__value">
+          <a class="contacts-list__link" href={`mailto:${CONTACTS.emailPrimary}`}>{CONTACTS.emailPrimary}</a>
+        </dd>
+      </div>
+
+      <div class="contacts-list__row">
+        <dt class="contacts-list__label">Адрес</dt>
+        <dd class="contacts-list__value">{CONTACTS.locality}</dd>
+      </div>
+
+      <div class="contacts-list__row">
+        <dt class="contacts-list__label">Режим работы</dt>
+        <dd class="contacts-list__value">{CONTACTS.workingHours}</dd>
+      </div>
+
+      <div class="contacts-list__row">
+        <dt class="contacts-list__label">Telegram</dt>
+        <dd class="contacts-list__value">
+          <a
+            class="contacts-list__link contacts-list__telegram"
+            href={CONTACTS.telegram.footer.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src="/icons/telegram-footer.svg" width="20" height="20" alt="" />
+            {telegramFooterHandle}
+          </a>
+        </dd>
+      </div>
+    </dl>
+
+    <div class="contacts-cta">
+      <div class="contacts-cta__copy">
+        <h2 class="contacts-cta__title">Есть вопрос по оборудованию?</h2>
+        <p class="contacts-cta__text">{REQUEST_BLOCK.text}</p>
+      </div>
+      <button type="button" class="btn btn--primary" data-open-request-modal>Задать вопрос</button>
+    </div>
+  </section>
+
+  <RequestModal />
+</Base>
+
+<style>
+  .contacts-page {
+    padding-bottom: var(--section-y);
+  }
+
+  .contacts-page h1 {
+    margin-bottom: var(--space-8);
+  }
+
+  .contacts-list {
+    max-width: 40rem;
+    border-top: 1px solid var(--line);
+  }
+  .contacts-list__row {
+    display: grid;
+    grid-template-columns: minmax(140px, 200px) minmax(0, 1fr);
+    column-gap: var(--space-8);
+    align-items: baseline;
+    padding-block: var(--space-4);
+    border-bottom: 1px solid var(--line);
+  }
+  .contacts-list__label {
+    font-family: var(--font-display);
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+  }
+  .contacts-list__value {
+    font-size: 1.0625rem;
+  }
+  .contacts-list__link {
+    color: var(--text);
+    text-decoration: none;
+  }
+  .contacts-list__link:hover {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .contacts-list__telegram {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .contacts-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+    max-width: 40rem;
+    margin-top: var(--space-12);
+    padding: var(--space-8);
+    background: var(--bg-muted);
+    border-radius: var(--radius);
+  }
+  .contacts-cta__title {
+    font-size: var(--fs-h3);
+    line-height: var(--lh-h3);
+  }
+  .contacts-cta__text {
+    margin-top: var(--space-2);
+    max-width: 40ch;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 768px) {
+    .contacts-list__row {
+      grid-template-columns: 1fr;
+      row-gap: var(--space-1);
+    }
+    .contacts-cta {
+      flex-direction: column;
+      align-items: stretch;
+      padding: var(--space-6);
+    }
+    .contacts-cta .btn {
+      width: 100%;
+    }
+  }
+</style>

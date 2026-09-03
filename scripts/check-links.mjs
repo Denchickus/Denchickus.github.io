@@ -35,7 +35,6 @@ const { machineTypes } = read('data/catalog/machine-types.json');
  */
 const PLANNED = new Set([
   '/oplata-i-dostavka',
-  '/contacts',
 ]);
 
 /**
@@ -51,6 +50,7 @@ const EXPECTED_ROUTES = [
   '/',
   '/catalog',
   '/machines',
+  '/contacts',
   ...categories.map((c) => `/catalog/category/${c.slug}`),
   ...products.map((p) => `/catalog/${p.slug}`),
   ...machineTypes.filter((m) => m.confirmed).map((m) => `/machines/${m.slug}`),
