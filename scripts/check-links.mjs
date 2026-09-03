@@ -115,8 +115,21 @@ for (const b of results.broken) console.log(`    ✗ ${b.page}  ->  ${b.raw}  ($
 const missingRoutes = EXPECTED_ROUTES.filter((r) => !builtRoutes.has(r));
 console.log(`  Ожидаемых маршрутов: ${EXPECTED_ROUTES.length}, не построено: ${missingRoutes.length}`);
 for (const r of missingRoutes) console.log(`    ✗ не сгенерирован: ${r}`);
+
+/**
+ * 404 — специальный документ ошибки, НЕ публичный маршрут: он вне навигации,
+ * вне sitemap и не входит в счётчик публичных страниц (EXPECTED_ROUTES).
+ * Но dist/404.html обязан быть собран — GitHub Pages отдаёт его на любых
+ * несуществующих путях. Проверяется отдельно, чтобы не смешивать с public route count.
+ */
+const has404 = existsSync(join(DIST, '404.html'));
+console.log(`  Спец. документ 404 : dist/404.html ${has404 ? 'есть' : '✗ отсутствует'}`);
 console.log('  ' + '-'.repeat(48));
 
+if (!has404) {
+  console.error('  РЕЗУЛЬТАТ: FAIL (dist/404.html не собран)\n');
+  process.exit(1);
+}
 if (missingRoutes.length) {
   console.error(`  РЕЗУЛЬТАТ: FAIL (не построено маршрутов: ${missingRoutes.length})\n`);
   process.exit(1);

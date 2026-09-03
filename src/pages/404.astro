@@ -1,0 +1,212 @@
+---
+/**
+ * 404 — специальный документ ошибки (не публичный маршрут, вне навигации и sitemap).
+ *
+ * Astro при статической сборке рендерит src/pages/404.astro в dist/404.html;
+ * GitHub Pages отдаёт этот файл на любых несуществующих путях автоматически —
+ * дополнительной конфигурации не требуется.
+ *
+ * Содержимое минимальное (решение пользователя): eyebrow + H1 + короткий
+ * нейтральный UX-текст + навигационные CTA на существующие разделы. Бизнес-фактов
+ * здесь нет, весь текст — интерфейсный. Breadcrumbs не показываются (контекста
+ * пути на 404 нет). RequestModal не используется.
+ *
+ * Вёрстка (targeted redesign, решение пользователя): hero-композиция в две
+ * колонки 55/45. Слева — текст и CTA, справа — крупный декоративный «404» как
+ * визуальный якорь (только CSS/типографика/существующие токены, без изображений).
+ * Все локальные размеры заданы здесь и НЕ меняют глобальные h1/h2/h3-токены.
+ */
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Страница не найдена"
+  description="Запрошенная страница не найдена."
+>
+  <section class="notfound container">
+    <div class="notfound__grid">
+      <div class="notfound__body">
+        <p class="notfound__eyebrow">Ошибка 404</p>
+        <h1 class="notfound__title">Страница не найдена</h1>
+        <p class="notfound__text">
+          Возможно, адрес указан с ошибкой или страница была перемещена.
+        </p>
+
+        <div class="notfound__actions">
+          <a class="btn btn--primary" href="/">На главную</a>
+          <a class="btn btn--secondary" href="/catalog">Каталог оборудования</a>
+        </div>
+
+        <a class="notfound__tertiary" href="/machines">
+          Подбор по типу техники <span aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+
+      <div class="notfound__anchor" aria-hidden="true">
+        <span class="notfound__glyph">4<span class="notfound__glyph-accent">0</span>4</span>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .notfound {
+    display: grid;
+    align-items: center;
+    min-height: min(68vh, 620px);
+    padding-block: var(--section-y);
+    overflow: hidden; /* декоративный глиф не создаёт горизонтальный скролл */
+  }
+
+  .notfound__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
+    align-items: center;
+    gap: var(--space-16);
+  }
+
+  /* --- Левая колонка ------------------------------------------------- */
+  .notfound__body {
+    max-width: 34rem;
+  }
+
+  .notfound__eyebrow {
+    font-family: var(--font-display);
+    font-size: 0.8125rem; /* ~13px, локально */
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .notfound__title {
+    margin-top: var(--space-3);
+    /* Локальный размер, глобальный --fs-h1 не трогаем */
+    font-size: clamp(2.75rem, 5.6vw, 4rem); /* ~44 → 64px */
+    line-height: 1.05;
+    font-weight: 700;
+  }
+
+  .notfound__text {
+    margin-top: var(--space-4);
+    max-width: 40ch;
+    font-size: 1.125rem; /* ~18px */
+    line-height: 1.55;
+    color: var(--text-muted);
+  }
+
+  .notfound__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-top: 40px;
+  }
+
+  .notfound__tertiary {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 2px;
+    transition: border-color var(--dur) var(--easing), color var(--dur) var(--easing);
+  }
+  .notfound__tertiary:hover {
+    color: var(--accent);
+    border-bottom-color: currentColor;
+  }
+  .notfound__tertiary span {
+    transition: transform var(--dur) var(--easing);
+  }
+  .notfound__tertiary:hover span {
+    transform: translateX(3px);
+  }
+
+  /* --- Правая колонка: декоративный «404» -------------------------- */
+  .notfound__anchor {
+    justify-self: end;
+    padding-left: var(--space-8);
+    border-left: 2px solid var(--accent);
+  }
+
+  .notfound__glyph {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(180px, 19vw, 280px);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    color: var(--line);
+    user-select: none;
+  }
+  .notfound__glyph-accent {
+    color: var(--accent);
+  }
+
+  /* --- Планшет: чуть плотнее ------------------------------------- */
+  @media (max-width: 1024px) {
+    .notfound__grid {
+      gap: var(--space-12);
+    }
+    .notfound__glyph {
+      font-size: clamp(160px, 22vw, 240px);
+    }
+  }
+
+  /* --- Мобильный: одна колонка, глиф — ненавязчивый фон ---------- */
+  @media (max-width: 768px) {
+    .notfound {
+      position: relative;
+      min-height: 0;
+    }
+    .notfound__grid {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .notfound__body {
+      position: relative;
+      z-index: 1;
+      max-width: none;
+    }
+    .notfound__title {
+      font-size: clamp(2rem, 11vw, 2.75rem); /* ~32 → 44px */
+    }
+    .notfound__text {
+      font-size: 1.0625rem;
+    }
+    .notfound__actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .notfound__actions .btn {
+      width: 100%;
+    }
+
+    .notfound__anchor {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 0;
+      padding-left: 0;
+      border-left: 0;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+    .notfound__glyph {
+      font-size: clamp(120px, 40vw, 190px);
+    }
+  }
+
+  @media (max-width: 380px) {
+    .notfound__anchor {
+      opacity: 0.28;
+    }
+    .notfound__glyph {
+      font-size: 120px;
+    }
+  }
+</style>
