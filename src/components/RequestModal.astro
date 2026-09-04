@@ -69,7 +69,16 @@ const { productName, machineTypeName } = Astro.props;
 
       <label class="field">
         <span class="field__label">Телефон</span>
-        <input class="field__input tnum" type="tel" name="phone" autocomplete="tel" required />
+        <input
+          class="field__input tnum"
+          type="tel"
+          name="phone"
+          autocomplete="tel"
+          inputmode="tel"
+          pattern="[0-9+ ]{6,}"
+          title="Телефон: не менее 6 символов — только цифры, пробелы и знак +"
+          required
+        />
       </label>
 
       <label class="field">
@@ -105,6 +114,13 @@ const { productName, machineTypeName } = Astro.props;
       btn.addEventListener('click', () => {
         lastFocused = document.activeElement as HTMLElement | null;
         modal.showModal();
+        // Блокируем прокрутку фона под открытой модалкой. Через microtask —
+        // чтобы значение пережило синхронный cleanup мобильного меню
+        // (Header.astro сбрасывает body.overflow при закрытии меню, а кнопка
+        // «Запросить цену» в меню закрывает его и открывает модалку в один клик).
+        queueMicrotask(() => {
+          document.body.style.overflow = 'hidden';
+        });
       });
     });
 
@@ -116,6 +132,7 @@ const { productName, machineTypeName } = Astro.props;
     });
 
     modal.addEventListener('close', () => {
+      document.body.style.overflow = '';
       lastFocused?.focus?.();
     });
   }

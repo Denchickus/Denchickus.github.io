@@ -116,6 +116,7 @@ const mtLookup = confirmedMts.map((mt) => ({ id: mt.id, slug: mt.slug, name: mt.
 <Base
   title={product.name}
   description={descriptionSections[0]?.text.slice(0, 160)}
+  requestModal={false}
 >
   <div class="container">
     <Breadcrumbs items={crumbs} />

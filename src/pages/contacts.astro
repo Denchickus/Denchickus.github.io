@@ -26,7 +26,6 @@
  */
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
-import RequestModal from '../components/RequestModal.astro';
 import { CONTACTS, REQUEST_BLOCK, telHref } from '../data/site';
 
 const phone = CONTACTS.phones[0];
@@ -107,8 +106,6 @@ const telegramFooterHandle = CONTACTS.telegram.footer.url.replace(/^https:\/\//,
       <button type="button" class="btn btn--primary" data-open-request-modal>Задать вопрос</button>
     </div>
   </section>
-
-  <RequestModal />
 </Base>
 
 <style>

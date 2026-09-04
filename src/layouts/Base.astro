@@ -8,14 +8,24 @@ import '../styles/base.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FloatingTelegram from '../components/FloatingTelegram.astro';
+import RequestModal from '../components/RequestModal.astro';
 import { BRAND } from '../data/site';
 
 interface Props {
   title: string;
   description?: string;
+  /**
+   * Глобальная mock-модалка запроса цены. По умолчанию рендерится на каждой
+   * странице — её открывает кнопка «Запросить цену» в шапке и любые другие
+   * [data-open-request-modal]. Страница передаёт false, если рендерит свой
+   * экземпляр RequestModal с предзаполнением (страница товара — productName /
+   * machineTypeName для журнея B). Двух <dialog id="request-modal"> на странице
+   * быть не должно.
+   */
+  requestModal?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, requestModal = true } = Astro.props;
 const fullTitle = title ? `${title} — ${BRAND.name}` : BRAND.name;
 ---
 
@@ -49,5 +59,6 @@ const fullTitle = title ? `${title} — ${BRAND.name}` : BRAND.name;
     </main>
     <Footer />
     <FloatingTelegram />
+    {requestModal && <RequestModal />}
   </body>
 </html>

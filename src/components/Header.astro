@@ -16,7 +16,6 @@ import PhoneIcon from './icons/PhoneIcon.astro';
 import SearchIcon from './icons/SearchIcon.astro';
 
 const phone = CONTACTS.phones[0];
-const requestHref = '/#request';
 // Поля поиска в шапке нет: единственный поисковый интерфейс живёт в каталоге,
 // сюда добавлена только точка входа (SITE_STRUCTURE.md §9, п.3).
 const searchHref = '/catalog#search';
@@ -53,7 +52,7 @@ const searchHref = '/catalog#search';
         <SearchIcon class="site-header__search-svg" />
       </a>
       <a class="site-header__phone tnum" href={telHref(phone)}>{phone}</a>
-      <a class="btn btn--primary site-header__cta" href={requestHref}>Запросить цену</a>
+      <button type="button" class="btn btn--primary site-header__cta" data-open-request-modal>Запросить цену</button>
     </div>
 
     <a class="site-header__phone-icon" href={telHref(phone)} aria-label="Позвонить СТ-ТЕХНИКС">
@@ -81,7 +80,7 @@ const searchHref = '/catalog#search';
         Поиск по каталогу
       </a>
       <a class="mobile-menu__phone tnum" href={telHref(phone)} data-menu-close>{phone}</a>
-      <a class="btn btn--primary btn--block" href={requestHref} data-menu-close>Запросить цену</a>
+      <button type="button" class="btn btn--primary btn--block" data-open-request-modal data-menu-close>Запросить цену</button>
     </div>
   </dialog>
 </header>
