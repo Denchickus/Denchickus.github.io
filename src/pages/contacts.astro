@@ -17,8 +17,12 @@
  * footer-канал, чтобы не дублировать то, что уже видно на экране под другим
  * текстом; URL не объединялись и не подменяли друг друга.
  *
- * Карты нет: адрес — только текст (DR-06, корректность как почтового адреса
- * не подтверждена; сама строка — да). Координат в данных нет.
+ * Карта: секция «Как нас найти» — Яндекс.Карта обычным map-widget iframe
+ * (без Yandex Maps JS API, без API-ключа). Координаты 54.848240, 38.172839
+ * (короткая ссылка yandex.ru/maps/-/CTX6Q-1H) подтверждены пользователем,
+ * не из инвентаря — на своё усмотрение не меняются. Текстовый адрес
+ * по-прежнему DR-06 (см. ниже): подтверждена точность строки, не её
+ * корректность как почтового адреса.
  */
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
@@ -40,6 +44,7 @@ const telegramFooterHandle = CONTACTS.telegram.footer.url.replace(/^https:\/\//,
   <section class="contacts-page container">
     <h1>Контакты</h1>
 
+    <div class="contacts-layout">
     <dl class="contacts-list">
       <div class="contacts-list__row">
         <dt class="contacts-list__label">Телефон</dt>
@@ -81,6 +86,19 @@ const telegramFooterHandle = CONTACTS.telegram.footer.url.replace(/^https:\/\//,
       </div>
     </dl>
 
+    <section class="contacts-map" aria-labelledby="contacts-map-heading">
+      <h2 id="contacts-map-heading" class="contacts-map__title">Как нас найти</h2>
+      <div class="contacts-map__frame">
+        <iframe
+          title="СТ-ТЕХНИКС на карте — Московская область, Кашира, ул. Городской посёлок 4"
+          src="https://yandex.ru/map-widget/v1/?ll=38.172839%2C54.848240&amp;z=17&amp;pt=38.172839%2C54.848240,pm2rdm"
+          loading="lazy"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </section>
+    </div>
+
     <div class="contacts-cta">
       <div class="contacts-cta__copy">
         <h2 class="contacts-cta__title">Есть вопрос по оборудованию?</h2>
@@ -102,8 +120,14 @@ const telegramFooterHandle = CONTACTS.telegram.footer.url.replace(/^https:\/\//,
     margin-bottom: var(--space-8);
   }
 
+  .contacts-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 40fr) minmax(0, 60fr);
+    gap: var(--space-12);
+    align-items: start;
+  }
+
   .contacts-list {
-    max-width: 40rem;
     border-top: 1px solid var(--line);
   }
   .contacts-list__row {
@@ -137,14 +161,35 @@ const telegramFooterHandle = CONTACTS.telegram.footer.url.replace(/^https:\/\//,
     gap: var(--space-2);
   }
 
+  .contacts-map {
+    min-width: 0;
+  }
+  .contacts-map__title {
+    font-size: var(--fs-h3);
+    line-height: var(--lh-h3);
+    margin-bottom: var(--space-4);
+  }
+  .contacts-map__frame {
+    width: 100%;
+    height: 440px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .contacts-map__frame iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
   .contacts-cta {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-6);
-    max-width: 40rem;
-    margin-top: var(--space-12);
+    margin-top: var(--space-16);
     padding: var(--space-8);
     background: var(--bg-muted);
     border-radius: var(--radius);
@@ -160,9 +205,16 @@ const telegramFooterHandle = CONTACTS.telegram.footer.url.replace(/^https:\/\//,
   }
 
   @media (max-width: 768px) {
+    .contacts-layout {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
     .contacts-list__row {
       grid-template-columns: 1fr;
       row-gap: var(--space-1);
+    }
+    .contacts-map__frame {
+      height: 320px;
     }
     .contacts-cta {
       flex-direction: column;

@@ -34,20 +34,22 @@ import { PAYMENT_DELIVERY, REQUEST_BLOCK } from '../data/site';
   <section class="payment-page container">
     <h1>Оплата и доставка</h1>
 
-    <div class="payment-block">
-      <h2 class="payment-block__title">Доставка</h2>
-      <ul class="payment-list">
-        {PAYMENT_DELIVERY.delivery.map((item) => <li>{item}</li>)}
-      </ul>
-    </div>
+    <div class="payment-grid">
+      <div class="payment-block">
+        <h2 class="payment-block__title">Доставка</h2>
+        <ul class="payment-list">
+          {PAYMENT_DELIVERY.delivery.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
 
-    <div class="payment-block">
-      <h2 class="payment-block__title">Оплата и документы</h2>
-      <ul class="payment-list">
-        <li>{PAYMENT_DELIVERY.audience}</li>
-        <li>{PAYMENT_DELIVERY.pricing}</li>
-        <li>{PAYMENT_DELIVERY.documents}</li>
-      </ul>
+      <div class="payment-block">
+        <h2 class="payment-block__title">Оплата и документы</h2>
+        <ul class="payment-list">
+          <li>{PAYMENT_DELIVERY.audience}</li>
+          <li>{PAYMENT_DELIVERY.pricing}</li>
+          <li>{PAYMENT_DELIVERY.documents}</li>
+        </ul>
+      </div>
     </div>
 
     <div class="payment-cta">
@@ -71,9 +73,16 @@ import { PAYMENT_DELIVERY, REQUEST_BLOCK } from '../data/site';
     margin-bottom: var(--space-8);
   }
 
+  .payment-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-8);
+  }
+
   .payment-block {
-    max-width: 44rem;
-    margin-bottom: var(--space-12);
+    padding: var(--space-8);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
   }
   .payment-block__title {
     font-size: var(--fs-h3);
@@ -111,8 +120,7 @@ import { PAYMENT_DELIVERY, REQUEST_BLOCK } from '../data/site';
     align-items: center;
     justify-content: space-between;
     gap: var(--space-6);
-    max-width: 44rem;
-    margin-top: var(--space-12);
+    margin-top: var(--space-16);
     padding: var(--space-8);
     background: var(--bg-muted);
     border-radius: var(--radius);
@@ -128,6 +136,13 @@ import { PAYMENT_DELIVERY, REQUEST_BLOCK } from '../data/site';
   }
 
   @media (max-width: 768px) {
+    .payment-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+    .payment-block {
+      padding: var(--space-6);
+    }
     .payment-cta {
       flex-direction: column;
       align-items: stretch;
