@@ -33,7 +33,25 @@ a{color:inherit}
    (тонкая рамка 1px, обычное начертание — вровень с остальными пунктами меню) */
 .nav .cat{border:1px solid var(--l);padding:7px 13px}
 .nav .pick{border:2px solid var(--l);padding:7px 13px;font-weight:700}
-.q{flex:1;min-width:240px;border:1px solid var(--l);padding:7px 10px;color:var(--m);font-size:14px}
+/* выпадающие списки desktop-шапки (27.09.2026): «Каталог ▾» и «Ещё ▾». Без JS — открываются по
+   наведению и по фокусу (клавиатура/клик по кнопке), закрываются сами при уходе. Панель стоит
+   вплотную под кнопкой, поэтому курсор не «теряет» её по дороге. Класс .open — тот же открытый
+   вид, зафиксированный статически (для скриншотов и проверки). */
+.dd{position:relative}
+.dd-t{font:inherit;font-size:15px;color:inherit;background:#fff;cursor:pointer}
+.dd-more .dd-t{border:0;padding:7px 0}
+/* visibility, а не display: закрытие откладывается на 0.3 с. Панель «Ещё» прижата к правому
+   краю и уходит далеко влево от узкой кнопки, поэтому курсор, идущий к пункту по диагонали,
+   на миг оказывается вне кнопки и вне панели — без задержки меню схлопывалось под рукой
+   (нашлось живой проверкой наведения). Открывается мгновенно (transition-delay:0s). */
+.dd-panel{visibility:hidden;position:absolute;top:100%;left:0;min-width:240px;background:#fff;
+  border:1px solid var(--l);z-index:60;transition:visibility 0s linear .3s}
+.dd-more .dd-panel{left:auto;right:0}
+.dd-panel a{display:block;padding:9px 16px;white-space:nowrap}
+.dd-panel a + a{border-top:1px solid var(--s)}
+.dd:hover .dd-panel,.dd:focus-within .dd-panel,.dd.open .dd-panel{visibility:visible;
+  transition-delay:0s}
+.q{flex:1;min-width:280px;border:1px solid var(--l);padding:7px 10px;color:var(--m);font-size:14px}
 .burger{display:none;border:2px solid var(--l);padding:7px 12px;font-weight:700;cursor:pointer}
 
 /* строка поиска на mobile — отдельно от липкой шапки, прокручивается вместе со страницей
@@ -214,6 +232,7 @@ footer a{text-decoration:none}
   /* «Каталог» и «Подобрать под технику» из шапки на mobile убраны — оба действия уже постоянно
      доступны в нижней закреплённой панели (.bar); шапка не должна их дублировать (26.09.2026) */
   .nav .cat{display:none}
+  .nav .dd{display:none}
   .nav .pick{display:none}
   .burger{display:inline-block;margin-left:auto}
   /* поиск внутри липкой шапки скрыт — он живёт в отдельной неприлипающей строке ниже
