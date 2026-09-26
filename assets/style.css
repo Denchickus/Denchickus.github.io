@@ -111,6 +111,7 @@ section{margin:26px 0}
 .tile{border:1px solid var(--l);padding:14px;text-decoration:none;display:block}
 .tile .n{font-weight:700;font-size:17px}
 .proof .card{border:1px solid var(--l);padding:16px}
+.proof .pl{font-size:13px;font-weight:700;color:var(--m);margin-bottom:6px}
 .proof .pf{font-weight:700;font-size:22px;line-height:1.25}
 .proof .ps{font-size:14px;color:var(--m);margin-top:6px}
 .toc{grid-template-columns:repeat(5,1fr);gap:10px}
