@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>Подбор под технику — СТ-ТЕХНИКС</title>
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/style.css?v=94b31a89">
 </head>
 <body>
 <div class="contacts-row"><div class="wrap">
@@ -14,9 +14,9 @@
 <span>Telegram: два канала</span><span class="sp"></span><span>Кашира, Московская область</span></div>
 </div></div>
 <header class="top"><div class="wrap">
-<nav class="nav">
+<nav class="nav" aria-label="Основная навигация">
   <a class="logo" href="../">СТ-ТЕХНИКС<small>навесное оборудование, производство</small></a>
-  <div class="dd dd-cat"><button type="button" class="dd-t cat">Каталог ▾</button>
+  <div class="dd dd-cat"><button type="button" class="dd-t cat" aria-expanded="false">Каталог ▾</button>
     <div class="dd-panel">
       <a href="../catalog/">Все оборудование</a>
       <a href="../catalog/">По типу оборудования</a>
@@ -26,7 +26,7 @@
   <a class="pick" href="../podbor/">Подобрать под технику</a>
   <span class="linkset"><a href="../proizvodstvo/">Производство</a></span>
   <span class="linkset"><a href="../dileram/">Дилерам</a></span>
-  <div class="dd dd-more"><button type="button" class="dd-t more">Ещё ▾</button>
+  <div class="dd dd-more"><button type="button" class="dd-t more" aria-expanded="false">Ещё ▾</button>
     <div class="dd-panel">
       <a href="../o-kompanii/">О компании</a>
       <a href="../dostavka-i-oplata/">Доставка и оплата</a>
@@ -36,20 +36,30 @@
       <a href="../individualnye-razmery/">Индивидуальные размеры</a>
       <a href="../kontakty/">Контакты</a>
     </div></div>
-  <input type="checkbox" id="mmenu" class="mmenu-toggle">
-  <label for="mmenu" class="burger">Меню</label>
-  <div class="mmenu-panel">
-    <a href="../catalog/">Каталог</a>
-    <a href="../tehnika/">Техника</a>
+  <button type="button" class="ico-search" data-panel="msearch" aria-expanded="false"
+    aria-label="Поиск">&#8981;</button>
+  <button type="button" class="burger" data-panel="mmenu" aria-expanded="false">Меню</button>
+  <div class="mpanel mmenu-panel" id="mmenu">
+    <div class="mmenu-group"><b>Каталог</b>
+      <a href="../catalog/">Все оборудование</a>
+      <a href="../catalog/">По типу оборудования</a>
+      <a href="../tehnika/">По типу техники</a>
+    </div>
+    <a href="../podbor/">Подобрать под технику</a>
     <a href="../proizvodstvo/">Производство</a>
     <a href="../dileram/">Дилерам</a>
+    <a href="../o-kompanii/">О компании</a>
+    <a href="../dostavka-i-oplata/">Доставка и оплата</a>
+    <a href="../voprosy/">Вопросы и ответы</a>
+    <a href="../zakupshchikam/">Закупщикам</a>
+    <a href="../zapchasti/">Запчасти и подбор</a>
+    <a href="../individualnye-razmery/">Индивидуальные размеры</a>
     <a href="../kontakty/">Контакты</a>
-    <a href="../podbor/">Подобрать под технику</a>
+  </div>
+  <div class="mpanel msearch-panel" id="msearch">
+    <span class="q mob-q">Поиск по названию оборудования</span>
   </div>
 </nav></div></header>
-<div class="mob-search-row"><div class="wrap">
-  <span class="q mob-q">Поиск по названию оборудования</span>
-</div></div>
 <main class="wrap"><div class="crumbs"><a href="../">Главная</a> → <span>Подбор под технику</span></div>
 <h1>Подобрать оборудование под вашу технику</h1>
 <p class="lead">Три поля — марка, модель и год машины. Заявку смотрит человек: мы всегда проверяем технику и сообщаем, если оборудование не подойдёт.</p>
@@ -106,5 +116,21 @@
 <p class="nosend">Прототип для показа. Формы не отправляют данные. Реквизиты, сертификаты и
 фотографии производства появятся к боевому сайту.</p></div></footer>
 <nav class="bar"><a href="../catalog/"><span class="i">☰</span>Каталог</a><a href="../podbor/"><span class="i">⌕</span>Подбор</a><a href="../kontakty/"><span class="i">✆</span>Позвонить</a><a href="../kontakty/"><span class="i">✉</span>Написать</a></nav>
+<script>(function(){
+var d=document,items=[];
+d.querySelectorAll('.dd').forEach(function(dd){items.push({t:dd.querySelector('.dd-t'),box:dd});});
+d.querySelectorAll('[data-panel]').forEach(function(b){
+  var box=d.getElementById(b.getAttribute('data-panel'));if(box)items.push({t:b,box:box});});
+function set(it,on){it.box.classList.toggle('open',on);it.t.setAttribute('aria-expanded',on?'true':'false');}
+function closeAll(){items.forEach(function(it){set(it,false);});}
+items.forEach(function(it){it.t.addEventListener('click',function(e){
+  e.stopPropagation();var on=!it.box.classList.contains('open');closeAll();set(it,on);});});
+d.addEventListener('click',function(e){items.forEach(function(it){
+  if(it.box.classList.contains('open')&&!it.box.contains(e.target))set(it,false);});});
+d.addEventListener('keydown',function(e){if(e.key!=='Escape')return;
+  var o=items.filter(function(it){return it.box.classList.contains('open');})[0];
+  if(o){closeAll();o.t.focus();}});
+window.addEventListener('resize',closeAll);
+})();</script>
 </body>
 </html>

@@ -33,36 +33,28 @@ a{color:inherit}
    (тонкая рамка 1px, обычное начертание — вровень с остальными пунктами меню) */
 .nav .cat{border:1px solid var(--l);padding:7px 13px}
 .nav .pick{border:2px solid var(--l);padding:7px 13px;font-weight:700}
-/* выпадающие списки desktop-шапки (27.09.2026): «Каталог ▾» и «Ещё ▾». Без JS — открываются по
-   наведению и по фокусу (клавиатура/клик по кнопке), закрываются сами при уходе. Панель стоит
-   вплотную под кнопкой, поэтому курсор не «теряет» её по дороге. Класс .open — тот же открытый
-   вид, зафиксированный статически (для скриншотов и проверки). */
+/* выпадающие списки desktop-шапки: «Каталог ▾» и «Ещё ▾» (28.09.2026). Кнопка-триггер открывает
+   плавающую панель под собой — она вне потока (position:absolute), поэтому не увеличивает шапку
+   и не сдвигает страницу. Открывается и закрывается кликом; закрытие по клику вне меню и по
+   Escape, максимум один открытый список — это делает небольшой скрипт в конце страницы
+   (DOC/JS ниже). Без скрипта списки просто закрыты. */
 .dd{position:relative}
 .dd-t{font:inherit;font-size:15px;color:inherit;background:#fff;cursor:pointer}
 .dd-more .dd-t{border:0;padding:7px 0}
-/* visibility, а не display: закрытие откладывается на 0.3 с. Панель «Ещё» прижата к правому
-   краю и уходит далеко влево от узкой кнопки, поэтому курсор, идущий к пункту по диагонали,
-   на миг оказывается вне кнопки и вне панели — без задержки меню схлопывалось под рукой
-   (нашлось живой проверкой наведения). Открывается мгновенно (transition-delay:0s). */
-.dd-panel{visibility:hidden;position:absolute;top:100%;left:0;min-width:240px;background:#fff;
-  border:1px solid var(--l);z-index:60;transition:visibility 0s linear .3s}
+.dd-panel{display:none;position:absolute;top:100%;left:0;min-width:240px;background:#fff;
+  border:1px solid var(--l);z-index:60}
 .dd-more .dd-panel{left:auto;right:0}
 .dd-panel a{display:block;padding:9px 16px;white-space:nowrap}
 .dd-panel a + a{border-top:1px solid var(--s)}
-.dd:hover .dd-panel,.dd:focus-within .dd-panel,.dd.open .dd-panel{visibility:visible;
-  transition-delay:0s}
+.dd.open .dd-panel{display:block}
 .q{flex:1;min-width:280px;border:1px solid var(--l);padding:7px 10px;color:var(--m);font-size:14px}
-.burger{display:none;border:2px solid var(--l);padding:7px 12px;font-weight:700;cursor:pointer}
-
-/* строка поиска на mobile — отдельно от липкой шапки, прокручивается вместе со страницей
-   (27.09.2026); скрыта на desktop, там поиск стоит внутри .nav как обычно */
-.mob-search-row{display:none;background:#fff}
-.mob-search-row .q{display:flex;align-items:center;width:100%;min-width:0}
-
-/* выпадающее меню «Меню» на mobile — чистый CSS (checkbox hack, без JS), открывается поверх
-   контента под липкой шапкой, не сдвигая его (27.09.2026) */
-.mmenu-toggle{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
-.mmenu-panel{display:none}
+/* кнопки mobile-шапки (иконка поиска, «Меню») — на desktop скрыты */
+.burger,.ico-search{display:none;border:2px solid var(--l);background:#fff;color:inherit;
+  font:inherit;font-weight:700;padding:7px 12px;cursor:pointer}
+.ico-search{font-size:18px;line-height:1;padding:7px 11px}
+/* панели mobile (меню и поиск) — открываются кнопками в шапке, поверх контента, не сдвигая его;
+   стили открытия — в mobile-блоке ниже */
+.mpanel{display:none}
 
 /* общее */
 .crumbs{font-size:13px;color:var(--m);padding:12px 0}
@@ -228,25 +220,23 @@ footer a{text-decoration:none}
   .compat-desktop{display:none}
   .compat-mini{display:block}
   .contacts{display:none}
-  .nav .linkset{display:none}
-  /* «Каталог» и «Подобрать под технику» из шапки на mobile убраны — оба действия уже постоянно
-     доступны в нижней закреплённой панели (.bar); шапка не должна их дублировать (26.09.2026) */
-  .nav .cat{display:none}
-  .nav .dd{display:none}
-  .nav .pick{display:none}
-  .burger{display:inline-block;margin-left:auto}
-  /* поиск внутри липкой шапки скрыт — он живёт в отдельной неприлипающей строке ниже
-     (.mob-search-row), чтобы липла только компактная строка «логотип + Меню» (27.09.2026) */
-  .nav .q{display:none}
-  .mob-search-row{display:block}
-  /* «Меню» открывает список поверх контента, не сдвигая его: раскрытие через :checked,
-     без JS (27.09.2026) */
-  .mmenu-toggle:checked ~ .mmenu-panel{
-    display:block;position:absolute;left:0;right:0;top:100%;background:#fff;
-    border-bottom:2px solid var(--l);box-shadow:0 6px 10px -6px rgba(0,0,0,.25);z-index:49}
-  .mmenu-panel a{display:block;padding:12px 16px;border-top:1px solid var(--s);
+  /* Mobile-шапка (28.09.2026): закрытая — только «бренд · иконка поиска · Меню». Все desktop-пункты
+     скрыты целиком, до открытия меню их в шапке нет; «Каталог» и «Подобрать» дублировала бы
+     нижняя панель (.bar). Липнет вся эта компактная строка. */
+  .nav .linkset,.nav .cat,.nav .dd,.nav .pick,.nav > .q{display:none}
+  .ico-search{display:inline-block;margin-left:auto}
+  .burger{display:inline-block}
+  .nav{gap:8px}
+  /* панели «Меню» и поиска — поверх контента под липкой строкой, высоту шапки не меняют */
+  .mpanel.open{display:block;position:absolute;left:0;right:0;top:100%;background:#fff;
+    border-bottom:2px solid var(--l);z-index:49;max-height:calc(100vh - 140px);overflow-y:auto}
+  .mmenu-panel a,.mmenu-group b{display:block;padding:12px 16px;border-top:1px solid var(--s);
     text-decoration:none;font-size:15px}
-  .mmenu-panel a:first-child{border-top:0}
+  .mmenu-panel > a:first-child,.mmenu-group:first-child b{border-top:0}
+  .mmenu-group b{font-weight:700}
+  .mmenu-group a{padding-left:32px}
+  .msearch-panel{padding:12px 16px}
+  .msearch-panel .q{display:flex;align-items:center;width:100%;min-width:0}
   .g2,.g3,.g4,.gauto{grid-template-columns:1fr}
   .subcats{grid-template-columns:1fr}
   .cols{grid-template-columns:1fr;gap:14px}
