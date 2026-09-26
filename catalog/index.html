@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>Каталог — СТ-ТЕХНИКС</title>
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="../assets/style.css?v=94b31a89">
+<link rel="stylesheet" href="../assets/style.css?v=7cf898dc">
 </head>
 <body>
 <div class="contacts-row"><div class="wrap">
@@ -40,21 +40,28 @@
     aria-label="Поиск">&#8981;</button>
   <button type="button" class="burger" data-panel="mmenu" aria-expanded="false">Меню</button>
   <div class="mpanel mmenu-panel" id="mmenu">
-    <div class="mmenu-group"><b>Каталог</b>
-      <a href="../catalog/">Все оборудование</a>
-      <a href="../catalog/">По типу оборудования</a>
-      <a href="../tehnika/">По типу техники</a>
-    </div>
     <a href="../podbor/">Подобрать под технику</a>
     <a href="../proizvodstvo/">Производство</a>
     <a href="../dileram/">Дилерам</a>
-    <a href="../o-kompanii/">О компании</a>
-    <a href="../dostavka-i-oplata/">Доставка и оплата</a>
-    <a href="../voprosy/">Вопросы и ответы</a>
-    <a href="../zakupshchikam/">Закупщикам</a>
-    <a href="../zapchasti/">Запчасти и подбор</a>
-    <a href="../individualnye-razmery/">Индивидуальные размеры</a>
-    <a href="../kontakty/">Контакты</a>
+    <div class="acc"><button type="button" class="acc-t" aria-expanded="false">Каталог</button>
+      <div class="acc-b">
+        <a href="../catalog/">Все оборудование</a>
+        <a href="../catalog/">По типу оборудования</a>
+        <a href="../tehnika/">По типу техники</a>
+      </div></div>
+    <div class="acc"><button type="button" class="acc-t" aria-expanded="false">Покупателям</button>
+      <div class="acc-b">
+        <a href="../dostavka-i-oplata/">Доставка и оплата</a>
+        <a href="../voprosy/">Вопросы и ответы</a>
+        <a href="../zakupshchikam/">Закупщикам</a>
+        <a href="../zapchasti/">Запчасти и подбор</a>
+        <a href="../individualnye-razmery/">Индивидуальные размеры</a>
+      </div></div>
+    <div class="acc"><button type="button" class="acc-t" aria-expanded="false">Компания</button>
+      <div class="acc-b">
+        <a href="../o-kompanii/">О компании</a>
+        <a href="../kontakty/">Контакты</a>
+      </div></div>
   </div>
   <div class="mpanel msearch-panel" id="msearch">
     <span class="q mob-q">Поиск по названию оборудования</span>
@@ -71,9 +78,11 @@
 <a class="btn btn2" href="../tehnika/">По типу техники</a></div>
 <section><div class="grid g3"><a class="tile" href="../catalog/kovshi/"><div class="n">Ковши</div><div class="c">4 позиции<br>обычно в наличии</div></a><a class="tile" href="../catalog/shchetki/"><div class="n">Щётки</div><div class="c">3 позиции<br>обычно в наличии</div></a><a class="tile" href="../catalog/snegouborochnoe-oborudovanie/"><div class="n">Снегоуборочное оборудование</div><div class="c">2 позиции<br>Отвалы, Снегомёты<br>обычно в наличии</div></a><a class="tile" href="../catalog/zahvaty/"><div class="n">Захваты</div><div class="c">2 позиции<br>обычно в наличии</div></a><a class="tile" href="../catalog/vily/"><div class="n">Вилы</div><div class="c">1 позиция<br>обычно в наличии</div></a><a class="tile" href="../catalog/gidromoloty/"><div class="n">Гидромолоты</div><div class="c">1 позиция</div></a><a class="tile" href="../catalog/prochee/"><div class="n">Прочее оборудование</div><div class="c">1 позиция</div></a></div></section>
 <section>
-  <h2>Не нашли нужное?</h2>
-  <p>Назовите марку, модель и год машины — подберём сами.
-  <a class="btn btn2" href="../podbor/">Подобрать под технику</a></p>
+  <h2>Подбор под вашу технику</h2>
+  <div class="cta-line">
+    <p>Укажите марку, модель и год выпуска — проверим совместимость и подберём подходящий вариант.</p>
+    <a class="btn btn2" href="../podbor/">Подобрать под технику</a>
+  </div>
 </section>
 </main>
 <footer><div class="wrap"><div class="cols">
@@ -114,6 +123,8 @@ d.addEventListener('click',function(e){items.forEach(function(it){
 d.addEventListener('keydown',function(e){if(e.key!=='Escape')return;
   var o=items.filter(function(it){return it.box.classList.contains('open');})[0];
   if(o){closeAll();o.t.focus();}});
+d.querySelectorAll('.acc-t').forEach(function(b){b.addEventListener('click',function(){
+  var a=b.parentNode,on=!a.classList.contains('open');a.classList.toggle('open',on);b.setAttribute('aria-expanded',on?'true':'false');});});
 window.addEventListener('resize',closeAll);
 })();</script>
 </body>
