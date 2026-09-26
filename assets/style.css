@@ -1,0 +1,237 @@
+
+:root{--l:#111;--m:#666;--s:#aaa;--f:#f2f2f2}
+*{box-sizing:border-box}
+/* clip, а не hidden: hidden делает body собственным scroll-контейнером и ломает
+   position:sticky у шапки (sticky «липнет» к body вместо окна). clip обрезает так же, но
+   scroll-контейнера не создаёт (27.09.2026) */
+html,body{max-width:100%;overflow-x:clip}
+body{margin:0;background:#fff;color:var(--l);
+  font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+.wire{outline:1px solid var(--s);outline-offset:-1px}
+
+/* шапка */
+/* строка контактов — справочная, не действие, и не липкая: уходит при прокрутке на всех
+   шириинах (27.09.2026). Без своей линии-разделителя — граница есть у .top ниже, вторая тут же
+   под ней читалась как двойной акцент. */
+.contacts-row{background:#fff}
+.contacts{font-size:12px;color:var(--m);display:flex;gap:18px;flex-wrap:wrap;padding:6px 0}
+.contacts .sp{margin-left:auto}
+/* .top — липкая основная строка шапки: логотип, «Каталог», поиск, «Подобрать под технику»,
+   меню разделов. Непрозрачный фон и z-index обязательны — иначе контент просвечивает сквозь
+   шапку при прокрутке и перекрывается на границе. На mobile тот же .top липнет компактным —
+   «Каталог»/«Подобрать»/пункты меню/поиск в нём уже скрыты правкой 26.09.2026, остаются только
+   логотип и «Меню» (27.09.2026). */
+.top{position:sticky;top:0;z-index:50;background:#fff;border-bottom:2px solid var(--l)}
+.nav{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:12px 0;position:relative}
+.logo{font-size:19px;font-weight:700;text-decoration:none;white-space:nowrap}
+.logo small{display:block;font-size:10px;font-weight:400;color:var(--m)}
+.nav a{text-decoration:none;font-size:15px}
+/* иерархия desktop-шапки (27.09.2026): «Подобрать под технику» — главный CTA страницы
+   (сплошная рамка 2px, как .btn), «Каталог» — навигационный элемент, не действие
+   (тонкая рамка 1px, обычное начертание — вровень с остальными пунктами меню) */
+.nav .cat{border:1px solid var(--l);padding:7px 13px}
+.nav .pick{border:2px solid var(--l);padding:7px 13px;font-weight:700}
+.q{flex:1;min-width:240px;border:1px solid var(--l);padding:7px 10px;color:var(--m);font-size:14px}
+.burger{display:none;border:2px solid var(--l);padding:7px 12px;font-weight:700;cursor:pointer}
+
+/* строка поиска на mobile — отдельно от липкой шапки, прокручивается вместе со страницей
+   (27.09.2026); скрыта на desktop, там поиск стоит внутри .nav как обычно */
+.mob-search-row{display:none;background:#fff}
+.mob-search-row .q{display:flex;align-items:center;width:100%;min-width:0}
+
+/* выпадающее меню «Меню» на mobile — чистый CSS (checkbox hack, без JS), открывается поверх
+   контента под липкой шапкой, не сдвигая его (27.09.2026) */
+.mmenu-toggle{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.mmenu-panel{display:none}
+
+/* общее */
+.crumbs{font-size:13px;color:var(--m);padding:12px 0}
+/* запас на случай якорных переходов (#id) — липкая шапка не должна закрывать собой заголовок,
+   к которому прыгнул браузер (27.09.2026); высота запаса — примерная высота липкой строки */
+h1,h2,h3{scroll-margin-top:76px}
+h1{font-size:28px;line-height:1.2;margin:6px 0}
+h2{font-size:20px;margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--s)}
+h3{font-size:16px;margin:18px 0 6px}
+.lead{font-size:18px;color:#333;margin:6px 0 14px}
+.muted{color:var(--m);font-size:14px}
+section{margin:26px 0}
+
+/* заглушка медиа */
+.ph{border:2px dashed var(--s);background:var(--f);color:var(--m);display:flex;
+  align-items:center;justify-content:center;text-align:center;padding:18px;font-size:14px;
+  min-height:110px}
+.ph.hero{min-height:280px}
+.ph.gal{min-height:240px}
+.ph.sm{min-height:64px;padding:12px;font-size:13px}
+
+/* текст + вторичная кнопка в одну плотную строку — без лишнего воздуха, который получался
+   у обычного <p> из-за того, что кнопка выше строки текста (27.09.2026) */
+.cta-line{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:10px 0}
+.cta-line p{margin:0}
+
+/* ждём данные */
+.wait{border:1px solid var(--l);border-left-width:5px;background:var(--f);padding:10px 13px;
+  margin:10px 0;font-size:14px}
+.wait b{display:block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--m);margin-bottom:3px}
+
+/* вопрос к показу */
+.ask{border:1px dotted var(--l);padding:10px 13px;margin:10px 0;font-size:13px;color:var(--m)}
+.ask b{color:var(--l)}
+
+/* сетки и карточки */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+
+/* листинг с подкатегориями: секции стоят рядом в колонках, а не друг под другом —
+   иначе при одном товаре на подкатегорию страница выглядит пустой */
+.subcats{display:grid;gap:14px 28px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  align-items:start;margin:14px 0}
+.subcat h3{margin-top:0}
+/* сетка карточек товара: не фиксированное число колонок, а авто-сетка. auto-fit (не auto-fill!)
+   принципиален — auto-fill создаёт пустые треки сетки, даже когда товаров меньше, чем треков,
+   и единственная карточка остаётся узкой и прилипает к левому краю вместо того, чтобы занять
+   всю доступную ширину колонки. auto-fit схлопывает пустые треки, и содержимое растягивается
+   на реально доступное место. Порога количества товаров нигде не зашит (27.09.2026). */
+.gauto{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.tile{border:1px solid var(--l);padding:14px;text-decoration:none;display:block}
+.tile .n{font-weight:700;font-size:17px}
+.tile .c{font-size:13px;color:var(--m);margin-top:4px}
+.pc{border:1px solid var(--l);padding:0;display:flex;flex-direction:column}
+.pc .body{padding:12px}
+.pc .n{font-weight:700}
+.pc .p{margin-top:6px;font-size:17px}
+.pc .mt{font-size:12px;color:var(--m);margin-top:6px}
+.badge{display:inline-block;border:1px solid var(--l);padding:1px 7px;font-size:11px;
+  letter-spacing:.04em;text-transform:uppercase}
+
+/* таблицы */
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:0}
+th,td{border:1px solid var(--s);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:var(--f);font-weight:700}
+.tcap{font-size:13px;color:var(--m);margin-top:14px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.04em}
+
+/* плотные таблицы (4+ колонки, правило 26.09.2026): на desktop/tablet — обычная таблица со
+   скроллом и закреплённой первой колонкой; на mobile таблица прячется, вместо неё показывается
+   .mod-cards — по карточке на строку. Простые таблицы (класс .kv, 2–3 колонки) в этот механизм
+   не попадают вовсе — они читаемы как таблица на любой ширине (см. ниже). */
+.tw.dense th:first-child,.tw.dense td:first-child{position:sticky;left:0;background:#fff;
+  box-shadow:2px 0 3px -2px rgba(0,0,0,.25)}
+.tw.dense th:first-child{background:var(--f)}
+.tscroll-hint{display:none;font-size:12px;color:var(--m);text-align:right;margin:-4px 0 10px}
+.tw.dense + .tscroll-hint{display:block}
+
+/* карточка модификации — по одной на строку плотной таблицы, только на mobile (см. media ниже) */
+.mod-cards{display:none;margin:10px 0}
+.mod-card{border:1px solid var(--l);padding:13px 15px;margin:0 0 10px}
+.mod-title{font-weight:700;font-size:16px;margin-bottom:8px}
+.mod-row{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:5px 0;
+  border-top:1px solid var(--s)}
+.mod-label{color:var(--m)}
+.mod-value{text-align:right}
+.mod-price{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  margin-top:10px;padding-top:10px;border-top:1px solid var(--l)}
+.mod-price-label{font-size:13px;color:var(--m)}
+.mod-price-value{font-size:19px;font-weight:700}
+
+/* компактный блок медиа: видео + 3D рядом, не друг под другом */
+.media-extra{display:flex;gap:10px;margin-top:10px}
+.media-extra .ph{flex:1;min-height:70px}
+
+/* краткая совместимость на карточке товара — показывается только на mobile,
+   на desktop эти сведения уже стоят перед CTA (см. .compat-desktop) */
+.compat-mini{display:none;font-size:14px;margin-top:12px;padding-top:12px;
+  border-top:1px dashed var(--s)}
+
+/* формы */
+form{border:1px solid var(--l);padding:16px}
+.f{margin:11px 0}
+.f label{display:block;font-size:14px;margin-bottom:4px}
+.f .req{color:var(--l);font-weight:700}
+.f .opt{color:var(--m);font-weight:400}
+.f input,.f textarea,.f select{width:100%;padding:9px;border:1px solid var(--s);font:inherit}
+.hint{font-size:13px;color:var(--m);margin-top:4px}
+.btn{display:inline-block;border:2px solid var(--l);background:#fff;padding:11px 20px;
+  font:inherit;font-weight:700;text-decoration:none;cursor:pointer}
+.btn2{border-width:1px;font-weight:400}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.nosend{font-size:13px;color:var(--m);border-top:1px dashed var(--s);margin-top:12px;
+  padding-top:8px}
+
+/* карточка товара: верхний блок */
+.hero2{display:grid;gap:20px;grid-template-columns:1.1fr 1fr}
+.price{font-size:26px;font-weight:700}
+
+/* подвал */
+footer{border-top:2px solid var(--l);margin-top:42px;padding:24px 0 40px;font-size:14px}
+.cols{display:grid;gap:18px;grid-template-columns:repeat(4,1fr)}
+.fcol p{margin:6px 0}
+.fcol .flinks{list-style:none;margin:8px 0 0;padding:0}
+.fcol .flinks li{margin:5px 0}
+footer a{text-decoration:none}
+
+/* нижняя панель на телефоне */
+.bar{position:fixed;left:0;right:0;bottom:0;display:none;border-top:2px solid var(--l);
+  background:#fff;z-index:5}
+.bar a{flex:1;text-align:center;padding:8px 3px;font-size:11px;text-decoration:none;
+  border-right:1px solid var(--s)}
+.bar a:last-child{border-right:0}
+.bar .i{display:block;font-size:17px;line-height:1.25}
+
+@media(max-width:860px){
+  .g4,.g3{grid-template-columns:repeat(2,1fr)}
+  .hero2{grid-template-columns:1fr}
+  .cols{grid-template-columns:repeat(2,1fr)}
+}
+.mob-link{display:none}
+
+@media(max-width:560px){
+  h1{font-size:23px}
+  .ph.hero{min-height:150px}
+  .ph.gal{min-height:170px}
+  .ph.sm{min-height:56px;padding:10px}
+  .desk-form{display:none}
+  .mob-link{display:block}
+  table{font-size:14px}
+  th,td{padding:6px 7px;white-space:nowrap}
+  /* таблицы «параметр — значение»: переносятся по словам, а не обрезаются и не скроллятся */
+  .kv th,.kv td{white-space:normal}
+  .kv th{width:46%}
+  /* плотные таблицы (4+ колонки) на mobile не показываются как таблица — вместо неё карточки */
+  .tw.dense{display:none}
+  .tw.dense + .tscroll-hint{display:none}
+  .mod-cards{display:block}
+  .compat-desktop{display:none}
+  .compat-mini{display:block}
+  .contacts{display:none}
+  .nav .linkset{display:none}
+  /* «Каталог» и «Подобрать под технику» из шапки на mobile убраны — оба действия уже постоянно
+     доступны в нижней закреплённой панели (.bar); шапка не должна их дублировать (26.09.2026) */
+  .nav .cat{display:none}
+  .nav .pick{display:none}
+  .burger{display:inline-block;margin-left:auto}
+  /* поиск внутри липкой шапки скрыт — он живёт в отдельной неприлипающей строке ниже
+     (.mob-search-row), чтобы липла только компактная строка «логотип + Меню» (27.09.2026) */
+  .nav .q{display:none}
+  .mob-search-row{display:block}
+  /* «Меню» открывает список поверх контента, не сдвигая его: раскрытие через :checked,
+     без JS (27.09.2026) */
+  .mmenu-toggle:checked ~ .mmenu-panel{
+    display:block;position:absolute;left:0;right:0;top:100%;background:#fff;
+    border-bottom:2px solid var(--l);box-shadow:0 6px 10px -6px rgba(0,0,0,.25);z-index:49}
+  .mmenu-panel a{display:block;padding:12px 16px;border-top:1px solid var(--s);
+    text-decoration:none;font-size:15px}
+  .mmenu-panel a:first-child{border-top:0}
+  .g2,.g3,.g4,.gauto{grid-template-columns:1fr}
+  .subcats{grid-template-columns:1fr}
+  .cols{grid-template-columns:1fr;gap:14px}
+  footer{padding:16px 0 88px}
+  .bar{display:flex}
+  .mobile-first{order:-1}
+}
