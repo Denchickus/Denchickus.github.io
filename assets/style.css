@@ -26,7 +26,7 @@ a{color:inherit}
 .top{position:sticky;top:0;z-index:50;background:#fff;border-bottom:2px solid var(--l)}
 .nav{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:12px 0;position:relative}
 .logo{font-size:19px;font-weight:700;text-decoration:none;white-space:nowrap}
-.logo small{display:block;font-size:10px;font-weight:400;color:var(--m)}
+.logo img{display:block;height:41px;width:auto}
 .nav a{text-decoration:none;font-size:15px}
 /* иерархия desktop-шапки (27.09.2026): «Подобрать под технику» — главный CTA страницы
    (сплошная рамка 2px, как .btn), «Каталог» — навигационный элемент, не действие
@@ -75,6 +75,7 @@ section{margin:26px 0}
 .ph.hero{min-height:280px}
 .ph.gal{min-height:240px}
 .ph.sm{min-height:64px;padding:12px;font-size:13px}
+.btn.off{opacity:.55;cursor:default}
 
 /* текст + вторичная кнопка в одну плотную строку — без лишнего воздуха, который получался
    у обычного <p> из-за того, что кнопка выше строки текста (27.09.2026) */
@@ -119,6 +120,21 @@ section{margin:26px 0}
 .toc .n{font-size:15px;font-weight:600}
 main section[id]{scroll-margin-top:84px}
 .tags-label{margin-bottom:6px}
+.cnav{position:sticky;top:var(--hh,60px);z-index:40;background:#fff;box-shadow:inset 0 -1px 0 #ccc;
+  display:flex;gap:26px;overflow-x:auto;white-space:nowrap;scrollbar-width:none;margin:0 0 20px}
+.cnav::-webkit-scrollbar{display:none}
+
+.media-extra .ph.dwgv{min-height:300px}
+@media(max-width:860px){.media-extra .ph.dwgv{min-height:200px}}
+main section.sp[id]{scroll-margin-top:calc(var(--hh,70px) + 62px)}
+.cnav a{flex:none;display:inline-flex;align-items:baseline;gap:6px;padding:14px 2px 12px;font-size:16px;
+  font-weight:600;color:var(--l);text-decoration:none;line-height:1.2;border-bottom:3px solid transparent}
+.cnav a small{font-size:13px;font-weight:400;color:var(--m)}
+.cnav a:hover{border-bottom-color:#bbb}
+.cnav a.on{border-bottom-color:var(--l)}
+.cnav a:focus-visible{outline:2px solid var(--l);outline-offset:-2px}
+@media(max-width:860px){.cnav{gap:22px;-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);
+  mask-image:linear-gradient(90deg,#000 88%,transparent)}.cnav a{font-size:15px}}
 .compatibility-tags{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
 .compatibility-tag{display:inline-block;border:1px solid var(--l);border-radius:6px;padding:5px 11px;
   font-size:14px;line-height:1.35;text-decoration:none;color:inherit;background:#fff}
@@ -126,6 +142,27 @@ main section[id]{scroll-margin-top:84px}
 .compatibility-tag:active{background:var(--s);color:#fff}
 .compatibility-tag:focus-visible{outline:2px solid var(--l);outline-offset:2px}
 .compatibility-tag.is-current,.compatibility-tag[aria-current]{background:var(--l);color:#fff}
+.v3d{border:1px solid var(--l);background:#fff}
+.v3d{display:flex;flex-direction:column}
+.v3d model-viewer{display:block;width:100%;height:400px;background:linear-gradient(#fff,#e9e9e9)}
+@media(max-width:560px){.v3d model-viewer{height:320px}}
+.v3d .cap{font-size:12px;color:var(--m);padding:6px 8px;border-top:1px solid var(--s)}
+.car{margin:0}
+.cview{position:relative;border:1px solid var(--l);background:var(--f)}
+.cslides{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;
+  scrollbar-width:none;outline-offset:2px}
+.cslides::-webkit-scrollbar{display:none}
+.cs{flex:0 0 100%;margin:0;scroll-snap-align:start;aspect-ratio:4/3}
+.cs img{width:100%;height:100%;object-fit:cover;display:block}
+.cprev,.cnext{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border:2px solid var(--l);
+  background:#fff;color:var(--l);font-size:26px;line-height:1;cursor:pointer;padding:0}
+.cprev{left:8px}.cnext{right:8px}
+.cprev:focus-visible,.cnext:focus-visible,.gth:focus-visible{outline:2px solid var(--l);outline-offset:2px}
+.ccount{position:absolute;right:8px;bottom:8px;background:#fff;border:1px solid var(--l);font-size:12px;padding:2px 8px}
+.gths{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.gth{padding:0;border:1px solid var(--s);background:var(--f);cursor:pointer;aspect-ratio:4/3;overflow:hidden}
+.gth img{width:100%;height:100%;object-fit:cover;display:block}
+.gth.on{border:2px solid var(--l)}
 .tile .c{font-size:13px;color:var(--m);margin-top:4px}
 .pc{border:1px solid var(--l);padding:0;display:flex;flex-direction:column}
 .pc .body{padding:12px}
@@ -166,7 +203,9 @@ th{background:var(--f);font-weight:700}
 .mod-price-value{font-size:19px;font-weight:700}
 
 /* компактный блок медиа: видео + 3D рядом, не друг под другом */
-.media-extra{display:flex;gap:10px;margin-top:10px}
+.media-extra{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch;margin:10px 0}
+.media-extra .ph{margin:0;min-height:0}
+.buy{align-self:start}
 .media-extra .ph{flex:1;min-height:70px}
 
 /* краткая совместимость на карточке товара — показывается только на mobile,
@@ -276,4 +315,9 @@ footer a{text-decoration:none}
   footer{padding:16px 0 88px}
   .bar{display:flex}
   .mobile-first{order:-1}
+}
+@media(max-width:860px){.media-extra{grid-template-columns:1fr}.media-extra .ph{min-height:140px}}
+@media(max-width:860px){
+  .compatibility-tag{padding:12px 14px}
+  main p>a:only-child,.tile .c a,.cta-line a:not(.btn){display:inline-block;padding:12px 0}
 }

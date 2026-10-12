@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>СТ-ТЕХНИКС — навесное оборудование, производство</title>
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="assets/style.css?v=f2fc8156">
+<link rel="stylesheet" href="assets/style.css?v=29612dbe">
 </head>
 <body>
 <div class="contacts-row"><div class="wrap">
@@ -15,7 +15,7 @@
 </div></div>
 <header class="top"><div class="wrap">
 <nav class="nav" aria-label="Основная навигация">
-  <a class="logo" href="">СТ-ТЕХНИКС<small>навесное оборудование, производство</small></a>
+  <a class="logo" href=""><img src="assets/logo.svg" alt="СТ-ТЕХНИКС — навесное оборудование, производство" width="127" height="41"></a>
   <div class="dd dd-cat"><button type="button" class="dd-t cat" aria-expanded="false">Каталог ▾</button>
     <div class="dd-panel">
       <a href="catalog/">Всё оборудование</a>
@@ -193,6 +193,33 @@ d.addEventListener('keydown',function(e){if(e.key!=='Escape')return;
   if(o){closeAll();o.t.focus();}});
 d.querySelectorAll('.acc-t').forEach(function(b){b.addEventListener('click',function(){
   var a=b.parentNode,on=!a.classList.contains('open');a.classList.toggle('open',on);b.setAttribute('aria-expanded',on?'true':'false');});});
+(function(){var c=d.querySelector('.car');if(!c)return;
+  var s=c.querySelector('.cslides'),th=c.querySelectorAll('.gth'),n=th.length,cnt=c.querySelector('.ccount');
+  function cur(){return Math.round(s.scrollLeft/s.clientWidth);}
+  function go(i){i=Math.max(0,Math.min(n-1,i));s.scrollTo({left:i*s.clientWidth});}
+  function mark(){var i=cur();th.forEach(function(x,k){x.classList.toggle('on',k===i);});cnt.textContent=(i+1)+' / '+n;}
+  s.addEventListener('scroll',mark);
+  c.querySelector('.cprev').addEventListener('click',function(){go(cur()-1);});
+  c.querySelector('.cnext').addEventListener('click',function(){go(cur()+1);});
+  th.forEach(function(x,k){x.addEventListener('click',function(){go(k);});});
+  s.addEventListener('keydown',function(e){if(e.key==='ArrowLeft'){go(cur()-1);e.preventDefault();}
+    if(e.key==='ArrowRight'){go(cur()+1);e.preventDefault();}});
+})();
+(function(){var n=document.querySelector('.cnav');if(!n)return;
+var h=document.querySelector('header.top');
+function hh(){document.documentElement.style.setProperty('--hh',(h?h.offsetHeight:60)+'px');}
+hh();window.addEventListener('resize',hh);
+var links=[].slice.call(n.querySelectorAll('a')),map={};
+links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a;});
+function on(id){links.forEach(function(a){a.classList.toggle('on',a===map[id]);});
+  var a=map[id];if(a)n.scrollTo({left:a.offsetLeft-12,behavior:'smooth'});}
+if('IntersectionObserver' in window){
+  var lock=0;
+  links.forEach(function(a){a.addEventListener('click',function(){lock=Date.now()+1100;on(a.getAttribute('href').slice(1));});});
+  var io=new IntersectionObserver(function(es){if(Date.now()<lock)return;es.forEach(function(e){if(e.isIntersecting)on(e.target.id);});},
+    {rootMargin:'-30% 0px -60% 0px'});
+  Object.keys(map).forEach(function(id){var el=document.getElementById(id);if(el)io.observe(el);});}
+})();
 window.addEventListener('resize',closeAll);
 })();</script>
 </body>
