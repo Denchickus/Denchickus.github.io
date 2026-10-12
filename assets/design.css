@@ -1,5 +1,5 @@
 
-:root{--ink:#1b1a18;--ink-2:#45423d;--muted:#6b665e;--line:#dcd8d1;--surface:#f5f3ef;--bg:#ffffff;--accent:#f95201;--accent-2:#ff7a33;
+:root{--ink:#1b1a18;--ink-2:#45423d;--muted:#6b665e;--line:#dcd8d1;--field:#8c867c;--surface:#f5f3ef;--bg:#ffffff;--accent:#f95201;--accent-2:#ff7a33;
   --font:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   --r:2px;--wrap:1200px;--gut:20px}
 *{box-sizing:border-box}
@@ -29,15 +29,15 @@ p{margin:0 0 1em;max-width:68ch}
 .fact{font-weight:800;font-size:clamp(48px,7vw,84px);line-height:.95;letter-spacing:-.045em;color:var(--accent)}
 
 /* кнопки: строгие, без теней; главная — графит на оранжевом (5,2:1) */
-.b{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:12px 22px;
+.b,.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:12px 22px;
   border:1px solid var(--ink);border-radius:var(--r);background:var(--bg);color:var(--ink);
   font:800 16px/1.2 var(--font);letter-spacing:-.005em;text-decoration:none;cursor:pointer;
   transition:background-color .15s,border-color .15s,color .15s}
-.b:hover{background:var(--surface)}
-.b-main{background:var(--accent);border-color:var(--accent);color:var(--ink)}
-.b-main:hover{background:var(--accent-2);border-color:var(--accent-2)}
+.b:hover,.btn.btn2:hover{background:var(--surface)}
+.b-main,.btn:not(.btn2){background:var(--accent);border-color:var(--accent);color:var(--ink)}
+.b-main:hover,.btn:not(.btn2):not(.off):hover{background:var(--accent-2);border-color:var(--accent-2)}
 .b-white{background:var(--accent);border-color:var(--accent);color:#fff}
-.b[aria-disabled=true]{border-color:var(--line);color:var(--muted);background:var(--bg);cursor:default}
+.b[aria-disabled=true],.btn.off,.btn.off:hover{border-color:var(--line);color:var(--muted);background:var(--bg);cursor:default}
 
 /* разделы страницы-образца */
 .sec{padding:56px 0;border-top:1px solid var(--line)}
@@ -69,3 +69,82 @@ p{margin:0 0 1em;max-width:68ch}
 .ds-top img{height:38px;width:auto}
 .ds-note{background:var(--surface);border-left:3px solid var(--ink);padding:14px 16px;font-size:15px;max-width:none}
 .btnrow{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:0 0 10px}
+
+/* ── элементы (этап 2): оформляются классы, которые уже выдаёт сборка ── */
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0}
+.badge{display:inline-block;border:1px solid var(--ink);border-radius:var(--r);padding:3px 8px;
+  font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+
+/* теги совместимости — ссылки на тип техники */
+.compatibility-tags{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.compatibility-tag{display:inline-flex;align-items:center;min-height:40px;padding:8px 14px;
+  border:1px solid var(--field);border-radius:var(--r);color:var(--ink);font-size:15px;text-decoration:none}
+.compatibility-tag:hover{border-color:var(--ink);background:var(--surface)}
+.tags-label{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+
+/* полоса якорей карточки: активный пункт подчёркнут оранжевым (не текст — линия, 3,4:1) */
+.cnav{position:sticky;top:var(--hh,0px);z-index:40;background:var(--bg);box-shadow:inset 0 -1px 0 var(--line);
+  display:flex;gap:28px;overflow-x:auto;white-space:nowrap;scrollbar-width:none;margin:0 0 24px}
+.cnav::-webkit-scrollbar{display:none}
+.cnav a{flex:none;display:inline-flex;align-items:center;min-height:52px;padding:0 1px;font-size:16px;font-weight:800;
+  color:var(--ink-2);text-decoration:none;border-bottom:3px solid transparent}
+.cnav a:hover{color:var(--ink);border-bottom-color:var(--line)}
+.cnav a.on{color:var(--ink);border-bottom-color:var(--accent)}
+@media(max-width:860px){.cnav{gap:22px;-webkit-mask-image:linear-gradient(90deg,#000 86%,transparent);
+  mask-image:linear-gradient(90deg,#000 86%,transparent)}.cnav a{font-size:15px}}
+
+/* таблицы: тонкие линии, заголовки мелкими прописными, цифры ровными столбиками */
+table{border-collapse:collapse;width:100%;font-size:15px;font-variant-numeric:tabular-nums}
+th,td{border:0;border-bottom:1px solid var(--line);padding:12px 14px;text-align:left;vertical-align:top}
+th{font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);
+  border-bottom-color:var(--ink);vertical-align:bottom}
+tr:hover td{background:var(--surface)}
+.tcap{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:24px 0 8px}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:8px 0 16px}
+.tw.dense th:first-child,.tw.dense td:first-child{position:sticky;left:0;background:var(--bg);font-weight:800}
+.tscroll-hint{display:none;font-size:13px;color:var(--muted);text-align:right;margin:-8px 0 16px}
+.mod-cards{display:none;margin:8px 0 16px}
+.mod-card{border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:0 0 12px}
+.mod-title{font-weight:800;font-size:17px;margin-bottom:8px}
+.mod-row{display:flex;justify-content:space-between;gap:12px;font-size:15px;padding:7px 0;border-top:1px solid var(--line)}
+.mod-label{color:var(--muted)}
+.mod-value{text-align:right;font-variant-numeric:tabular-nums}
+.mod-price{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-top:10px;
+  padding-top:12px;border-top:1px solid var(--ink)}
+.mod-price-label{font-size:13px;color:var(--muted)}
+.mod-price-value{font-size:24px;font-weight:800;letter-spacing:-.02em;color:var(--accent);font-variant-numeric:tabular-nums}
+/* планшет и шире: прокрутки вбок нет. Таблица не влезает (класс .scrolls ставит скрипт) — вместо неё
+   те же карточки модификаций, что на телефоне, но в несколько колонок */
+.tscroll-hint{display:none!important}
+@media(min-width:561px){.tw.dense.scrolls{display:none}
+  .tw.dense.scrolls ~ .mod-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+  .tw.dense.scrolls ~ .mod-cards .mod-card{margin:0}}
+@media(max-width:560px){.tw.dense{display:none}.tw.dense + .tscroll-hint{display:none}.mod-cards{display:block}}
+
+/* формы: поле видно (рамка 3,6:1), подпись над полем, без лишнего */
+form{border:1px solid var(--line);border-radius:var(--r);padding:24px;background:var(--bg)}
+.f{margin:0 0 18px}
+.f label{display:block;font-size:15px;font-weight:800;margin-bottom:6px}
+.f .req,.f .opt{font-weight:400;font-size:13px;color:var(--muted)}
+.f input,.f textarea,.f select{width:100%;min-height:48px;padding:11px 12px;border:1px solid var(--field);
+  border-radius:var(--r);font:400 16px/1.4 var(--font);color:var(--ink);background:var(--bg)}
+.f input:focus,.f textarea:focus{outline:2px solid var(--ink);outline-offset:0;border-color:var(--ink)}
+.f input[type=file]{padding:10px;background:var(--surface)}
+.hint{font-size:14px;color:var(--muted);margin-top:6px}
+@media(max-width:560px){form{padding:16px}}
+
+/* служебные пометки прототипа — спокойно: подложка, тонкая линия, без «тревожных» цветов */
+.wait{background:var(--surface);border-left:3px solid var(--field);padding:12px 16px;margin:12px 0;
+  font-size:15px;color:var(--ink-2)}
+.wait b{display:block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:2px}
+.ask{border:1px dashed var(--field);padding:12px 16px;margin:12px 0;font-size:15px;color:var(--ink-2)}
+.nosend{font-size:14px;color:var(--muted);margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+
+/* рамка-заглушка под фото, видео, 3D, чертежи */
+.ph{display:flex;align-items:center;justify-content:center;text-align:center;min-height:120px;padding:16px;
+  background:var(--surface);border:1px dashed var(--field);border-radius:var(--r);color:var(--muted);font-size:15px;margin:8px 0}
+.ph.gal{min-height:260px}
+.ph.sm{min-height:72px;font-size:14px}
+
+@media(max-width:860px){.compatibility-tag{min-height:44px}}
