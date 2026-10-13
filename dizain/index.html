@@ -14,14 +14,70 @@
 @font-face{font-family:Inter;font-style:normal;font-weight:800;font-display:swap;src:url(../assets/fonts/inter-latin-800-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:Inter;font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/inter-latin-ext-400-normal.woff2) format('woff2');unicode-range:U+20BD}
 @font-face{font-family:Inter;font-style:normal;font-weight:800;font-display:swap;src:url(../assets/fonts/inter-latin-ext-800-normal.woff2) format('woff2');unicode-range:U+20BD}</style>
-<link rel="stylesheet" href="../assets/design.css?v=b83cca22">
+<link rel="stylesheet" href="../assets/design.css?v=838c38ee">
 </head>
 <body class="ds">
+<div class="contacts-row"><div class="wrap">
+<div class="contacts"><a href="tel:+79152092012">+7 (915) 209-20-12</a><a href="mailto:1@st-technics.ru">1@st-technics.ru</a>
+<span>Telegram: два канала</span><span class="sp"></span><span>Кашира, Московская область</span></div>
+</div></div>
+<header class="top"><div class="wrap">
+<nav class="nav" aria-label="Основная навигация">
+  <a class="logo" href="../"><img src="../assets/logo.svg" alt="СТ-ТЕХНИКС — навесное оборудование, производство" width="127" height="41"></a>
+  <div class="dd dd-cat"><button type="button" class="dd-t cat" aria-expanded="false">Каталог ▾</button>
+    <div class="dd-panel">
+      <a href="../catalog/">Всё оборудование</a>
+      <a href="../catalog/">По типу оборудования</a>
+      <a href="../tehnika/">По типу техники</a>
+    </div></div>
+  <span class="q">Поиск по каталогу</span>
+  <a class="pick" href="../podbor/">Подобрать под технику</a>
+  <span class="linkset"><a href="../proizvodstvo/">Производство</a></span>
+  <span class="linkset"><a href="../dileram/">Дилерам</a></span>
+  <div class="dd dd-more"><button type="button" class="dd-t more" aria-expanded="false">Ещё ▾</button>
+    <div class="dd-panel">
+      <a href="../o-kompanii/">О компании</a>
+      <a href="../dostavka-i-oplata/">Доставка и оплата</a>
+      <a href="../voprosy/">Вопросы и ответы</a>
+      <a href="../zakupshchikam/">Закупщикам</a>
+      <a href="../zapchasti/">Запчасти</a>
+      <a href="../individualnye-razmery/">Индивидуальные размеры</a>
+      <a href="../kontakty/">Контакты</a>
+    </div></div>
+  <button type="button" class="ico-search" data-panel="msearch" aria-expanded="false"
+    aria-label="Поиск"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+  <button type="button" class="burger" data-panel="mmenu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>Меню</span></button>
+  <div class="mpanel mmenu-panel" id="mmenu">
+    <a href="../podbor/">Подобрать под технику</a>
+    <a href="../proizvodstvo/">Производство</a>
+    <a href="../dileram/">Дилерам</a>
+    <div class="acc"><button type="button" class="acc-t" aria-expanded="false">Каталог</button>
+      <div class="acc-b">
+        <a href="../catalog/">Всё оборудование</a>
+        <a href="../catalog/">По типу оборудования</a>
+        <a href="../tehnika/">По типу техники</a>
+      </div></div>
+    <div class="acc"><button type="button" class="acc-t" aria-expanded="false">Покупателям</button>
+      <div class="acc-b">
+        <a href="../dostavka-i-oplata/">Доставка и оплата</a>
+        <a href="../voprosy/">Вопросы и ответы</a>
+        <a href="../zakupshchikam/">Закупщикам</a>
+        <a href="../zapchasti/">Запчасти</a>
+        <a href="../individualnye-razmery/">Индивидуальные размеры</a>
+      </div></div>
+    <div class="acc"><button type="button" class="acc-t" aria-expanded="false">Компания</button>
+      <div class="acc-b">
+        <a href="../o-kompanii/">О компании</a>
+        <a href="../kontakty/">Контакты</a>
+      </div></div>
+  </div>
+  <div class="mpanel msearch-panel" id="msearch">
+    <span class="q mob-q">Поиск по каталогу</span>
+  </div>
+</nav></div></header>
 
-<header class="ds-top"><div class="wrap">
-  <img src="../assets/logo.svg" alt="СТ-ТЕХНИКС" width="118" height="38">
-  <span class="eyebrow">Дизайн-система · этапы 1–2 из 11: шрифт, цвет, элементы</span>
-</div></header>
+<div class="ds-strip"><div class="wrap">Дизайн-система · этапы 1–3 из 11: шрифт и цвет, элементы,
+шапка и подвал. Шапка, меню и подвал на этой странице — настоящие.</div></div>
 <main class="wrap">
 
 <section class="sec">
@@ -61,7 +117,7 @@
 
 <section class="sec">
   <p class="eyebrow">Шкала заголовков</p>
-  <h1>Ковш челюстной</h1>
+  <div class="h1">Ковш челюстной</div>
   <h2>Модификации и цены</h2>
   <h3>Характеристики</h3>
   <p class="lead">Челюстной ковш для работы с грунтом и щебнем. Подходит для планировочных работ и захвата.</p>
@@ -112,9 +168,9 @@
   <p class="tags-label">Подходит для техники</p>
   <div class="compatibility-tags"><a class="compatibility-tag" href="#elementy">Минипогрузчик</a><a class="compatibility-tag" href="#elementy">Экскаватор-погрузчик</a><a class="compatibility-tag" href="#elementy">Фронтальный погрузчик</a><a class="compatibility-tag" href="#elementy">Телескопический погрузчик</a></div>
 
-  <h3 style="margin-top:32px">Полоса разделов карточки</h3>
-  <p class="small">Прилипает под шапкой; активный раздел подчёркнут оранжевым, остальные — графитом.</p>
-  <nav class="cnav" style="position:static" aria-label="Разделы карточки (образец)"><a href="#elementy">Видео и 3D</a><a class="on" href="#elementy">Модификации и цены</a><a href="#elementy">Характеристики</a><a href="#elementy">Чертежи</a><a href="#elementy">Конструктивные особенности</a></nav>
+  <h3 style="margin-top:32px">Переходы к разделам карточки</h3>
+  <p class="small">Ссылки на разделы этой же карточки: стрелка вниз показывает, что страница прокрутится к разделу. На телефоне — столбиком.</p>
+  <nav class="cnav" aria-label="На странице (образец)"><a href="#cn-1">Видео и 3D</a><a href="#cn-2">Модификации и цены</a><a href="#cn-3">Характеристики</a><a href="#cn-4">Чертежи</a><a href="#cn-5">Конструктивные особенности</a></nav>
 
   <h3 style="margin-top:32px">Модификации и цены</h3>
   <p class="small">Цена в каждой строке. Если таблица помещается по ширине — показывается таблица. Если нет
@@ -134,6 +190,16 @@
   <div class="grid2"><div class="ph gal">чертёж: вид спереди<br>с размерами</div><div class="ph gal">видео работы оборудования</div></div>
 </section>
 
+<section class="sec" id="shapka">
+  <p class="eyebrow">Этап 3</p>
+  <h2>Шапка и подвал</h2>
+  <p class="lead">Шапка вверху и подвал внизу этой страницы — настоящие, в новом оформлении. Пункты меню и
+  тексты те же, что в прототипе.</p>
+  <p class="ds-note">Что посмотреть: на компьютере — меню «Каталог» и «Ещё», поиск, оранжевая «Подобрать под
+  технику»; на телефоне и планшете — кнопка «Меню», разделы «Каталог», «Покупателям», «Компания», на телефоне —
+  нижняя панель; подвал с одноцветным логотипом. Телефон и почта в верхней строке теперь нажимаются.</p>
+</section>
+
 <section class="sec">
   <p class="eyebrow">Контраст</p>
   <h2>Проверка читаемости</h2>
@@ -145,6 +211,75 @@
 
 </main>
 
+<footer><div class="wrap"><div class="flogo-row"><img class="flogo" src="../assets/logo-mono.svg" alt="СТ-ТЕХНИКС" width="118" height="38"></div>
+<div class="cols">
+<div class="fcol"><b>Компания</b><ul class="flinks ffacts"><li>Производим с <strong>2016</strong> года</li><li><strong>5000+</strong> единиц произведено и отгружено</li><li><span class="pin" aria-hidden="true"></span>Кашира, Московская область</li></ul></div>
+<div class="fcol"><b>Каталог</b><ul class="flinks">
+<li><a href="../catalog/">Всё оборудование</a></li>
+<li><a href="../tehnika/">По типу техники</a></li>
+<li><a href="../zapchasti/">Запчасти</a></li>
+</ul></div>
+<div class="fcol"><b>Покупателям</b><ul class="flinks">
+<li><a href="../dostavka-i-oplata/">Доставка и оплата</a></li>
+<li><a href="../voprosy/">Вопросы и ответы</a></li>
+<li><a href="../dileram/">Дилерам</a></li>
+<li><a href="../zakupshchikam/">Закупщикам</a></li>
+</ul></div>
+<div class="fcol"><b>Связь</b><ul class="flinks">
+<li><a href="tel:+79152092012">+7 (915) 209-20-12</a></li>
+<li><a href="mailto:1@st-technics.ru">1@st-technics.ru</a></li>
+<li>Telegram: два канала</li>
+<li><a href="../kontakty/">Контакты</a></li>
+</ul></div>
+</div>
+<p class="nosend">Прототип для показа. Формы не отправляют данные. Реквизиты и
+фотографии производства появятся к боевому сайту.</p></div></footer>
+<nav class="bar"><a href="../catalog/"><span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7"/><rect x="13" y="4" width="7" height="7"/><rect x="4" y="13" width="7" height="7"/><rect x="13" y="13" width="7" height="7"/></svg></span>Каталог</a><a href="../podbor/"><span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></span>Подбор</a><a href="../kontakty/"><span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span>Позвонить</a><a href="../kontakty/"><span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="m3 7 9 6 9-6"/></svg></span>Написать</a></nav>
+<script>(function(){
+var d=document,items=[];
+d.querySelectorAll('.dd').forEach(function(dd){items.push({t:dd.querySelector('.dd-t'),box:dd});});
+d.querySelectorAll('[data-panel]').forEach(function(b){
+  var box=d.getElementById(b.getAttribute('data-panel'));if(box)items.push({t:b,box:box});});
+function set(it,on){it.box.classList.toggle('open',on);it.t.setAttribute('aria-expanded',on?'true':'false');}
+function closeAll(){items.forEach(function(it){set(it,false);});}
+items.forEach(function(it){it.t.addEventListener('click',function(e){
+  e.stopPropagation();var on=!it.box.classList.contains('open');closeAll();set(it,on);});});
+d.addEventListener('click',function(e){items.forEach(function(it){
+  if(it.box.classList.contains('open')&&!it.box.contains(e.target))set(it,false);});});
+d.addEventListener('keydown',function(e){if(e.key!=='Escape')return;
+  var o=items.filter(function(it){return it.box.classList.contains('open');})[0];
+  if(o){closeAll();o.t.focus();}});
+d.querySelectorAll('.acc-t').forEach(function(b){b.addEventListener('click',function(){
+  var a=b.parentNode,on=!a.classList.contains('open');a.classList.toggle('open',on);b.setAttribute('aria-expanded',on?'true':'false');});});
+(function(){var c=d.querySelector('.car');if(!c)return;
+  var s=c.querySelector('.cslides'),th=c.querySelectorAll('.gth'),n=th.length,cnt=c.querySelector('.ccount');
+  function cur(){return Math.round(s.scrollLeft/s.clientWidth);}
+  function go(i){i=Math.max(0,Math.min(n-1,i));s.scrollTo({left:i*s.clientWidth});}
+  function mark(){var i=cur();th.forEach(function(x,k){x.classList.toggle('on',k===i);});cnt.textContent=(i+1)+' / '+n;}
+  s.addEventListener('scroll',mark);
+  c.querySelector('.cprev').addEventListener('click',function(){go(cur()-1);});
+  c.querySelector('.cnext').addEventListener('click',function(){go(cur()+1);});
+  th.forEach(function(x,k){x.addEventListener('click',function(){go(k);});});
+  s.addEventListener('keydown',function(e){if(e.key==='ArrowLeft'){go(cur()-1);e.preventDefault();}
+    if(e.key==='ArrowRight'){go(cur()+1);e.preventDefault();}});
+})();
+(function(){var n=document.querySelector('.cnav');if(!n)return;
+var h=document.querySelector('header.top');
+function hh(){document.documentElement.style.setProperty('--hh',(h?h.offsetHeight:60)+'px');}
+hh();window.addEventListener('resize',hh);
+var links=[].slice.call(n.querySelectorAll('a')),map={};
+links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a;});
+function on(id){links.forEach(function(a){a.classList.toggle('on',a===map[id]);});
+  var a=map[id];if(a)n.scrollTo({left:a.offsetLeft-12,behavior:'smooth'});}
+if('IntersectionObserver' in window){
+  var lock=0;
+  links.forEach(function(a){a.addEventListener('click',function(){lock=Date.now()+1100;on(a.getAttribute('href').slice(1));});});
+  var io=new IntersectionObserver(function(es){if(Date.now()<lock)return;es.forEach(function(e){if(e.isIntersecting)on(e.target.id);});},
+    {rootMargin:'-30% 0px -60% 0px'});
+  Object.keys(map).forEach(function(id){var el=document.getElementById(id);if(el)io.observe(el);});}
+})();
+window.addEventListener('resize',closeAll);
+})();</script>
 <script>
 /* таблица не помещается по ширине → показываем карточки модификаций (см. .scrolls в CSS) */
 (function(){function f(){document.querySelectorAll('.tw.dense').forEach(function(t){
