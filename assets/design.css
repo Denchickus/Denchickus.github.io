@@ -359,6 +359,10 @@ footer .nosend{color:#a9a39a;border-top:1px solid #3a3833;margin-top:40px;paddin
 .v3d .cap{font-size:14px;color:var(--muted);padding:10px 14px;border-top:1px solid var(--line)}
 
 /* таблица «параметр — значение» */
+.ltab th,.ltab td{padding-left:6px;padding-right:6px}
+.ltab th:first-child,.ltab td:first-child{padding-left:0}
+.ltab small{display:block;font-size:13px;color:var(--ink-2)}
+@media(max-width:400px){.ltab th{font-size:11px;letter-spacing:0}}
 .kv th{width:42%;font-size:15px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--ink-2);border-bottom-color:var(--line)}
 .kv td{font-weight:800}
 
