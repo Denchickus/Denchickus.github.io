@@ -143,7 +143,13 @@ form{border:1px solid var(--line);border-radius:var(--r);padding:24px;background
 .f input,.f textarea,.f select{width:100%;min-height:48px;padding:11px 12px;border:1px solid var(--field);
   border-radius:var(--r);font:400 16px/1.4 var(--font);color:var(--ink);background:var(--bg)}
 .f input:focus,.f textarea:focus{outline:2px solid var(--ink);outline-offset:0;border-color:var(--ink)}
-.f input[type=file]{padding:10px;background:var(--surface)}
+.f input[type=file]{padding:7px;background:var(--surface);border-style:dashed;color:var(--ink-2);cursor:pointer}
+.f input[type=file]::file-selector-button{min-height:40px;margin-right:14px;padding:8px 18px;border:1px solid var(--ink);
+  border-radius:var(--r);background:var(--bg);color:var(--ink);font:800 15px/1.2 var(--font);cursor:pointer;
+  transition:background-color .15s}
+.f input[type=file]:hover::file-selector-button{background:var(--surface)}
+.f input[type=file]:focus-visible{border-style:solid}
+@media(max-width:400px){.f input[type=file]{font-size:13px;padding:5px}.f input[type=file]::file-selector-button{margin-right:8px;padding:8px 10px;font-size:13px}}
 .hint{font-size:14px;color:var(--muted);margin-top:6px}
 @media(max-width:560px){form{padding:16px}}
 
