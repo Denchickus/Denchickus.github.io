@@ -139,6 +139,7 @@ form{border:1px solid var(--line);border-radius:var(--r);padding:24px;background
 .f{margin:0 0 18px}
 .f label{display:block;font-size:15px;font-weight:800;margin-bottom:6px}
 .f .req,.f .opt{font-weight:400;font-size:13px;color:var(--muted)}
+.f .req{font-size:17px;font-weight:800;color:var(--ink);line-height:1}
 .f input,.f textarea,.f select{width:100%;min-height:48px;padding:11px 12px;border:1px solid var(--field);
   border-radius:var(--r);font:400 16px/1.4 var(--font);color:var(--ink);background:var(--bg)}
 .f input:focus,.f textarea:focus{outline:2px solid var(--ink);outline-offset:0;border-color:var(--ink)}
