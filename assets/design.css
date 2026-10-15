@@ -448,6 +448,17 @@ footer .nosend{color:#a9a39a;border-top:1px solid #3a3833;margin-top:40px;paddin
   .v-b .buy .compatibility-tag{font-size:13px;gap:6px;padding:8px 10px}
   .v-b .buy .compatibility-tag:after{display:none}}
 
+/* видео: кадр-превью и кнопка, файл грузится по нажатию */
+.vid{margin:0 0 12px}
+.vid-play{position:relative;display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:var(--r);
+  background:var(--surface);overflow:hidden;cursor:pointer;aspect-ratio:848/464}
+.vid-play img{display:block;width:100%;height:100%;object-fit:cover}
+.vid-btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:inline-flex;flex-direction:column;
+  align-items:center;gap:2px;min-height:48px;padding:12px 22px;border:1px solid var(--ink);border-radius:var(--r);
+  background:var(--bg);color:var(--ink);font:800 16px/1.2 var(--font)}
+.vid-btn small{font-weight:400;font-size:13px;color:var(--ink-2)}
+.vid-play:hover .vid-btn{background:var(--surface)}
+.vid video{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:var(--r);background:#000}
 /* 3D: переключатель исполнений (несколько моделей одного изделия) */
 .v3d-tabs{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid var(--line)}
 .v3d-tab{flex:1 1 auto;min-height:48px;padding:10px 16px;border:0;border-right:1px solid var(--line);background:var(--bg);
