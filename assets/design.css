@@ -468,9 +468,12 @@ footer .nosend{color:#a9a39a;border-top:1px solid #3a3833;margin-top:40px;paddin
 .v3d-tab.on{color:var(--ink);box-shadow:inset 0 -3px 0 var(--accent)}
 
 /* чертежи КБ: листы А3 в рамке, подпись, «Открыть крупно» и «Скачать PDF» */
-.dwgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:20px;margin:8px 0 12px}
+.dwgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:20px;align-items:start;margin:8px 0 12px}
 .dwg{margin:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:#fff}
 .dwg-img{display:block;cursor:zoom-in}
+/* листы разного формата (А4 вертикальный и А3 горизонтальный) — в одинаковых рамках, обе карточки одной высоты */
+.dwgs.eq .dwg-img{display:flex;align-items:center;justify-content:center;aspect-ratio:4/3;background:#fff;padding:12px}
+.dwgs.eq .dwg-img img{width:auto;max-width:100%;height:auto;max-height:100%;object-fit:contain}
 .dwg-img img{display:block;width:100%;height:auto}
 .dwg figcaption{display:flex;flex-direction:column;align-items:flex-start;gap:2px;
   padding:12px 16px;border-top:1px solid var(--line);font-size:15px}
