@@ -604,6 +604,116 @@ td:last-child,.mod-price-value{font-weight:800}
   .b2b-grid{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:560px){.mt-grid{grid-template-columns:minmax(0,1fr);gap:8px}.mt-tile{min-height:56px}
   .dlv-grid{grid-template-columns:minmax(0,1fr)}.dlv{min-height:0}.b2b{padding:24px}.prod-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}}
+/* ── каталог: поиск и фильтры (этап 9а, 21.10.2026). Корень .catx (.cat занят кнопкой «Каталог» в шапке) ── */
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* заголовок каталога скромнее, чем у карточек: товары должны быть видны в первом экране (21.10.2026) */
+.catx h1{margin:4px 0 10px;font-size:clamp(30px,3.4vw,42px)}
+.ctrust{display:flex;flex-wrap:wrap;gap:6px 22px;margin:0 0 22px;padding:0;list-style:none;font-size:15px;color:var(--ink-2)}
+.ctrust li{position:relative;padding-left:16px}
+.ctrust li::before{content:"";position:absolute;left:0;top:.68em;width:8px;height:2px;background:var(--accent)}
+/* на странице каталога поиск в шапке скрыт — на странице свой, с подсказками; два поля сразу выглядели ошибкой */
+.catpage .nav > .q,.catpage .ico-search,.catpage #msearch{display:none}
+.catpage .nav > .pick{margin-left:auto}      /* без поля поиска пункты шапки прижимаются вправо, как обычно */
+@media(max-width:1100px){.catpage .burger{margin-left:auto}}  /* с этой ширины шапка компактная */
+/* метка «Производим» в списке — тише: в каталоге она у каждой позиции (своё и чужое различаются, когда появится чужое) */
+.catx .pc .badge{border-color:var(--line);color:var(--muted);font-weight:500}
+/* «Нужны свои размеры?» — полоса во всю ширину под товарами (одна плитка в ряду выглядела забытой), в счёт не входит */
+.cown{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;gap:16px 32px;padding:24px 28px;
+  background:var(--surface);border:1px solid var(--surface);border-radius:var(--r);color:var(--ink);text-decoration:none;
+  transition:border-color .15s}
+.cown-txt{display:flex;flex-direction:column;gap:6px}
+.cown:hover{border-color:var(--ink)}
+.cown[hidden]{display:none}
+.cown-t{font-size:20px;font-weight:800;letter-spacing:-.01em;line-height:1.2}
+.cown-n{color:var(--ink-2);line-height:1.5}
+.cown .ctile-cta{flex:none;margin:0;min-height:48px;padding:0 22px;font-size:16px}
+.cown:hover .ctile-cta{background:var(--accent-2)}
+.csearch{position:relative;max-width:680px;margin:0 0 28px}
+.csearch input{width:100%;min-height:54px;padding:12px 16px 12px 48px;border:1px solid var(--field);border-radius:var(--r);
+  font:inherit;font-size:17px;color:var(--ink);background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' stroke='%231b1a18' stroke-width='2' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") 16px 50%/20px no-repeat}
+.csearch input:focus{outline:2px solid var(--ink);outline-offset:1px}
+.csugg{position:absolute;left:0;right:0;top:100%;z-index:20;margin:4px 0 0;padding:6px 0;list-style:none;background:#fff;
+  border:1px solid var(--ink);border-radius:var(--r)}
+.csugg a{display:flex;justify-content:space-between;align-items:baseline;gap:16px;min-height:44px;padding:10px 16px;
+  color:var(--ink);text-decoration:none}
+.csugg a:hover,.csugg a:focus{background:var(--surface);outline:0}
+.csugg b{flex:none;color:var(--accent);font-weight:800}
+.cat-l{display:grid;gap:32px}
+.cfil fieldset{border:0;margin:0;padding:0;min-width:0}
+.cfil legend{padding:0;margin:0 0 10px;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.opt{display:flex;align-items:center;gap:10px;min-height:40px;font-size:16px;cursor:pointer}
+.opt input{flex:none;width:20px;height:20px;margin:0;accent-color:var(--ink)}
+.opt i{margin-left:auto;font-style:normal;font-size:14px;color:var(--muted)}
+.opt.off{color:#a39d93;cursor:default}  /* под выбранное ничего нет — пункт гаснет, но остаётся на месте */
+.cprice{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cprice input{width:100%;min-height:44px;padding:8px 12px;border:1px solid var(--field);border-radius:var(--r);font:inherit;font-size:16px;color:var(--ink)}
+.cprice input:focus{outline:2px solid var(--ink);outline-offset:1px}
+.creset{justify-self:start;min-height:44px;padding:0;border:0;background:none;font:inherit;font-weight:600;color:var(--ink);
+  text-decoration:underline;text-underline-offset:4px;cursor:pointer}
+.cempty .btn.creset{min-height:48px;padding:12px 22px;border:1px solid var(--ink);background:var(--bg);text-decoration:none}  /* в пустой выдаче сброс — обычная вторая кнопка, а не ссылка */
+.cempty .btn.creset:hover{background:var(--surface)}
+/* крестик очистки поиска — в цвет текста, а не стандартный синий Chrome */
+.csearch input::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none;width:18px;height:18px;cursor:pointer;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231b1a18' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6 6 18'/%3E%3C/svg%3E") center/18px no-repeat}
+.cbar{display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;margin:0 0 16px}
+.ccount{font-weight:600}
+.csort{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:15px;color:var(--muted)}
+.csort select{min-height:44px;padding:8px 12px;border:1px solid var(--field);border-radius:var(--r);font:inherit;font-size:16px;
+  color:var(--ink);background:#fff}
+.cgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+/* ярлыки выбранных фильтров: снять один фильтр, не открывая панель */
+.cchips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.cchips[hidden]{display:none}
+.cchip{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:6px 10px 6px 14px;border:1px solid var(--ink);
+  border-radius:var(--r);background:var(--bg);font:inherit;font-size:15px;font-weight:500;color:var(--ink);cursor:pointer}
+.cchip:hover{background:var(--surface)}
+.cchip span{font-size:20px;line-height:1;color:var(--muted)}
+.cgrid .pc[hidden]{display:none}
+.cempty{padding:32px;background:var(--surface);border-radius:var(--r)}
+.cempty b{font-size:22px;font-weight:800}
+.cempty p{margin:8px 0 0}
+.cfil-head,.cfil-foot,.cfil-open{display:none}
+/* фильтры колонкой слева, как в интернет-магазине (вариант A — выбор владельца 21.10.2026) */
+.lay-a .cat-l{grid-template-columns:250px minmax(0,1fr);align-items:start}
+.lay-a .cfil{position:sticky;top:96px;display:grid;gap:28px;max-height:calc(100vh - 112px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:0 6px 8px 0}
+@media(max-width:1100px){.lay-a .cgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* телефон и планшет: фильтры — в выезжающей панели по кнопке «Фильтры» (оба варианта) */
+@media(max-width:860px){
+  .lay-a .cat-l{grid-template-columns:minmax(0,1fr)}
+  .catx .cfil{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;align-items:stretch;gap:24px;padding:0 var(--gut) 96px;
+    overflow:auto;background:var(--bg);border-radius:0;transform:translateX(100%);visibility:hidden;transition:transform .2s,visibility .2s}
+  .catx .cfil.open{transform:none;visibility:visible}
+  .cfil-head{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;align-items:center;min-height:60px;
+    margin:0 calc(-1 * var(--gut));padding:0 var(--gut);background:var(--bg);border-bottom:1px solid var(--line);font-size:19px}
+  .catx .cfil .creset{align-self:center}
+  .cfil-x{width:44px;height:44px;border:0;background:none;font-size:30px;line-height:1;color:var(--ink);cursor:pointer}
+  .cfil-foot{position:fixed;left:0;right:0;bottom:0;display:block;padding:12px var(--gut);background:var(--bg);border-top:1px solid var(--line)}
+  .cfil-foot .btn{width:100%;min-height:52px}
+  .cfil-open{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1px solid var(--ink);
+    border-radius:var(--r);background:var(--bg);font:inherit;font-weight:600;color:var(--ink);cursor:pointer}
+  .cfil-n{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:var(--ink);
+    color:var(--surface);font-size:13px}
+  .cfil-n[hidden]{display:none}
+  .catx .cgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ccount{flex:1 0 100%;order:-1}
+  .csort{margin-left:auto}
+  body.cfil-on{overflow:hidden}}
+@media(max-width:560px){.catx .cgrid{gap:10px}.catx .pc .body{padding:12px}.catx .pc .n{font-size:15px;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:anywhere}.catx .pc .p{font-size:18px}
+  .catx .pc .mt{font-size:14px}.csort span{display:none}.csearch{margin-bottom:24px}
+  .ctrust{gap:2px 16px;font-size:14px;margin-bottom:18px}
+  .cown{flex-direction:column;align-items:stretch;padding:20px}.cown .ctile-cta{align-self:stretch;justify-content:center}}
+/* «Запросить» в строке таблицы модификаций и в её карточке на телефоне (21.10.2026): заполняет поле
+   «Желаемое оборудование» в форме этой же страницы — товар, тип техники и модель строки */
+.mod-ask{min-height:36px;padding:4px 12px;border:1px solid var(--ink);border-radius:var(--r);background:var(--bg);
+  font:inherit;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;white-space:nowrap}
+.mod-ask:hover{background:var(--ink);color:var(--surface)}
+td.ask-td{width:1%;text-align:right}
+.mod-card .mod-ask{width:100%;min-height:44px;margin-top:12px;font-size:15px}
+.f input.asked{outline:2px solid var(--accent);outline-offset:1px;transition:outline-color 1.5s}
+.card main section:has(.form-contacts){scroll-margin-top:calc(var(--hh,64px) + 16px)}  /* раздел заявки доезжает под шапку, а не за неё */
+/* поиск в шапке — настоящее поле: Enter открывает каталог с результатами */
+form.q input{flex:1;min-width:0;height:100%;padding:0;border:0;background:none;font:inherit;color:var(--ink);outline:0}
+form.q input::placeholder{color:var(--muted)}
+form.q:focus-within{border-color:var(--ink);outline:2px solid var(--ink);outline-offset:1px}
 /* главная: завершающий блок перед подвалом */
 .home main > section.closing{padding:56px 0 72px}
 /* тёмная полоса (выбор владельца 20.10.2026): сетка 2 × 2 — заголовок строго напротив кнопки, текст строго напротив
