@@ -714,6 +714,82 @@ td.ask-td{width:1%;text-align:right}
 form.q input{flex:1;min-width:0;height:100%;padding:0;border:0;background:none;font:inherit;color:var(--ink);outline:0}
 form.q input::placeholder{color:var(--muted)}
 form.q:focus-within{border-color:var(--ink);outline:2px solid var(--ink);outline-offset:1px}
+/* ── текстовая страница (этап 9б, 22.10.2026): образец для «Производство», «О компании», «Дилерам», «Закупщикам» и др. ──
+   шапка с цифрами · шаги с фото · медиа + текст · галерея с подписями · тёмная полоса с призывом */
+.tpg > section{padding:56px 0;border-top:1px solid var(--line)}
+.tpg > section.closing{padding:56px 0 72px}
+.tpg h2{margin:0 0 24px}
+.tp-head{padding:4px 0 44px}
+.tp-head h1{margin:4px 0 14px}
+.tp-head .lead{max-width:40em;margin:0 0 28px;font-size:19px;line-height:1.55;color:var(--ink-2)}
+.tp-facts{display:flex;flex-wrap:wrap;gap:16px 48px;margin:0;padding:22px 0 0;border-top:1px solid var(--line);list-style:none}
+.tp-facts li{display:flex;flex-direction:column;gap:2px;font-size:15px;color:var(--ink-2)}
+.tp-facts b{font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.1;color:var(--accent)}
+.tp-sub{margin:-12px 0 24px;color:var(--ink-2)}
+/* шапка с фото справа: страница о производстве начинается с цеха, а не с голого текста */
+/* фото ровно в высоту текста (как блок производства на главной): верх фото — на уровне заголовка, низ — на уровне цифр;
+   по центру края колонок расходились «ступеньками» (владелец 22.10.2026) */
+.tp-head-pic{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:32px 56px;align-items:stretch}
+.tp-head-pic h1{margin-top:-6px}
+.tp-head-fig{position:relative;min-height:320px}
+.tp-fig.tp-head-fig img{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto}  /* сильнее общего .tp-fig img (4:3) ниже в CSS */
+.tp-head-pic .lead{margin-bottom:20px}
+.tp-head-pic .cta{margin:0 0 24px}
+.tp-head-pic .tp-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 32px}  /* 2 × 2, а не «3 + 1» */
+/* выгоды покупателя: три пункта в ряд, как пункты блока производства на главной */
+.gains{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0;padding:0;list-style:none}
+/* строки карточек общие (subgrid): если заголовок одной карточки переносится, тексты всех трёх всё равно начинаются на одной линии */
+.gains li{display:grid;grid-row:span 2;grid-template-rows:subgrid;align-content:start;gap:8px;padding:24px;background:var(--surface);
+  border-radius:var(--r);color:var(--ink-2);line-height:1.55}
+.gains b{position:relative;padding-left:20px;font-size:19px;font-weight:800;line-height:1.25;color:var(--ink)}
+.gains b::before{content:"";position:absolute;left:0;top:.6em;width:10px;height:2px;background:var(--accent)}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 20px;margin:0;padding:0;list-style:none;counter-reset:st}
+.steps li{display:flex;flex-direction:column;gap:6px;counter-increment:st}
+.steps img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;margin:0 0 10px;border-radius:var(--r);background:#1b1a18}
+.steps b{font-size:18px;font-weight:800;line-height:1.25}
+.steps b::before{content:counter(st,decimal-leading-zero);margin-right:8px;color:var(--accent)}
+.steps span{color:var(--ink-2);line-height:1.5}
+.tp-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:32px 64px;align-items:center}
+.tp-split.tp-rev{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.tp-txt p{margin:0 0 20px;max-width:34em;color:var(--ink-2);line-height:1.6}
+.tp-links{display:flex;flex-wrap:wrap;gap:4px 32px}
+/* блок КБ: чёрная панель ровно в высоту текста, рендер вписан целиком (его фон того же чёрного — границ не видно);
+   по центру край текста и картинки расходились, подпись висела отдельно (владелец 22.10.2026) */
+.tp-split.tp-kb{align-items:stretch}
+.tp-kb h2{margin-top:-6px}
+.tp-kb .prod-list{margin-bottom:20px}
+.tp-fig.tp-kb-fig{position:relative;min-height:300px;border-radius:var(--r);background:rgb(9,11,6);overflow:hidden}
+.tp-fig.tp-kb-fig img{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;object-fit:contain;background:none}
+.tp-fig{margin:0}
+.tp-fig img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:var(--r);background:#0b0c0a}
+.tp-fig figcaption,.pgal figcaption{margin-top:10px;font-size:15px;color:var(--ink-2)}
+/* вертикальный ролик: узкая колонка, превью во весь блок, загрузка по нажатию */
+.vidv{justify-self:center;width:100%;max-width:290px}
+/* вертикальный ролик — узкой колонкой у левого края, текст сразу рядом (без пустого поля вокруг видео) */
+.tp-split.tp-vid{grid-template-columns:290px minmax(0,1fr);gap:32px 64px;align-items:start}  /* уже — меньше пустоты под текстом */.tp-vid .vidv{justify-self:start}
+/* видео втрое выше текста: текст по верху (по центру висел в пустоте), под ним — что в ролике, с переходом к моменту */
+.vchap{display:grid;gap:4px;margin:0 0 24px;padding:0;list-style:none;border-top:1px solid var(--line)}
+.vchap li{border-bottom:1px solid var(--line)}
+.vchap button{display:flex;align-items:baseline;gap:16px;width:100%;min-height:52px;padding:12px 4px;border:0;background:none;
+  font:inherit;font-size:16px;text-align:left;color:var(--ink);cursor:pointer}
+.vchap button:hover{background:var(--surface)}
+.vchap time{flex:none;min-width:40px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}  /* мелкий текст — не оранжевым (контраст) */
+.vidv .vid-play{border:0;background:#1b1a18;aspect-ratio:9/16}  /* общий стиль задаёт 848:464 (ролик снегомёта) */
+.vidv .vid-play img{height:100%}
+.vidv .vid-btn{top:auto;bottom:22px;transform:translateX(-50%);white-space:nowrap}  /* под изделием, а не поверх */
+.vidv video{display:block;width:100%;aspect-ratio:9/16;border-radius:var(--r);background:#000}
+.pgal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 16px}
+.pgal figure{margin:0}
+.pgal img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:var(--r);background:#1b1a18}
+@media(max-width:860px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.gains{grid-template-columns:minmax(0,1fr)}}  /* на планшете 1024 — ещё по 4 и по 3 в ряд */
+@media(max-width:860px){.tp-split,.tp-split.tp-rev,.tp-split.tp-vid,.tp-head-pic{grid-template-columns:minmax(0,1fr)}
+  .tp-head-fig{min-height:0}.tp-fig.tp-head-fig img{position:static;height:auto;aspect-ratio:4/3}
+  .tp-fig.tp-kb-fig{min-height:0}.tp-fig.tp-kb-fig img{position:static;height:auto;aspect-ratio:4/3}.tp-kb h2{margin-top:0}.tp-head-pic h1{margin-top:4px}.tp-vid .vidv{justify-self:center}.tp-rev .tp-fig{order:-1}
+  .tpg > section{padding:44px 0}}  /* галерея из трёх фото остаётся в три колонки — без «2 + 1» */
+@media(max-width:560px){.tp-head .lead{font-size:17px}.tp-facts,.tp-head-pic .tp-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 20px}.tp-facts b{font-size:21px}
+  .vidv{max-width:270px}
+  /* галерея на телефоне: первое фото во всю ширину, два под ним в ряд — без длинного столбика */
+  .pgal{grid-template-columns:repeat(2,minmax(0,1fr))}.pgal figure:first-child{grid-column:1 / -1}.steps{gap:20px 12px}.steps b{font-size:16px}.steps span{font-size:15px}.pgal{gap:16px 10px}.pgal figcaption{font-size:14px}}
 /* главная: завершающий блок перед подвалом */
 .home main > section.closing{padding:56px 0 72px}
 /* тёмная полоса (выбор владельца 20.10.2026): сетка 2 × 2 — заголовок строго напротив кнопки, текст строго напротив
