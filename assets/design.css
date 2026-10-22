@@ -14,7 +14,9 @@ a:hover{text-decoration-thickness:2px}
 .wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--gut)}
 
 /* типографика: крупно и плотно, один шрифт */
-h1,.h1{font-weight:800;font-size:clamp(34px,5.2vw,60px);line-height:1.02;letter-spacing:-.035em;margin:0 0 .35em}
+h1,.h1{font-weight:800;font-size:clamp(34px,5.2vw,60px);line-height:1.02;letter-spacing:-.035em;margin:0 0 .35em;
+  overflow-wrap:break-word;hyphens:auto}
+@media(max-width:360px){h1,.h1{font-size:30px}}  /* «общестроительный» не помещался в 305 px */
 h2,.h2{font-weight:800;font-size:clamp(25px,3.2vw,36px);line-height:1.08;letter-spacing:-.03em;margin:0 0 .5em}
 h3,.h3{font-weight:800;font-size:clamp(19px,2vw,22px);line-height:1.2;letter-spacing:-.015em;margin:0 0 .4em}
 p{margin:0 0 1em;max-width:68ch}
@@ -110,7 +112,7 @@ p{margin:0 0 1em;max-width:68ch}
 table{border-collapse:collapse;width:100%;font-size:15px;font-variant-numeric:tabular-nums}
 th,td{border:0;border-bottom:1px solid var(--line);padding:12px 14px;text-align:left;vertical-align:top}
 th{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);
-  border-bottom-color:var(--ink);vertical-align:bottom}
+  border-bottom-color:var(--ink);vertical-align:top}  /* заголовки сверху, как и значения: тексты начинаются на одной линии */
 tr:hover td{background:var(--surface)}
 .tcap{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:24px 0 8px}
 .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:8px 0 16px}
@@ -372,6 +374,8 @@ footer .nosend{color:#a9a39a;border-top:1px solid #3a3833;margin-top:40px;paddin
 @media(max-width:400px){.ltab th{font-size:11px;letter-spacing:0}}
 .kv th{width:42%;font-size:15px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--ink-2);border-bottom-color:var(--line)}
 .kv td{font-weight:800}
+/* простая таблица «параметр — значение» не шире экрана: длинные слова и обозначения переносятся (этап 10) */
+table.kv{width:100%;max-width:100%}.kv th,.kv td{overflow-wrap:anywhere}
 
 /* другие изделия категории */
 .grid{display:grid;gap:16px}
@@ -597,6 +601,10 @@ td:last-child,.mod-price-value{font-weight:800}
   border:1px solid var(--line);border-radius:var(--r)}
 .dlv-l{font-size:15px;color:var(--ink-2);line-height:1.4}
 .dlv b{font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.15;color:var(--ink)}
+.dlv:has(.dlv-v){justify-content:flex-start;min-height:0;gap:18px}  /* значения — на одной высоте, пояснения под ними */
+@media(min-width:861px){.dlv:has(.dlv-v) .dlv-l{min-height:2.8em}}  /* подпись первой карточки может занять две строки — значения не съезжают */
+.dlv-cont .dlv:has(.dlv-v) .dlv-l{min-height:0}   /* подписи контактов — в одну строку */
+.dlv-v small{text-wrap:balance;display:block;margin-top:6px;font-size:14px;line-height:1.4;color:var(--ink-2)}  /* пояснение под значением */
 .dlv b.dlv-free{color:var(--accent)}  /* самое выгодное условие — единственный акцент блока (крупный жирный текст, 3:1) */
 .dlv-more{margin-top:16px}
 @media(max-width:1100px){.mt-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -641,10 +649,10 @@ td:last-child,.mod-price-value{font-weight:800}
 .cat-l{display:grid;gap:32px}
 .cfil fieldset{border:0;margin:0;padding:0;min-width:0}
 .cfil legend{padding:0;margin:0 0 10px;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.opt{display:flex;align-items:center;gap:10px;min-height:40px;font-size:16px;cursor:pointer}
-.opt input{flex:none;width:20px;height:20px;margin:0;accent-color:var(--ink)}
-.opt i{margin-left:auto;font-style:normal;font-size:14px;color:var(--muted)}
-.opt.off{color:#a39d93;cursor:default}  /* под выбранное ничего нет — пункт гаснет, но остаётся на месте */
+.cfil .opt{display:flex;align-items:center;gap:10px;min-height:40px;font-size:16px;cursor:pointer}
+.cfil .opt input{flex:none;width:20px;height:20px;margin:0;accent-color:var(--ink)}
+.cfil .opt i{margin-left:auto;font-style:normal;font-size:14px;color:var(--muted)}
+.cfil .opt.off{color:#a39d93;cursor:default}  /* под выбранное ничего нет — пункт гаснет, но остаётся на месте */
 .cprice{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .cprice input{width:100%;min-height:44px;padding:8px 12px;border:1px solid var(--field);border-radius:var(--r);font:inherit;font-size:16px;color:var(--ink)}
 .cprice input:focus{outline:2px solid var(--ink);outline-offset:1px}
@@ -667,6 +675,13 @@ td:last-child,.mod-price-value{font-weight:800}
   border-radius:var(--r);background:var(--bg);font:inherit;font-size:15px;font-weight:500;color:var(--ink);cursor:pointer}
 .cchip:hover{background:var(--surface)}
 .cchip span{font-size:20px;line-height:1;color:var(--muted)}
+/* карточки в ряду делят общие строки (subgrid): фото · название · цена · «подходит для» · метка. Название в одну или две
+   строки больше не сдвигает цену (владелец 22.10.2026: «цены разъехались») */
+.cgrid .pc{--pad:16px;display:grid;grid-row:span 5;grid-template-rows:subgrid;row-gap:0}
+.cgrid .pc .body{display:contents}
+.cgrid .pc .n{margin:var(--pad) var(--pad) 0}
+.cgrid .pc .p,.cgrid .pc .mt{margin-left:var(--pad);margin-right:var(--pad)}
+.cgrid .pc .mt:last-child{margin-top:auto;padding:14px 0 var(--pad)}
 .cgrid .pc[hidden]{display:none}
 .cempty{padding:32px;background:var(--surface);border-radius:var(--r)}
 .cempty b{font-size:22px;font-weight:800}
@@ -697,7 +712,7 @@ td:last-child,.mod-price-value{font-weight:800}
   .ccount{flex:1 0 100%;order:-1}
   .csort{margin-left:auto}
   body.cfil-on{overflow:hidden}}
-@media(max-width:560px){.catx .cgrid{gap:10px}.catx .pc .body{padding:12px}.catx .pc .n{font-size:15px;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:anywhere}.catx .pc .p{font-size:18px}
+@media(max-width:560px){.catx .cgrid{gap:10px}.cgrid .pc{--pad:12px}.catx .pc .n{font-size:15px;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:anywhere}.catx .pc .p{font-size:18px}
   .catx .pc .mt{font-size:14px}.csort span{display:none}.csearch{margin-bottom:24px}
   .ctrust{gap:2px 16px;font-size:14px;margin-bottom:18px}
   .cown{flex-direction:column;align-items:stretch;padding:20px}.cown .ctile-cta{align-self:stretch;justify-content:center}}
@@ -706,7 +721,7 @@ td:last-child,.mod-price-value{font-weight:800}
 .mod-ask{min-height:36px;padding:4px 12px;border:1px solid var(--ink);border-radius:var(--r);background:var(--bg);
   font:inherit;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;white-space:nowrap}
 .mod-ask:hover{background:var(--ink);color:var(--surface)}
-td.ask-td{width:1%;text-align:right}
+td.ask-td{width:1%;text-align:right;padding-top:6px;padding-bottom:6px}  /* текст кнопки — на одной линии с цифрами строки */
 .mod-card .mod-ask{width:100%;min-height:44px;margin-top:12px;font-size:15px}
 .f input.asked{outline:2px solid var(--accent);outline-offset:1px;transition:outline-color 1.5s}
 .card main section:has(.form-contacts){scroll-margin-top:calc(var(--hh,64px) + 16px)}  /* раздел заявки доезжает под шапку, а не за неё */
@@ -744,7 +759,8 @@ form.q:focus-within{border-color:var(--ink);outline:2px solid var(--ink);outline
 .gains b{position:relative;padding-left:20px;font-size:19px;font-weight:800;line-height:1.25;color:var(--ink)}
 .gains b::before{content:"";position:absolute;left:0;top:.6em;width:10px;height:2px;background:var(--accent)}
 .steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 20px;margin:0;padding:0;list-style:none;counter-reset:st}
-.steps li{display:flex;flex-direction:column;gap:6px;counter-increment:st}
+/* шаги в ряду делят общие строки (фото · заголовок · текст): заголовок в одну или две строки не сдвигает текст */
+.steps li{display:grid;grid-row:span 3;grid-template-rows:subgrid;row-gap:6px;align-content:start;counter-increment:st}
 .steps img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;margin:0 0 10px;border-radius:var(--r);background:#1b1a18}
 .steps b{font-size:18px;font-weight:800;line-height:1.25}
 .steps b::before{content:counter(st,decimal-leading-zero);margin-right:8px;color:var(--accent)}
@@ -790,6 +806,27 @@ form.q:focus-within{border-color:var(--ink);outline:2px solid var(--ink);outline
   .vidv{max-width:270px}
   /* галерея на телефоне: первое фото во всю ширину, два под ним в ряд — без длинного столбика */
   .pgal{grid-template-columns:repeat(2,minmax(0,1fr))}.pgal figure:first-child{grid-column:1 / -1}.steps{gap:20px 12px}.steps b{font-size:16px}.steps span{font-size:15px}.pgal{gap:16px 10px}.pgal figcaption{font-size:14px}}
+/* ── «Контакты» и «Доставка и оплата» (этап 10б): карточки контактов и доставки, как «Доставка» на главной ── */
+.tp-cont .dlv-grid{margin:0 0 16px}
+a.dlv{color:var(--ink);text-decoration:none;transition:border-color .15s}
+a.dlv:hover{border-color:var(--ink)}
+/* «Контакты» (вариант 2, выбор владельца 22.10.2026): все плитки светлые; номер телефона — оранжевым (крупный жирный, 3:1),
+   «Оставить заявку» — с оранжевой рамкой, как вторая кнопка */
+.dlv-cont .dlv:first-child b{color:var(--accent)}
+.dlv-cont .dlv:first-child:hover{border-color:var(--ink)}
+.dlv-cta{background:var(--bg);border:2px solid var(--accent)}
+.dlv-cta b span{color:var(--accent)}
+a.dlv-cta:hover{background:var(--surface);border-color:var(--accent)}
+.tp-note{margin:0 0 16px;max-width:42em;color:var(--ink-2);line-height:1.55}
+.tp-lead2{margin:0 0 12px;max-width:42em;font-size:18px;line-height:1.55;color:var(--ink-2)}
+.tpg .dlv-grid .dlv b{overflow-wrap:anywhere}
+/* меню «Каталог»: два столбца прямых ссылок на фильтры (этап 10) */
+.dd-mega{min-width:560px;padding:6px 0 10px}
+.dd-all{font-weight:600;border-bottom:1px solid var(--line);margin-bottom:4px}
+.dd-cols{display:grid;grid-template-columns:1fr 1fr}
+.dd-h{margin:10px 18px 4px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.acc-b .dd-h{margin:0;padding:14px 16px 6px;background:var(--surface)}
+.acc-b .dd-all{border-bottom:0}
 /* главная: завершающий блок перед подвалом */
 .home main > section.closing{padding:56px 0 72px}
 /* тёмная полоса (выбор владельца 20.10.2026): сетка 2 × 2 — заголовок строго напротив кнопки, текст строго напротив

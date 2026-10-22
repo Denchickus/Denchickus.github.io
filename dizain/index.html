@@ -20,7 +20,7 @@
 @font-face{font-family:Inter;font-style:normal;font-weight:500;font-display:swap;src:url(../assets/fonts/inter-rub-500-normal.woff) format('woff');unicode-range:U+20BD}
 @font-face{font-family:Inter;font-style:normal;font-weight:600;font-display:swap;src:url(../assets/fonts/inter-rub-600-normal.woff) format('woff');unicode-range:U+20BD}
 @font-face{font-family:Inter;font-style:normal;font-weight:800;font-display:swap;src:url(../assets/fonts/inter-rub-800-normal.woff) format('woff');unicode-range:U+20BD}</style>
-<link rel="stylesheet" href="../assets/design.css?v=29b140bf">
+<link rel="stylesheet" href="../assets/design.css?v=751ca2ac">
 </head>
 <body class="ds">
 <div class="contacts-row"><div class="wrap">
@@ -31,12 +31,10 @@
 <nav class="nav" aria-label="Основная навигация">
   <a class="logo" href="../"><img src="../assets/logo.svg" alt="СТ-ТЕХНИКС — навесное оборудование, производство" width="127" height="41"></a>
   <div class="dd dd-cat"><button type="button" class="dd-t cat" aria-expanded="false">Каталог ▾</button>
-    <div class="dd-panel">
-      <a href="../catalog/">Всё оборудование</a>
-      <a href="../catalog/">По типу оборудования</a>
-      <a href="../tehnika/">По типу техники</a>
+    <div class="dd-panel dd-mega">
+<a class="dd-all" href="../catalog/">Всё оборудование</a><div class="dd-cols"><div><p class="dd-h">По типу оборудования</p><a href="../catalog/?cat=kovshi">Ковши</a><a href="../catalog/?cat=vily">Вилы</a><a href="../catalog/?cat=shchetki">Щётки</a><a href="../catalog/?cat=snegouborochnoe-oborudovanie">Отвалы и снегомёты</a><a href="../catalog/?cat=gidromoloty">Гидромолоты</a><a href="../catalog/?cat=zahvaty">Захваты</a><a href="../catalog/?cat=prochee">Измельчители и фрезы</a></div><div><p class="dd-h">По типу техники</p><a href="../catalog/?mt=minipogruzchik">Минипогрузчик</a><a href="../catalog/?mt=ehkskavator-pogruzchik">Экскаватор-погрузчик</a><a href="../catalog/?mt=frontalnyj-pogruzchik">Фронтальный погрузчик</a><a href="../catalog/?mt=teleskopicheskij-pogruzchik">Телескопический погрузчик</a><a href="../catalog/?mt=traktor">Трактор МТЗ</a><a href="../catalog/?mt=vilochnyj-pogruzchik">Вилочный погрузчик</a><a href="../catalog/?mt=mini-ehkskavator">Мини-экскаватор</a></div></div>
     </div></div>
-  <form class="q" role="search" action="../dizain/catalog/"><input type="search" name="q" placeholder="Поиск по каталогу" aria-label="Поиск по каталогу" autocomplete="off"></form>
+  <form class="q" role="search" action="../catalog/"><input type="search" name="q" placeholder="Поиск по каталогу" aria-label="Поиск по каталогу" autocomplete="off"></form>
   <a class="pick" href="../zayavka/">Оставить заявку</a>
   <span class="linkset"><a href="../proizvodstvo/">Производство</a></span>
   <span class="linkset"><a href="../dileram/">Дилерам</a></span>
@@ -59,12 +57,10 @@
     <a href="../proizvodstvo/">Производство</a>
     <a href="../dileram/">Дилерам</a>
     <a href="../chertezhi/">Чертежи</a>
-    <div class="acc"><button type="button" class="acc-t" aria-expanded="false">Каталог</button>
-      <div class="acc-b">
-        <a href="../catalog/">Всё оборудование</a>
-        <a href="../catalog/">По типу оборудования</a>
-        <a href="../tehnika/">По типу техники</a>
-      </div></div>
+    <div class="acc"><button type="button" class="acc-t" aria-expanded="false">Оборудование</button>
+      <div class="acc-b"><a class="dd-all" href="../catalog/">Всё оборудование</a><a href="../catalog/?cat=kovshi">Ковши</a><a href="../catalog/?cat=vily">Вилы</a><a href="../catalog/?cat=shchetki">Щётки</a><a href="../catalog/?cat=snegouborochnoe-oborudovanie">Отвалы и снегомёты</a><a href="../catalog/?cat=gidromoloty">Гидромолоты</a><a href="../catalog/?cat=zahvaty">Захваты</a><a href="../catalog/?cat=prochee">Измельчители и фрезы</a></div></div>
+    <div class="acc"><button type="button" class="acc-t" aria-expanded="false">Техника</button>
+      <div class="acc-b"><a href="../catalog/?mt=minipogruzchik">Минипогрузчик</a><a href="../catalog/?mt=ehkskavator-pogruzchik">Экскаватор-погрузчик</a><a href="../catalog/?mt=frontalnyj-pogruzchik">Фронтальный погрузчик</a><a href="../catalog/?mt=teleskopicheskij-pogruzchik">Телескопический погрузчик</a><a href="../catalog/?mt=traktor">Трактор МТЗ</a><a href="../catalog/?mt=vilochnyj-pogruzchik">Вилочный погрузчик</a><a href="../catalog/?mt=mini-ehkskavator">Мини-экскаватор</a></div></div>
     <div class="acc"><button type="button" class="acc-t" aria-expanded="false">Покупателям</button>
       <div class="acc-b">
         <a href="../dostavka-i-oplata/">Доставка и оплата</a>
@@ -80,12 +76,11 @@
       </div></div>
   </div>
   <div class="mpanel msearch-panel" id="msearch">
-    <form class="q mob-q" role="search" action="../dizain/catalog/"><input type="search" name="q" placeholder="Поиск по каталогу" aria-label="Поиск по каталогу" autocomplete="off"></form>
+    <form class="q mob-q" role="search" action="../catalog/"><input type="search" name="q" placeholder="Поиск по каталогу" aria-label="Поиск по каталогу" autocomplete="off"></form>
   </div>
 </nav></div></header>
 
-<div class="ds-strip"><div class="wrap">Дизайн-система · этапы 1–3 из 11: шрифт и цвет, элементы,
-шапка и подвал. Шапка, меню и подвал на этой странице — настоящие.</div></div>
+
 <main class="wrap">
 
 <section class="sec">
@@ -230,7 +225,6 @@
 <div class="fcol"><b>Компания</b><ul class="flinks ffacts"><li>Производим с <strong>2016</strong> года</li><li><strong>5000+</strong> единиц произведено и отгружено</li><li><span class="pin" aria-hidden="true"></span>Кашира, Московская область</li></ul></div>
 <div class="fcol"><b>Каталог</b><ul class="flinks">
 <li><a href="../catalog/">Всё оборудование</a></li>
-<li><a href="../tehnika/">По типу техники</a></li>
 <li><a href="../zapchasti/">Запчасти</a></li>
 </ul></div>
 <div class="fcol"><b>Покупателям</b><ul class="flinks">
@@ -263,7 +257,10 @@ d.addEventListener('keydown',function(e){if(e.key!=='Escape')return;
   var o=items.filter(function(it){return it.box.classList.contains('open');})[0];
   if(o){closeAll();o.t.focus();}});
 d.querySelectorAll('.acc-t').forEach(function(b){b.addEventListener('click',function(){
-  var a=b.parentNode,on=!a.classList.contains('open');a.classList.toggle('open',on);b.setAttribute('aria-expanded',on?'true':'false');});});
+  var a=b.parentNode,on=!a.classList.contains('open');
+  /* раскрывается один блок за раз: два открытых списка вместе давали длинное меню */
+  d.querySelectorAll('.acc.open').forEach(function(o){if(o!==a){o.classList.remove('open');o.querySelector('.acc-t').setAttribute('aria-expanded','false');}});
+  a.classList.toggle('open',on);b.setAttribute('aria-expanded',on?'true':'false');});});
 (function(){var c=d.querySelector('.car');if(!c)return;
   var s=c.querySelector('.cslides'),th=c.querySelectorAll('.gth'),n=th.length,cnt=c.querySelector('.ccount');
   function cur(){return Math.round(s.scrollLeft/s.clientWidth);}
